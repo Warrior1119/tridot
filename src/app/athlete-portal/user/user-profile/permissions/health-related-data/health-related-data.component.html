@@ -1,0 +1,47 @@
+<div class="main">
+  <div class="container" *ngIf="athleteProfile">
+    <div class="row mb-3">
+      <div class="col-6 text-left d-flex d-sm-flex align-items-center ">
+        <button class="btn card-box rounded-lg shadow" (click)="goBack()">
+          <div class=""  [inlineSVG]="'../assets/img/svg/icons/back-stick-icon.svg'" [autosize]="true" style="width: 15px;" height="18" class="mx-auto d-inline-block"></div>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-none d-lg-block col-lg-3 col-xl-3">
+
+      <app-health-related-data-side-bar></app-health-related-data-side-bar>
+      </div>
+
+      <div class=" col-lg-9 col-xl-9">
+        <div class="card card-box">
+          <div class="card-title card-header text-left">
+              Health-Related Data
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col col-md-11">
+                <h6 class="text-left mb-2 font-weight-normal">Allow Access</h6>
+                <p>TriDot collects and uses health data from your connected devices, such as your heart rate monitor, to analyze your performance and optimize your training. We collect this data from only devices that you've connected.  We do not share this data without your consent.</p>
+              </div>
+              <div class="text-right col-xs-2 col-md-1 align-self-center">
+                <label class="switch "  >
+                  <input type="checkbox" (click)="funct()" [(ngModel)]="healthCheck" class="success">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+

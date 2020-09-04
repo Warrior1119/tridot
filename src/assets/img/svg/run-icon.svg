@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">
+  <defs>
+    <style>
+      .run-icon-cls-1 {
+        fill: #569acb;
+      }
+
+      .run-icon-cls-2 {
+        fill: #4c69b7;
+      }
+
+      .run-icon-cls-3 {
+        fill: #85bfe6;
+      }
+    </style>
+  </defs>
+  <g id="user-run" transform="translate(-3 -3)">
+    <rect id="Rectangle_16" data-name="Rectangle 16" class="run-icon-cls-1" width="130" height="130" rx="65" transform="translate(3 3)"/>
+    <g id="Group_20" data-name="Group 20" transform="translate(37.49 30.329)">
+      <path id="Path_42" data-name="Path 42" class="run-icon-cls-2" d="M8.677,22.886a3.177,3.177,0,0,1-2.246-5.424l9.532-9.532A3.178,3.178,0,0,1,18.209,7H34.095a3.177,3.177,0,1,1,0,6.354H19.525l-8.6,8.6A3.166,3.166,0,0,1,8.677,22.886Z" transform="translate(0.999 12.063)"/>
+      <path id="Path_43" data-name="Path 43" class="run-icon-cls-2" d="M31.918,32.061H9.677a3.177,3.177,0,0,1-2.542-5.084l9.532-12.709a3.177,3.177,0,0,1,2.317-1.263,3.22,3.22,0,0,1,2.471.923L34.164,26.638a3.177,3.177,0,0,1-2.246,5.424Z" transform="translate(3.176 25.128)"/>
+      <path id="Path_45" data-name="Path 45" class="run-icon-cls-3" d="M9.532,0A9.532,9.532,0,1,1,0,9.532,9.532,9.532,0,0,1,9.532,0Z" transform="translate(38.271 0)"/>
+      <path id="Path_44" data-name="Path 44" class="run-icon-cls-3" d="M66.212,7.931a3.176,3.176,0,0,0-4.493,0L52.7,16.949S43.964,9.112,43.433,8.67a7.205,7.205,0,0,0-10.148.924L4.066,51.573a3.177,3.177,0,0,0,4.9,4.018L44.356,18.819c.1-.123.17-.262.263-.389l6.135,5.258a3.176,3.176,0,0,0,4.338-.144l11.12-11.12A3.176,3.176,0,0,0,66.212,7.931Z" transform="translate(-3.455 12.063)"/>
+    </g>
+  </g>
+</svg>

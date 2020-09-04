@@ -1,0 +1,244 @@
+<div class="main onboarding-process">
+  <div class="container green-borders">
+    <div class="row">
+      <div class="col-lg-6 col-xl-6 offset-lg-3">
+        <div class="box shadow-lg rounded-lg mb-4">
+          <div class="box-content">
+            <div class="logo-wrapper text-center">
+              <div class="tridot-scores-connected w-100">
+                <li>
+                  <div class="tridot-score swim score-lg"><span>{{ swimdot }}</span></div>
+                </li>
+                <li>
+                  <div class="tridot-score bike score-lg" [customTooltip]="'Based on your data, this is your current BikeDot'" [isOpen]="bikedot"><span>{{ bikedot }}</span></div>
+                </li>
+                <li class="active">
+                  <div class="tridot-score run score-lg static active"></div>
+                </li>
+                <li>
+                  <div class="tridot-score checkmark score-lg static"></div>
+                </li>
+              </div>
+            </div>
+            <div class="header-wrapper text-center">
+              <h2 class="mb-1">Complete Your
+                <span class="run-color">Run Fitness</span> Profile
+              </h2>
+              <div class="alert-info p-3 mb-3 rounded mt-3">
+                  Estimate your run ability below to determine your preliminary <strong>RunDot</strong> and provide your high-level training history.
+              </div>
+            </div>
+            <div class="form-wrapper">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <form [formGroup]="runProfileForm" #form="ngForm">
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          Estimate your current best time for:
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2 mb-3 d-flex align-items-center">
+                        <!-- <select class="custom-select custom-select-lg text-md" formControlName="distance" [(ngModel)]="profile.runDistance">
+                          <option value="" disabled>Select Distance</option>
+                          <option selected>5 km</option>
+                        </select>
+                        <label class="select-inside-label" for="distance">
+                          <span class="custom-tooltip" *ngIf="runProfileForm.hasError('required', 'distance') && (form.submitted || runProfileForm.get('distance').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!runProfileForm.hasError('required', 'distance') && (form.submitted || runProfileForm.get('distance').touched)"></i>
+                        </label> -->
+                        <label class="bg-light d-flex align-middle w-100 v-100 mb-0 rounded align-items-center px-2 py-2">5k</label>
+                      </div>
+                      <div class="col pl-2 mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? runProfileForm.get('time').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.runDistanceTime"
+                          formControlName="time"
+                          timeFormatMask includeHour="true">
+
+                        <label class="inside-label" for="time">
+                          <span class="custom-tooltip" *ngIf="(runProfileForm.hasError('required', 'time') || runProfileForm.hasError('minlength', 'time')) && !runProfileForm.hasError('incorrect', 'time') && (form.submitted || runProfileForm.get('time').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="runProfileForm.hasError('incorrect', 'time') && (form.submitted || runProfileForm.get('time').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              {{runDistanceTimeError}}
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!runProfileForm.hasError('required', 'time') && !runProfileForm.hasError('minlength', 'time') && !runProfileForm.hasError('incorrect', 'time') && (form.submitted || runProfileForm.get('time').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          How long ago did you start running competitively or for fitness?
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2 mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? runProfileForm.get('years').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          formControlName="years"
+                          [(ngModel)]="runAgeYears"
+                          mask="00"
+                          placeholder="years">
+
+                        <label class="inside-label" for="years">
+                          <span class="custom-tooltip" *ngIf="runProfileForm.hasError('required', 'years') && (form.submitted || runProfileForm.get('years').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="validateRunAgeYears(runAgeYears)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              Please Enter a value less than 60
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!runProfileForm.hasError('required', 'years') && !runProfileForm.hasError('incorrect','years') && (form.submitted || runProfileForm.get('years').touched)"></i>
+                        </label>
+                      </div>
+                      <div class="col pl-2 mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? runProfileForm.get('months').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="runAgeMonths"
+                          formControlName="months" 
+                          mask="00"
+                          placeholder="months">
+
+                        <label class="inside-label" for="months">
+                          <span class="custom-tooltip" *ngIf="runProfileForm.hasError('required', 'months') && (form.submitted || runProfileForm.get('months').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="validateRunAgeMonths(runAgeMonths)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              Please Enter a value less than 12
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!runProfileForm.hasError('required', 'months') && !validateRunAgeMonths(runAgeMonths) && (form.submitted || runProfileForm.get('months').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          How many training hours per week do you run?
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? runProfileForm.get('hoursPerWeek').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.runHoursPerWeek"
+                          formControlName="hoursPerWeek"
+                          timeFormatMask includeHour="true">
+
+                        <label class="inside-label" for="hoursPerWeek">
+                          <span class="custom-tooltip" *ngIf="(runProfileForm.hasError('required', 'hoursPerWeek') || runProfileForm.hasError('minlength', 'hoursPerWeek')) && !runProfileForm.hasError('incorrect', 'hoursPerWeek') && (form.submitted || runProfileForm.get('hoursPerWeek').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="runProfileForm.hasError('incorrect', 'hoursPerWeek') && (form.submitted || runProfileForm.get('hoursPerWeek').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              {{runHoursPerWeekError}}
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!runProfileForm.hasError('required', 'hoursPerWeek') && !runProfileForm.hasError('minlength', 'hoursPerWeek') && !runProfileForm.hasError('incorrect','hoursPerWeek') && (form.submitted || runProfileForm.get('hoursPerWeek').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          What's your longest individual weekly run training session?
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? runProfileForm.get('longestWeeklySession').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.runDurationLongestSession"
+                          formControlName="longestWeeklySession"
+                          timeFormatMask includeHour="true">
+
+                        <label class="inside-label" for="longestWeeklySession">
+                          <span class="custom-tooltip" *ngIf="(runProfileForm.hasError('required', 'longestWeeklySession') || runProfileForm.hasError('minlength', 'longestWeeklySession')) && !runProfileForm.hasError('incorrect', 'longestWeeklySession') && (form.submitted || runProfileForm.get('longestWeeklySession').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="runProfileForm.hasError('incorrect', 'longestWeeklySession') && (form.submitted || runProfileForm.get('longestWeeklySession').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              {{longestRunSessionError}}
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!runProfileForm.hasError('required', 'longestWeeklySession') && !runProfileForm.hasError('minlength', 'longestWeeklySession') && !runProfileForm.hasError('incorrect', 'longestWeeklySession') && (form.submitted || runProfileForm.get('longestWeeklySession').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                      <div class="col">
+                        <div class="progress btn-rounded">
+                          <div class="progress-bar btn-rounded run-bg" role="progressbar" style="width: 66%"
+                            aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2">
+                        <a href="/bike-profile.html" class="btn-default btn btn-lg text-md btn-block" [routerLink]="['/bike-profile']">Go
+                          Back</a>
+                      </div>
+                      <div class="col pl-2">
+
+                        <button class="btn-primary run-bg btn btn-lg text-md btn-block"
+                          (click)="continue(profile, runProfileForm.valid && !loading)">
+                          Continue
+                          <i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+                        </button>
+
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-xl-3">
+        <!-- <app-dashboard-race-details></app-dashboard-race-details> -->
+      </div>
+    </div>
+  </div>
+</div>

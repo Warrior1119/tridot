@@ -1,0 +1,16 @@
+<div *ngIf="profile">
+  <div class="card-img">
+    <div class="mb-4 mt-5 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/assessment-icon.svg'" [autosize]="true"  style="width: 130px;"></div>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title font-weight-normal">Do Your Assessments</h3>
+    <p class="card-text">Your assessment times significantly impact your training, race predictions, and ability to add races to your schedule. Please confirm they are accurate.</p>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-lg btn-block text-md text-uppercase" [routerLink]="['/assessments']" [ngClass]="{'btn-primary bg-assess': profile.assessmentChecked == 0, 'btn-success': profile.assessmentChecked == 1 }">{{(profile.assessmentChecked
+      == 1)? 'Completed': 'View Your Assessments'}}
+      <img class="mb-1 ml-2" [src]="(profile.assessmentChecked == 1)? '../assets/img/svg/icons/checkmark-white.svg': '../assets/img/svg/icons/plus-icon.svg'"
+        width="15">
+    </button>
+  </div>
+</div>

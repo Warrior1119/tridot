@@ -1,0 +1,261 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left text-capitalize">{{getTitle()}}</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <hr>
+  <form #form="ngForm" [class.d-none]="!assessment" (submit)="save(form.value, form.valid)" autocomplete="off" novalidate (keydown.enter)="onEnter($event)">
+    <div class="row mb-4">
+      <div class="col-lg-4 col-md-12">
+        <ng-container *ngIf="assessment">
+          <div class="form-group">
+            <label for="date-input" class="d-block">Date</label>
+            <input id="date-input"
+              #dp="bsDatepicker"
+              type="text"
+              placeholder="00/00/00"
+              class="form-control px-3 py-2"
+              mask="00/00/00"
+              (bsValueChange)="onDateChange($event)"
+              [value]="formatDate(assessment.assessmentDate)"
+              bsDatepicker
+              [bsConfig]="bsConfig"
+              [maxDate]="maxDate"
+              iosDatepickerExtra #iosdpe="iosDatepickerExtra" (onShown)="iosdpe.onShowPicker($event)"
+              autocomplete="off"
+            >
+          </div>
+          <div class="form-group d-block">
+            <label for="time-input">Time</label>
+            <timepicker class="btn btn-block form-control px-3 py-2 {{error.trainAssessTime && 'border border-1 border-danger'}}" id="time-input"
+              [showSpinners]="false" #trainAssessTimeModel="ngModel"
+              [ngModel]="assessment.trainAssessTime | amParse:'hh:mma' | amDateFormat:'YYYY-MM-DD HH:mm:ss'" name="trainAssessTime"
+              (click)="onTimeChange(trainAssessTimeModel.value)"
+              (change)="onTimeChange(trainAssessTimeModel.value);validate([trainAssessTimeModel.value, 'trainAssessTime'])"
+              required
+              [customTooltip]="error.trainAssessTime"
+              [tooltip-type]="'error'"
+            ></timepicker>
+            <i *ngIf="error.trainAssessTime" class="far fa-exclamation-circle text-danger err-icon" style="margin-top: -40px;"></i>
+          </div>
+        </ng-container>
+        <div class="form-group">
+          <label for="location-input">Location</label>
+          <ngxgeo-autocomplete id="location-input" [userSettings]="locationSettings"
+            (componentCallback)="onLocationChange($event)"
+          ></ngxgeo-autocomplete>
+        </div>
+        <div *ngIf="assessment" class="form-group position-relative">
+          <label for="weight-input">Weight</label>
+          <input type="text" id="weight-input"
+            class="form-control bg-white px-3 py-2 {{error.currentWeight && 'border border-1 border-danger'}}"
+            pattern="^\d+(\.\d+)?$"
+            name="currentWeight"
+            [ngModel]="assessment.currentWeight" (ngModelChange)="isDirty=true"
+            required #weightModel="ngModel"
+            [customTooltip]="error.currentWeight"
+            [tooltip-type]="'error'"
+            (blur)="validate([$event.target.value,'currentWeight'])"
+          >
+          <span *ngIf="weightModel.value" style="top: 41px;left: 20px;" class="backdrop weight-placeholder">
+            <span class="backdrop-placeholder">{{weightModel.value}}</span>{{ getWeightUnits() }}
+          </span>
+          <i *ngIf="error.currentWeight" class="far fa-exclamation-circle text-danger err-icon"></i>
+        </div>
+      </div>
+      <div *ngIf="assessment" class="col-lg-4 col-md-12">
+          <div class="form-control border border-1 px-3 py-2" style="margin-top: 32px; margin-bottom: 34px;">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" name="indoor" id="indoorcheck"
+                [ngModel]="assessment.indoor == 'true'" (ngModelChange)="onIndoorChange($event)" (change)="isDirty=true">
+              <label class="custom-control-label" for="indoorcheck">Indoor Session</label>
+            </div>
+          </div>
+        <div class="form-group position-relative">
+          <label for="temp-input">Temperature</label>
+          <input #tempModel id="temp-input"
+            class="form-control font-weight-bold px-3 py-2 {{error.temperature && 'border border-1 border-danger'}}"
+            type="text"
+            name="temperature"
+            [ngModel]="assessment.temperature" (ngModelChange)="isDirty=true"
+            [customTooltip]="error.temperature"
+            [tooltip-type]="'error'"
+            (blur)="validate([$event.target.value,'temperature'])"
+          >
+          <span *ngIf="tempModel.value" style="top: 41px;left: 20px;" class="backdrop weight-placeholder">
+            <span class="backdrop-placeholder">{{tempModel.value}}</span>{{getTemperatureUnit()}} 
+          </span>
+          <i *ngIf="error.temperature" class="far fa-exclamation-circle text-danger err-icon"></i>
+        </div>
+        <div class="form-group position-relative">
+          <label for="humidity-input">Humidity</label>
+          <input #humidityModel id="humidity-input"
+            class="form-control font-weight-bold px-3 py-2 {{error.humidity && 'border border-1 border-danger'}}"
+            type="text"
+            name="humidity"
+            [ngModel]="assessment.humidity" (ngModelChange)="isDirty=true"
+            [customTooltip]="error.humidity"
+            [tooltip-type]="'error'"
+            (blur)="validate([$event.target.value,'humidity'])"
+          >
+          <span *ngIf="humidityModel.value" style="top: 41px;left: 20px;" class="backdrop weight-placeholder">
+            <span class="backdrop-placeholder">{{humidityModel.value}}</span>% 
+          </span>
+          <i *ngIf="error.humidity" class="far fa-exclamation-circle text-danger err-icon"></i>
+        </div>
+        <div class="form-group position-relative">
+          <label for="assessment-input">Elevation</label>
+          <input #elevationModel id="assessment-input"
+            class="form-control font-weight-bold px-3 py-2 {{error.elevation && 'border border-1 border-danger'}}"
+            type="text"
+            name="elevation"
+            [ngModel]="assessment.elevation" (ngModelChange)="isDirty=true"
+            [customTooltip]="error.elevation"
+            [tooltip-type]="'error'"
+            (blur)="validate([$event.target.value,'elevation'])"
+          >
+          <span *ngIf="elevationModel.value" style="top: 41px;left: 20px;" class="backdrop weight-placeholder">
+            <span class="backdrop-placeholder">{{elevationModel.value}}</span>{{getLengthUnit()}}
+          </span>
+          <i *ngIf="error.elevation" class="far fa-exclamation-circle text-danger err-icon"></i>
+        </div>
+      </div>
+      <div *ngIf="assessment" class="col-lg-4 col-md-12">
+        <label for="type-select">Type</label>
+        <ng-container [ngSwitch]="sessionType">
+          <select *ngSwitchCase="'swim'" id="type-select"
+            class="form-control btn btn-block text-secondary shadow border-bottom bg-white px-3 py-2 {{((swimCourseModel.touched || form.submitted) && swimCourseModel.invalid) && 'border-1 border-danger'}}"
+            name="swim_course"
+            [ngModel]="assessment.swim_course || assessment.courseType" (change)="isDirty=true"
+            required #swimCourseModel="ngModel"
+            [customTooltip]="((swimCourseModel.touched || form.submitted) && swimCourseModel.invalid) && 'This field is required'"
+            [tooltip-type]="'error'">
+            <option [ngValue]="undefined">Select</option>
+            <option *ngFor="let course of swim_course" [value]="course.id" type="button">{{course.name}}</option>
+          </select>
+          <select *ngSwitchCase="'bike'" id="type-select"
+            class="form-control btn btn-block text-secondary shadow border-bottom bg-white px-3 py-2{{((bikeAssModel.touched || form.submitted) && bikeAssModel.invalid) && 'border-1 border-danger'}}"
+            name="assessmentType"
+            [ngModel]="assessment.assessmentType" (change)="isDirty=true"
+            required #bikeAssModel="ngModel"
+            [customTooltip]="((bikeAssModel.touched || form.submitted) && bikeAssModel.invalid) && 'This field is required'"
+            [tooltip-type]="'error'">
+            <option [ngValue]="undefined">Select</option>
+            <option *ngFor="let type of bike_ass_type" [value]="type.id" type="button">{{type.name}}</option>
+          </select>
+          <select *ngSwitchCase="'run'" id="type-select"
+            class="form-control btn btn-block text-secondary shadow border-bottom bg-white px-3 py-2 {{((runAssModel.touched || form.submitted) && runAssModel.invalid) && 'border-1 border-danger'}}"
+            name="assessmentType"
+            [ngModel]="assessment.assessmentType" (change)="isDirty=true"
+            required #runAssModel="ngModel"
+            [customTooltip]="((runAssModel.touched || form.submitted) && runAssModel.invalid) && 'This field is required'"
+            [tooltip-type]="'error'">
+            <option [ngValue]="undefined">Select</option>
+            <option *ngFor="let type of run_ass_type" [value]="type.id" type="button">{{type.name}}</option>
+          </select>
+        </ng-container>
+        <ng-container *ngIf="sessionType === 'swim'">
+          <div class="form-group" style="margin-top: 34px;">
+            <label for="css400">Time 400</label>
+            <input id="css400" class="form-control bg-white px-3 py-2 {{error.css400 && 'border border-1 border-danger'}}"
+              timeFormatMask type="text"
+              [ngModel]="assessment.css400" name="css400" (change)="isDirty=true" (ngModelChange)="isDirty=true"
+              [customTooltip]="error.css400"
+              [tooltip-type]="'error'"
+              (blur)="session.css400=form.value.css400;validate([$event.target.value,'css400'])"
+            >
+            <i *ngIf="error.css400" class="far fa-exclamation-circle text-danger err-icon" style="margin-right: 27px;"></i>
+          </div>
+          <div class="form-group">
+            <label for="css200">Time 200</label>
+            <input id="css200"
+              class="form-control bg-white px-3 py-2 {{error.css200 && 'border border-1 border-danger'}}"
+              timeFormatMask type="text"
+              [ngModel]="assessment.css200" name="css200" (change)="isDirty=true" (ngModelChange)="isDirty=true"
+              [customTooltip]="error.css200"
+              [tooltip-type]="'error'"
+              (blur)="session.css400=form.value.css400;session.css200=form.value.css200;validate([$event.target.value,'css200'])"
+            >
+            <i *ngIf="error.css200" class="far fa-exclamation-circle text-danger err-icon"></i>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="sessionType !== 'swim'">
+          <div class="form-group" style="margin-top: 34px;">
+            <label for="ass-time">Assessment Time</label>
+            <input #assTime id="ass-time"
+              class="form-control bg-white px-3 py-2 {{error.assessmentTime && 'border border-1 border-danger'}}"
+              timeFormatMask includeHour="true" type="text"
+              [ngModel]="assessment.assessmentTime" name="assessmentTime" (change)="isDirty=true" (ngModelChange)="isDirty=true"
+              [customTooltip]="error.assessmentTime"
+              [tooltip-type]="'error'"
+              (blur)="session.assessmentTime=assTime.value;session.assessmentType=form.value.assessmentType;validate([$event.target.value,'assessmentTime'])"
+            >
+            <i *ngIf="error.assessmentTime" class="far fa-exclamation-circle text-danger err-icon"></i>
+          </div>
+          <div class="form-group">
+            <label for="ahr-input">AHR</label>
+            <input type="text" id="ahr-input"
+              class="form-control bg-white px-3 py-2 {{error.ahr && 'border border-1 border-danger'}}"
+              [ngModel]="assessment.ahr" (ngModelChange)="isDirty=true"
+              name="ahr"
+              [customTooltip]="error.ahr"
+              [tooltip-type]="'error'"
+              (blur)="validate([$event.target.value,'ahr'])"
+            >
+          <i *ngIf="error.ahr" class="far fa-exclamation-circle text-danger err-icon"></i>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="sessionType === 'bike'">
+          <div class="form-group">
+            <label for="power-input">Power</label>
+            <input type="text" id="power-input"
+              class="form-control bg-white px-3 py-2 {{error.power && 'border border-1 border-danger'}}"
+              [ngModel]="assessment.power" (ngModelChange)="isDirty=true"
+              pattern="^\d+$"
+              name="power"
+              [customTooltip]="error.power"
+              [tooltip-type]="'error'"
+              (blur)="validate([$event.target.value,'power'])"
+            >
+            <i *ngIf="error.power" class="far fa-exclamation-circle text-danger err-icon"></i>
+          </div>
+          <label for="bike-select">Bike</label>
+          <select id="bike-select"
+            class="form-control btn btn-block text-secondary shadow border-bottom bg-white px-3 py-2 {{((bikeModel.touched || form.submitted) && bikeModel.invalid) && 'border-1 border-danger'}}"
+            name="bikeId"
+            [ngModel]="currentBike.bikeId" (change)="isDirty=true"
+            required #bikeModel="ngModel"
+            [customTooltip]="((bikeModel.touched || form.submitted) && bikeModel.invalid) && 'This field is required'"
+            [tooltip-type]="'error'"
+          >
+            <option [ngValue]="undefined">Select</option>
+            <option *ngFor="let bike of user_bikes" [ngValue]="bike.bikeId" type="button">{{bike.nickName}}</option>
+          </select>
+        </ng-container>
+      </div>
+    </div>
+    <textarea *ngIf="assessment"
+      class="form-control"
+      placeholder="Assessment Notes..."
+      name="comments"
+      cols="30"
+      rows="5"
+      [ngModel]="textEncodeDecode.getDecodedText(assessment.comments)"
+      (ngModelChange)="isDirty=true">
+    </textarea>
+
+    <div *ngIf="isDirty" [@ngIfExpandHeight] class="row d-flex justify-content-end align-items-center mt-4 mr-1">
+      <div *ngIf="isDirty" [@ngIfFadeIn]>
+        <button type="button" class="btn btn-default px-5 ml-2" [disabled]="loading" (click)="closeModal()">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-success px-5 ml-2" [disabled]="loading">
+          Save
+          <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

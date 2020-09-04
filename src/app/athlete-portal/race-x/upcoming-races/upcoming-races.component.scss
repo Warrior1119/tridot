@@ -1,0 +1,64 @@
+.upcoming-races-block {
+  .racex-menu-wrap {
+    right: 0px;
+    top: -23px;
+    .racex-header .custom-menu__list {
+      padding: 12px 50px 10px 0px;
+    }
+  }
+
+  .racex-menu-wrap.open {
+    right: 8px;
+    top: -12px;
+    .custom-menu__button {
+      top:-5px;
+      right:0px;
+    }
+  }
+
+  .distance-type {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 44px;
+    white-space: nowrap
+  }
+
+  .race-avatar {
+    background-color: #f3f3f3;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .button-container {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right:30px
+  }
+
+  .date-container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .date-font-size{
+    font-size: 2.25rem;
+    line-height:2.25rem;
+    font-weight: bolder;
+  }
+
+  .divider{
+    border-left:1px solid #d0d5d9;
+  }
+
+  .nowrap{
+    white-space: nowrap
+  }
+}

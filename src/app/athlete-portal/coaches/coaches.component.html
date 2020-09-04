@@ -1,0 +1,120 @@
+<div class="main text-center" *ngIf="loading">
+  <div class="spinner-border m-5" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<div class="main" *ngIf="!loading">
+  <div class="container daily-workout-container">
+    <div class="row">
+      <div class="col-lg-12 col-xl-12">
+        <div class="row p-2 justify-content-center text-danger" *ngIf="errorMessage">
+          {{errorMessage}}
+        </div>
+        <img class="mb-4 cursor-pointer" *ngIf="athleteProfile && athleteProfile.subscription != 'Premium2017'" src="../assets/img/banners/premium-upgrade.svg"
+          alt="" [routerLink]="['/user/subscription-options']">
+        <div class="card-box p-4 mb-4 rounded shadow d-flex justify-content-between align-items-center flex-wrap">
+          <div class="col-12 col-md-2 mb-3 mb-sm">
+            <input [(ngModel)]="coachNameFilter" class="text-sm" type="text" placeholder="Coach Name" (keyup)="filterByName()" >
+          </div>
+          
+          <div class="col-12 col-md-2 mb-3 mb-sm dropdown">
+            <button type="button" class="btn dropdown-toggle shadow px-2 py-2" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <span class="text-sm text-body mr-3 pull-left">{{(filterNames.gender)? 'Gender - '+
+                filterNames.gender: 'Gender' }}</span>
+              <span class="pull-right">
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" (click)="filter('gender', 'male','gender','Male' )">Male</a>
+              <a class="dropdown-item" (click)="filter('gender', 'female','gender','Female' )">Female</a>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-2 mb-3 mb-sm dropdown">
+            <button type="button" class="btn dropdown-toggle shadow px-2 py-2 w-100" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <span class="text-sm text-body mr-3 pull-left">{{(filterNames.atheleteFocus)? 'Athlete Focus - '+
+                filterNames.atheleteFocus: 'Athlete Focus' }}</span>
+              <span class="pull-right">
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" (click)="filter('beginnerFocus', 'true', 'atheleteFocus', 'Beginners' );">Beginners</a>
+              <a class="dropdown-item" (click)="filter('clydesdalesFocus', 'true', 'atheleteFocus', 'Clydesdales/Athenas' )">Clydesdales/Athenas</a>
+              <a class="dropdown-item" (click)="filter('intermediateFocus', 'true', 'atheleteFocus', 'Intermediate' )">Intermediate</a>
+              <a class="dropdown-item" (click)="filter('highlyCompetitiveFocus', 'true', 'atheleteFocus', 'Highly Competitive')">Highly
+                Competitive</a>
+              <a class="dropdown-item" (click)="filter('eliteFocus', 'true', 'atheleteFocus', 'Elite' )">Elite</a>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-2 mb-3 mb-sm dropdown">
+            <button type="button" class="btn dropdown-toggle shadow px-2 py-2 w-100" data-toggle="dropdown" id="format"
+              aria-haspopup="true" aria-expanded="false">
+              <span class="text-sm text-body mr-3 pull-left">{{(filterNames.formatFocus)? 'Format Focus - '+
+                filterNames.formatFocus: 'Format Focus' }}
+              </span>
+              <span class="pull-right">
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="format">
+              <a class="dropdown-item" (click)="filter('sprintFocus', 'true', 'formatFocus', 'Sprint'  )">Sprint</a>
+              <a class="dropdown-item" (click)="filter('olympicFocus', 'true', 'formatFocus', 'Olympic'  )">Olympic</a>
+              <a class="dropdown-item" (click)="filter('halfMarathonFocus', 'true', 'formatFocus', 'Half'  )">Half</a>
+              <a class="dropdown-item" (click)="filter('fullMarathonFocus', 'true', 'formatFocus', 'Full'  )">Full</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-2 mb-3 mb-sm dropdown">
+            <button type="button" class="btn dropdown-toggle shadow px-2 py-2 w-100" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              <span class="text-sm text-body mr-3 pull-left">
+                {{(filterNames.disciplineFocus)? 'Discipline Focus - '+
+                filterNames.disciplineFocus: 'Discipline Focus' }}
+              </span>
+              <span class="pull-right">
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" (click)="filter('swimFocus', 'true', 'disciplineFocus', 'Swim'  )">Swim</a>
+              <a class="dropdown-item" (click)="filter('bikeFocus', 'true', 'disciplineFocus', 'Bike'  )">Bike</a>
+              <a class="dropdown-item" (click)="filter('runFocus', 'true', 'disciplineFocus', 'Run'  )">Run</a>
+              <a class="dropdown-item" (click)="filter('nutritionFocus', 'true', 'disciplineFocus', 'Nutrition'  )">Nutrition</a>
+            </div>
+          </div>
+          <div class="col-12 col-md-2">
+          <button class="btn btn-block btn-primary px-3" (click)="reset()">Reset</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col text-center text-danger" *ngIf="coaches && coaches.length == 0">
+            Sorry no coach found with the selected search criteria
+          </div>
+        </div>
+
+        <div class="card-deck mb-4" *ngIf="coaches">
+          <div class="card coach-card" *ngFor="let coach of coaches">
+            <img class="card-img-top coach-profile-pic" src="{{(coach.profilePhoto)? endpoint + coach.profilePhoto : '../assets/img/banners/coach-placeholder.png'}}"
+              alt="Card image cap">
+            <div class="card-body px-4">
+              <h5 class="card-title">{{coach.firstName}} {{coach.lastName}}</h5>
+              <p class="card-text" [innerHTML]="coach.about" ></p>
+            </div>
+            <div class="card-footer px-4 d-flex justify-content-between">
+              <a href="#" class="btn btn-tertiary px-4" [routerLink]="['./coach-profile']" [queryParams]="{coachId: coach.coachId}">View
+                Profile</a>
+              <a href="javascript:void(0)" class="btn btn-primary px-3" *ngIf="!athleteProfile.coach"
+                (click)="addCoach(coach)">Add Coach +</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

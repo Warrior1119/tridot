@@ -1,0 +1,34 @@
+<div *ngIf="profile">
+  <div class="card-img">
+    <div class="mb-4 mt-5 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/device-icon.svg'" [autosize]="true"  style="width: 130px;"></div>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title font-weight-normal">Download the App</h3>
+    <p class="card-text">You’ll use the TriDot mobile app to conduct your daily training. Add the app to your device's homescreen to complete this step.
+    </p>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-lg btn-block text-md text-uppercase" (click)="openModal(downloadTemplate)" [ngClass]="{'btn-primary bg-app': profile && profile.mobileFirstLogin == 0, 'btn-success': profile && profile.mobileFirstLogin == 1 }">
+      {{(profile && profile.mobileFirstLogin == 1)? 'Completed': 'Download the App'}}
+      <img class="mb-1 ml-2" [src]=" (profile && profile.mobileFirstLogin == 1)? '../assets/img/svg/icons/checkmark-white.svg': '../assets/img/svg/icons/plus-icon.svg'"
+        width="15">
+    </button>
+  </div>
+</div>
+
+<ng-template #downloadTemplate>
+  <div class="modal-body p-4">
+    <div class="row mb-2">
+      <h3 class="w-100 text-center">Download the App</h3>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        To install the mobile app on your iPhone login to the site using Safari, tap the
+        <img src="assets/img/pwa/install-icon1.png" class="icon1" alt="" width="22"/> icon and then click the <br><img src="assets/img/pwa/install-icon2.png" class="icon2" alt="" width="25" /> "Add to Homescreen" option. For Android devices, you'll be prompted to add to homescreen immediately upon accessing the site from your mobile browser.
+      </div>
+    </div>
+    <div class="row justify-content-center pt-4" *ngIf="errorMessage">
+      <span class="text-danger"> {{errorMessage}} </span>
+    </div>
+  </div>
+</ng-template>

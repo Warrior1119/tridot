@@ -1,0 +1,254 @@
+<div class="race-form-wrap card-box rounded shadow p-2 d-flex flex-column align-items-center justify-content-around">
+  <div class="d-block w-75 text-center border-bottom border-2 my-4">
+    <h4 class="page-title pb-3">
+        Add a Race
+    </h4>
+  </div>
+  <div class="d-block mb-4">
+    <div *ngIf="showFirstRaceOptions" class="d-flex flex-row justify-content-between align-items-center">
+      <button class="btn btn-primary btn-md text-sm mr-2" (click)="showFirstRaceOptions = false">
+        Add a Race
+        <div class="mb-1 ml-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/plus-icon.svg'" [autosize]="true" style="width: 15px;"></div>
+      </button>
+      <button class="btn btn-md btn-default text-sm" (click)="noScheduledRace()">
+        I'm not ready to add a race
+        <i class="fal fa-times text-secondary"></i>
+      </button>
+    </div>
+    <ng-container *ngIf="step === Step.Priority && !showFirstRaceOptions">
+      <div class="text-center mb-4">
+        <h5 class="d-inline font-weight-normal">Select Race Priority</h5>
+        <button style="cursor:pointer; opacity:.8; background: transparent; border: none; outline: none;">
+          <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" data-toggle="modal"
+            data-target="#infoModal" class="mx-auto d-inline-block"></div>
+        </button>
+      </div>
+      <div class="race-priority d-inline-flex justify-content-between align-items-center">
+        <div
+          [customTooltip]="getNeedUpgrade('A') ? needUpgradeTooltip : null"
+          [hide-delay]="getNeedUpgrade('A') ? 2000 : 0"
+          tooltip-class="tooltip-clickable"
+          data-toggle="tooltip"
+          data-placement="top">
+          <button
+            class="priority cursor-pointer d-inline-flex align-items-center justify-content-center mr-2"
+            [class.priority-a]="!getNeedUpgrade('A')"
+            [disabled] = "getNeedUpgrade('A')"
+            (click)="setRacePriority('A')">A
+          </button>
+        </div>
+        <div
+          [customTooltip]="getNeedUpgrade('B') ? needUpgradeTooltipB : null"
+          [hide-delay]="getNeedUpgrade('B') ? 2000 : 0"
+          tooltip-class = "tooltip-clickable"
+          data-toggle="tooltip"
+          data-placement="top">
+          <button
+            class="priority cursor-pointer d-inline-flex align-items-center justify-content-center mr-2"
+            [class.priority-b]="!getNeedUpgrade('B')"
+            [disabled]="getNeedUpgrade('B')"
+            (click)="setRacePriority('B')">B
+          </button>
+        </div>
+        <button class="priority cursor-pointer priority-c d-inline-flex align-items-center justify-content-center"
+          data-toggle="tooltip" data-placement="top" (click)="setRacePriority('C')">C</button>
+        <div class="d-inline divider mr-2 pl-2" *ngIf="!showFirstRaceOptions"></div>
+        <div class="d-inline close-block" *ngIf="!showFirstRaceOptions">
+          <button class="priority cursor-pointer d-inline-flex align-items-center justify-content-center mr-2" (click)="goback()">
+            <div class="close-icon" aria-label="My icon" [inlineSVG]="'../assets/img/svg/icons/simple-remove.svg'"></div>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="step > Step.Priority">
+      <ng-container *ngIf="step !== Step.Summary">
+        <div class="race-priority text-center">
+          <div class="priority priority-selected cursor-pointer d-inline-flex align-items-center justify-content-center mb-3"
+            [ngStyle] = "{'background': selectedRacePriorityColor}"
+            data-toggle="tooltip" data-placement="top"
+            (click)="step = Step.Priority">{{selectedRacePriority}}
+          </div>
+          <button *ngIf="step > Step.Distance" class="priority font-weight-normal border-0 ml-2" (click)="step = Step.Distance">{{selectedRaceDistance.catName}}</button>
+          <button *ngIf="step > Step.Date" class="priority font-weight-normal border-0 ml-2" (click)="step = Step.Week">{{raceDate | amDateFormat: prefDateFormat }}</button>
+          <button *ngIf="step > Step.Name" class="priority font-weight-normal border-0 ml-2" (click)="step = Step.Name">{{customRaceName}}</button>
+          <button *ngIf="step > Step.Location" class="priority font-weight-normal border-0 ml-2" (click)="step = Step.Location"><i class="fal fa-map-marker-alt"></i></button>
+          <ng-container [ngSwitch]="step">
+            <h5 *ngSwitchCase="Step.Distance" class="font-weight-normal pb-3">Select Race Distance</h5>
+            <h5 *ngSwitchCase="Step.Race" class="font-weight-normal pb-3">Select Your Race</h5>
+            <h5 *ngSwitchCase="Step.Name" class="font-weight-normal pb-3">Enter Race Name</h5>
+            <h5 *ngSwitchCase="Step.Location" class="font-weight-normal pb-3">Select Race Location</h5>     
+            <h5 *ngSwitchCase="Step.Week" class="font-weight-normal">Select an available Race Week
+              <button style="cursor:pointer; opacity:.8; background: transparent; border: none; outline: none;">
+                <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" data-toggle="modal"
+                  data-target="#infoModal" class="mx-auto d-inline-block"></div>
+              </button>
+            </h5>
+            <h5 *ngSwitchCase="Step.Date" class="font-weight-normal pb-3">Select Race Date</h5>     
+          </ng-container>
+        </div>
+      </ng-container>
+      <div *ngFor="let alert of alerts" class="alert alert-danger" role="alert" [innerHTML]="alert"></div>
+
+      <ng-container [ngSwitch]="step">
+        <div *ngSwitchCase="Step.Distance" class="distance-grid border-top border-2 pt-4">
+          <button *ngFor="let raceDistance of raceDistances"
+            class="btn btn-lg btn-default text-drk"
+            type="button"
+            (click)="setRaceDistance(raceDistance);"
+          >{{raceDistance.catName}}</button>
+        </div>
+        <div *ngSwitchCase="Step.Race" class="d-inline-flex align-items-center justify-content-center w-100">
+          <div class="w-100">
+            <div class="btn-group shadow d-flex align-items-center justify-content-between" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-lg btn-white flex-grow-1 border-right border-2">{{selectedRace ? selectedRace.raceName : 'Select a Race'}}
+                <span class="btn-default btn btn-md d-inline-flex" *ngIf="selectedRace">{{ selectedRace.raceStartDate }}</span>
+              </button>
+              <button class="btn btn-lg btn-white" style="max-width: 50px;"><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></button>
+            </div>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" type="button" (click)="setSelectedRace('unlisted')">
+                  My Race isn't listed
+                  <span class="btn-default btn btn-md d-inline-flex">Add Unlisted Race</span>
+              </button>
+              <button class="dropdown-item" *ngFor="let race of availableRaces" type="button" (click)="setSelectedRace(race)">
+                <span>{{race.raceName}}</span>
+                <span class="btn-default btn btn-md d-inline-flex">{{ race.raceStartDate }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="Step.Name" class="d-inline-flex align-items-center justify-content-center w-100">
+          <input type="text" id="unlisted-race" class="form-control btn shadow p-2" (keyup.enter)="setCustomName()"
+            placeholder="Name your race..." [(ngModel)]="customRaceName">
+          <label for="unlisted-race">
+            <i *ngIf="customRaceName" class="fal fa-times fa-lg text-secondary close-unlisted p-1 cursor-pointer" (click)="clearRaceName()"></i>
+          </label>
+          <button class="ml-1 btn btn-md btn-default text-drk" (click)="setCustomName()"><i class="fas fa-greater-than"></i></button>
+        </div>
+        <div *ngSwitchCase="Step.Location" class="d-inline-flex align-items-center justify-content-between address ml-2" >
+          <ngxgeo-autocomplete [userSettings]="locationSettings"
+            (componentCallback)="setAddress($event)"></ngxgeo-autocomplete>
+        </div>
+        <ng-container *ngSwitchCase="Step.Week">
+          <div class="legend-container d-inline-flex justify-content-around align-items-center text-xs w-100 px-2 my-2">
+            <div class="legend d-inline-flex align-items-center">
+              <div class="color-graph avail mr-1"></div>
+              <div class="legend-title">
+                Available
+              </div>
+            </div>
+            <div class="legend d-inline-flex align-items-center ml-1">
+              <div class="color-graph not-opt mr-1 text-nowrap"></div>
+              <div class="legend-title">
+                Not Optimal
+              </div>
+            </div>
+            <div class="legend d-inline-flex align-items-center ml-1">
+              <div class="color-graph not-avail mr-1"></div>
+              <div class="legend-title">
+                Unavailable
+              </div>
+            </div>
+          </div>
+          <div class="week-grid mx-1">
+            <div *ngFor="let week of currentPlan.seasonSchedule"
+              class="week-circle-btn cursor-pointer {{getColorStatus(week)}} {{getColorStatus(week) === 'not-avail' ? 'text-drk' : 'text-light'}}"
+              (click)="selectWeek(week)">
+              <div class="stacked-number-container">
+                <div class="stacked-number-inner">
+                  <span class="number-xs-sub">{{week.weekdayStartDate | amLocal | amDateFormat: 'MMM'}}</span>
+                  <span class="number-xs">{{week.weekdayStartDate | amLocal | amDateFormat: 'DD'}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div *ngSwitchCase="Step.Date" class="calendar-dropdown position-relative d-flex">
+          <i class="fal fa-calendar-alt cal-icon cursor-pointer" (click)="selectDateMDY.toggle()"></i>
+          <input type="text" placeholder="Selected Date" [ngStyle]="{'border-color': selectedRaceTabColor }" class="form-control btn p-2 shadow"
+          #selectDateMDY="bsDatepicker" [minDate]="startDate" [maxDate]="endDate" [(ngModel)]="selectedDate" bsDatepicker [bsConfig]="bsConfig"
+          iosDatepickerExtra #iosdpe="iosDatepickerExtra" (onShown)="iosdpe.onShowPicker($event)" (ngModelChange)="onSelectDate()"
+          autocomplete="off">
+        </div>
+        <div *ngSwitchCase="Step.Summary" class="text-center">
+          <h3 class="font-weight-bold">{{customRaceName || selectedRace?.raceName}}</h3>
+          <h4 class="font-weight-normal">{{address}}</h4>
+          <h4 class="font-weight-bold">{{formatDate(selectedDate)}}</h4>
+          <div class="mt-5 mb-3">
+            <h5 class="d-inline border border-3 py-2 px-3 mr-2 text-muted text-uppercase" style="border-radius: 100px;">{{selectedRaceDistance.catName}}</h5>
+            <h4 class="d-inline btn btn-default py-2 px-3 position-relative text-drk"
+              style="top: -5px; border-radius: 100px; font-size: 1.5rem;">{{selectedRacePriority}}</h4>
+          </div>
+        </div>
+      </ng-container>
+
+
+      <div *ngIf="step < Step.Summary; else raceConfirm"
+        class="distance-grid border-top border-2 mt-4 pt-4">
+        <button
+          class="btn btn-lg btn-default text-uppercase text-drk"
+          type="button"
+          (click)="clearRacePriority()"
+        ><i class="far fa-sync-alt text-drk"></i> Restart</button>
+        <button
+          class="btn btn-lg btn-default text-uppercase text-drk"
+          type="button"
+          (click)="goback()"
+        ><i class="far fa-reply text-drk"></i> Go Back</button>
+      </div>
+    </ng-container>
+
+    <ng-template #raceConfirm>
+      <div class="border-top border-2 mt-4 pt-4 w-100 d-flex align-items-center justify-content-around">
+        <button
+          class="btn btn-lg btn-default text-uppercase text-drk"
+          type="button"
+          (click)="goback()"
+        ><i class="far fa-reply text-drk"></i></button>
+        <button class="ml-2 btn btn-primary btn-lg text-uppercase flex-grow-1 text-nowrap"
+          (click)="createRace()" [disabled]="loadingRace">Confirm & Add Race
+          <div class="mb-1 ml-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/plus-icon.svg'" [autosize]="true" style="width: 15px;" *ngIf = "!loadingRace"></div>
+          <i class="fal fa-spinner fa-spin" *ngIf="loadingRace"></i>
+        </button>
+      </div>
+    </ng-template>
+
+    <!-- <div class="d-inline divider mr-2 pl-2" *ngIf="!showFirstRaceOptions"></div> -->
+    <!-- <div class="d-inline close-block" *ngIf="!showFirstRaceOptions">
+      <button class="btn btn-default" (click)="goback()">
+        <div class="close-icon" aria-label="My icon" [inlineSVG]="'../assets/img/svg/icons/simple-remove.svg'"></div>
+      </button>
+    </div> -->
+  </div>
+  <!-- <dismissable [id]="'add-race-helper-' + selectedRacePriority.toLowerCase()" #dismissable *ngIf="selectedRacePriority">
+    <div class="race-priority alert alert-secondary alert-dismissible fade show mt-4 d-flex justify-content-center align-items-center px-3 py-2">
+      <div class="priority d-inline-flex align-items-center justify-content-center mr-3 priority-{{selectedRacePriority.toLowerCase()}}">{{selectedRacePriority}}</div>
+        <div>
+          <ng-container [ngSwitch]="selectedRacePriority">
+            <span *ngSwitchCase="'A'">"A" races drive how your season is divided into distinct training phases. These are generally the longest races you're doing and not scheduled too close together.</span>
+            <span *ngSwitchCase="'B'">"B" races are scheduled within the training phases that were determined by your A races. Training for these races will be optimized to minimize negative impact on your A race training.</span>
+            <span *ngSwitchCase="'C'">"C" races do not impact your training optimization at all. They give you flexibility to add races that don't align with your other priorities or ability. Altering your training to accommodate these races is up to your discretion.</span>
+          </ng-container>
+          <strong class="cursor-pointer" (click)="helper()">Read more about adding races in our Knowledge Base</strong>
+        </div>
+      <button class="dismiss btn btn-sm rounded btn-light text-uppercase text-sm d-flex align-items-center py-2 px-3" (click)="dismissable.hide()"><span class="mr-2 text-nowrap">Never show again</span><i class="fal fa-times pl-1 fa-lg"></i></button>
+    </div>
+  </dismissable> -->
+</div>
+<!-- <div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Race Priority</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="backdrop"></div>
+<ng-template #needUpgradeTooltip><a routerLink="/user/subscription-options" class="text-danger"><strong>Upgrade account</strong></a> to add a race</ng-template>
+<ng-template #needUpgradeTooltipB><a routerLink="/user/subscription-options" class="text-danger"><strong>Upgrade account</strong></a> to add a B race</ng-template>

@@ -1,0 +1,295 @@
+<div *ngIf="race && details && race.daysTillRace == 0" class="card-box rounded shadow">
+  <div class="border-bottom px-2 py-2 mx-5 mb-3">
+    <div class="col-12 text-center">
+      <h4 class="mt-2 mb-0 pb-0 font-weight-bold">{{race?.raceName}}</h4>
+      <p class="mb-1">Race Completion Survey</p>
+    </div>
+  </div>
+  
+  <div class="modal-body">
+    <div class="container-fluid">
+      <div class=" col ">
+       
+        <p *ngIf="details?.uiRaceDetails.isCustomRace == 0 && (!details?.uiRaceDetails.totalParticipants || !details?.uiRaceDetails.totalParticipantsInGender || !details?.uiRaceDetails.totalInDivision)">Number of race participants has not yet been released. Please check back soon to see your overall, gender, and division rank</p>
+        <h6>Participant Data</h6>
+
+        <div class="row my-3">
+          <div class="col-12 col-sm d-flex align-items-center justify-content-between border-sm-right pr-sm-4 mr-sm-4 mb-2 mb-sm-0" [class.border-danger]="totalParticipantsError">
+            <label for="swim-overall-num"># in Race(Overall)</label>
+            <input id="swim-overall-num" type="text"
+              AutoSizeInput [class.border-danger]="totalParticipantsError" 
+              [ngModel]="details.uiRaceDetails.totalParticipants || ''"
+              (ngModelChange)="details.uiRaceDetails.totalParticipants = $event || 0;updateTotalParticipants($event) "
+              [disabled]="!totalParticipantsCanEdit" [customTooltip]="totalParticipantsError" tooltip-type="error"
+              maxlength="4"  placeholder="#00" patternInput pattern="^\d+$">
+          </div>
+
+          <div class="col-12 col-sm d-flex align-items-center justify-content-between" >
+            <label for="swim-overall-rank">Your Overall Rank</label>
+            <input id="swim-overall-rank" type="text"
+              AutoSizeInput [class.border-danger]="overallRankError"
+              [ngModel]="details.uiRaceDetails.overallRank || ''"
+              (ngModelChange)="details.uiRaceDetails.overallRank = $event || 0; updateOverallRank($event)"
+              [customTooltip]="overallRankError" tooltip-type="error" maxlength="4" patternInput  placeholder="#00" pattern="^\d+$">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <!-- You don't need the card-box class here -->
+            <div class="bg-light p-3 text-center">
+              <p class="m-2 text-center">
+                <ng-container *ngIf="details.uiRaceDetails.totalParticipants">You placed {{details.uiRaceDetails.overallRank}} out of {{details.uiRaceDetails.totalParticipants}} Overall. Top {{ details.uiRaceDetails.overallRank/details.uiRaceDetails.totalParticipants |percent:'0.0' }}</ng-container>
+                <ng-container *ngIf="!details.uiRaceDetails.totalParticipants">Check back later to see your X rank</ng-container>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-12 col-sm d-flex align-items-center justify-content-between border-sm-right pr-sm-4 mr-sm-4 mb-2 mb-sm-0">
+            <label for="swim-gender-num"># in Gender</label>
+            <input id="swim-gender-num" type="text"
+              [class.border-danger]="totalMalesError" AutoSizeInput
+              [ngModel]="details.uiRaceDetails.totalParticipantsInGender || ''" (ngModelChange)="details.uiRaceDetails.totalParticipantsInGender = $event || 0; updateTotalMales($event)"
+              [disabled]="!totalParticipantsInGenderCanEdit"
+              [customTooltip]="totalMalesError" tooltip-type="error"
+              maxlength="4" patternInput placeholder="#00" pattern="^\d+$">
+          </div>
+
+          <div class="col-12 col-sm d-flex align-items-center justify-content-between">
+            <label for="swim-gender-rank">Your Gender Rank</label>
+            <input id="swim-gender-rank" type="text"
+              [class.border-danger]="genderRankError" 
+              AutoSizeInput [ngModel]="details.uiRaceDetails.genderRank || ''"
+              (ngModelChange)="details.uiRaceDetails.genderRank = $event || 0; updateGenderRank($event)"
+              [customTooltip]="genderRankError" tooltip-type="error" maxlength="4" patternInput  placeholder="#00" pattern="^\d+$">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="bg-light p-3 text-center">
+              <p class="m-2 text-center">
+                <ng-container *ngIf="details.uiRaceDetails.totalParticipantsInGender">You placed {{details.uiRaceDetails.genderRank}} out of {{details.uiRaceDetails.totalParticipantsInGender}} Overall. Top {{ details.uiRaceDetails.genderRank/details.uiRaceDetails.totalParticipantsInGender |percent:'0.0' }}</ng-container>
+                <ng-container *ngIf="!details.uiRaceDetails.totalParticipantsInGender">Check back later to see your X rank</ng-container>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-12 col-sm d-flex align-items-center justify-content-between border-sm-right pr-sm-4 mr-sm-4 mb-2 mb-sm-0">
+            <label for="swim-division-num"># in Division</label>
+            <input id="swim-division-num" type="text" style="width: 50px"
+              [class.border-danger]="totalInDivisionError" AutoSizeInput
+              [ngModel]="details.uiRaceDetails.totalInDivision || ''"
+              (ngModelChange)="details.uiRaceDetails.totalInDivision = $event || 0; updateTotalInDivision($event)"
+              [disabled]="!totalDivisionCanEdit" [customTooltip]="totalInDivisionError" tooltip-type="error"
+              maxlength="4"  placeholder="#00" patternInput pattern="^\d+$">
+          </div>
+
+          <div class="col-12 col-sm d-flex align-items-center justify-content-between">
+            <label for="swim-division-rank">Your Division Rank</label>
+            <input id="swim-division-rank" type="text" style="width: 50px"
+              [class.border-danger]="divisionRankError" AutoSizeInput 
+              [ngModel]="details.uiRaceDetails.divisionRank || ''"
+              (ngModelChange)="details.uiRaceDetails.divisionRank = $event || 0; updateDivisionRank($event)"
+              [customTooltip]="divisionRankError" tooltip-type="error" maxlength="4" patternInput  placeholder="#00" pattern="^\d+$">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col">
+            <!-- You don't need the card-box class here -->
+            <div class="bg-light p-3 text-center">
+              <p class="m-2 text-center">
+                <ng-container *ngIf="details.uiRaceDetails.totalInDivision">You placed {{details.uiRaceDetails.totalInDivision}} out of {{details.uiRaceDetails.divisionRank}} Overall. Top {{ details.uiRaceDetails.divisionRank/details.uiRaceDetails.totalInDivision |percent:'0.0' }}</ng-container>
+                <ng-container *ngIf="!details.uiRaceDetails.totalInDivision">Check back later to see your X rank</ng-container>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-4 col">
+        <h6 class="pt-2">Survey Questions</h6>
+      </div>
+
+      <div class="col-12 d-flex flex-column align-items-center justify-content-center pb-4">
+        <div class="d-flex justify-content-between mt-2 w-100">
+          <div class="pt-2">First Race Of This Distance?</div>
+          <div class="ml-auto">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="isFirstRaceOfDistance1"
+                [checked]="local.isFirstRaceOfDistance === 'YES'"
+                (click)="update('isFirstRaceOfDistance', 1);local.isFirstRaceOfDistance = 'YES'">
+              <label class="custom-control-label" for="isFirstRaceOfDistance1">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mr-0">
+              <input type="radio" class="custom-control-input" id="isFirstRaceOfDistance2"
+                [checked]="local.isFirstRaceOfDistance === 'NO'"
+                (click)="update('isFirstRaceOfDistance', 0);local.isFirstRaceOfDistance = 'NO'">
+              <label class="custom-control-label mr-0" for="isFirstRaceOfDistance2">No</label>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 w-100">
+          <div class="pt-2">Was This A Qualifying Performance?</div>
+          <div class="ml-auto">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="qualifyingPerformance1"
+                [checked]="local.qualifyingPerformance === 'YES'"
+                (click)="update('qualifyingPerformance', 1);local.qualifyingPerformance = 'YES'">
+              <label class="custom-control-label" for="qualifyingPerformance1">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mr-0">
+              <input type="radio" class="custom-control-input" id="qualifyingPerformance2"
+                [checked]="local.qualifyingPerformance === 'NO'"
+                (click)="update('qualifyingPerformance', 0);local.qualifyingPerformance = 'NO'">
+              <label class="custom-control-label mr-0" for="qualifyingPerformance2">No</label>
+            </div>
+          </div>
+        </div>
+
+
+        <br *ngIf="local.qualifyingPerformance == 'YES'" />
+        <div class="bg-light col-12 card-box px-3 py-3 text-center" *ngIf="local.qualifyingPerformance == 'YES'">
+          <button class="btn {{getButtonClass('qualifyingReason','Professional')}}  mr-2 my-2"
+            (click)="update('qualifyingReason', 'professional');local.qualifyingReason = 'Professional'">Professional</button>
+          <button class="btn {{getButtonClass('qualifyingReason','World Championship')}} my-2"
+            (click)="update('qualifyingReason', 'wc');local.qualifyingReason = 'World Championship' ">World
+            Championships</button>
+          <br />
+          <button class="btn {{getButtonClass('qualifyingReason','National Championship')}} mr-2"
+            (click)="update('qualifyingReason', 'nc');local.qualifyingReason = 'National Championship'">National
+            Championships</button>
+          <button class="btn {{getButtonClass('qualifyingReason','Others')}}"
+            (click)="update('qualifyingReason', 'others');local.qualifyingReason = 'Others' ">Others</button>
+
+        </div>
+
+
+
+
+        <div class="d-flex justify-content-between mt-2 w-100">
+          <div class="pt-2">Is Result Valid For Analysis?</div>
+          <div class="ml-auto">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="validForAnalysis1"
+                [checked]="local.validForAnalysis === 'YES'"
+                (click)="update('validForAnalysis', 1);local.validForAnalysis = 'YES'">
+              <label class="custom-control-label" for="validForAnalysis1">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mr-0">
+              <input type="radio" class="custom-control-input" id="validForAnalysis2"
+                [checked]="local.validForAnalysis === 'NO'"
+                (click)="update('validForAnalysis', 0);local.validForAnalysis = 'NO'">
+              <label class="custom-control-label mr-0" for="validForAnalysis2">No</label>
+            </div>
+          </div>
+        </div>
+
+
+        <br />
+        <div class="bg-light row col-12 card-box px-3 py-3 text-center">
+          <div class="col-12 col-sm-6 text-center d-flex align-items-center mb-2 mb-sm-0">Was this a DNS/DNF?</div>
+          <div class="col-12 col-sm-6 mr-0 text-right d-flex">
+            <button class="btn {{getButtonClass('dnsDnf','DNS')}} mr-2"
+              (click)="update('dnsDnf', 'dns');local.dnsDnf = 'DNS'">DNS</button>
+            <button class="btn {{getButtonClass('dnsDnf','DNF')}} mr-2"
+              (click)="update('dnsDnf', 'dnf');local.dnsDnf = 'DNF' ">DNF</button>
+            <button class="btn {{getButtonClass('dnsDnf','Neither')}}"
+              (click)="update('dnsDnf', 'neither');local.dnsDnf = 'Neither'">Neither</button>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-2 w-100 pt-2 pb-1">
+          <h6 class="ml-auto w-100">Race Goals</h6>
+          <div class="ml-auto text-nowrap pr-5">
+            <h6 class="">Achieved?</h6>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 w-100">
+          <input type="text" class="ml-auto rounded border px-3 py-2 w-100 text-body" placeholder="Race Goal 1"
+            [(ngModel)]="details.uiRaceDetails.goal1" (change)="update('goal1', details.uiRaceDetails.goal1)">
+          <div class="ml-auto text-nowrap pl-3 py-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="goal1Success1"
+                [checked]="local.goal1Success === 'YES'"
+                (click)="update('goal1Success', 1);local.goal1Success = 'YES'">
+              <label class="custom-control-label" for="goal1Success1">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mr-0">
+              <input type="radio" class="custom-control-input" id="goal1Success2"
+                [checked]="local.goal1Success === 'NO'" (click)="update('goal1Success', 0);local.goal1Success = 'NO'">
+              <label class="custom-control-label" for="goal1Success2">No</label>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 w-100">
+          <input type="text" class="ml-auto  border rounded px-3 py-2 w-100 text-body" placeholder="Race Goal 2"
+            [(ngModel)]="details.uiRaceDetails.goal2" (change)="update('goal2', details.uiRaceDetails.goal2)">
+          <div class="ml-auto text-nowrap pl-3 py-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="goal2Success1"
+                [checked]="local.goal2Success === 'YES'"
+                (click)="update('goal2Success', 1);local.goal2Success = 'YES'">
+              <label class="custom-control-label" for="goal2Success1">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mr-0">
+              <input type="radio" class="custom-control-input" id="goal2Success2"
+                [checked]="local.goal2Success === 'NO'" (click)="update('goal2Success', 0);local.goal2Success = 'NO'">
+              <label class="custom-control-label" for="goal2Success2">No</label>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-2 w-100">
+          <input type="text" class="ml-auto border rounded px-3 py-2 w-100 text-body" placeholder="Race Goal 3"
+            [(ngModel)]="details.uiRaceDetails.goal3" (change)="update('goal3', details.uiRaceDetails.goal3)">
+          <div class="ml-auto text-nowrap pl-3 py-2">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" class="custom-control-input" id="goal3Success1"
+                [checked]="local.goal3Success === 'YES'"
+                (click)="update('goal3Success', 1);local.goal3Success = 'YES'">
+              <label class="custom-control-label" for="goal3Success1">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline mr-0">
+              <input type="radio" class="custom-control-input" id="goal3Success2"
+                [checked]="local.goal3Success === 'NO'" (click)="update('goal3Success', 0);local.goal3Success = 'NO'">
+              <label class="custom-control-label" for="goal3Success2">No</label>
+            </div>
+          </div>
+        </div>
+        <br />
+        <div class="bg-light row col-12 card-box px-3 py-3 text-center">
+          <div class="col-12 col-sm-8 text-center flex-grow d-flex align-items-center mb-2 mb-sm-0">Was The Race Overall A Success?</div>
+          <div class="col-12 col-sm-4 mr-0 text-right d-flex justify-content-center justify-content-sm-end">
+            <button class="btn {{getButtonClass('overallRaceSuccess','YES')}} mr-2 "
+              (click)="update('overallRaceSuccess', 1);local.overallRaceSuccess = 'YES'">YES</button>
+            <button class="btn {{getButtonClass('overallRaceSuccess','NO')}} "
+              (click)="update('overallRaceSuccess', 0);local.overallRaceSuccess = 'NO'">NO</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col">
+        <textarea name="planned-comment" id="large-comments" class="px-2 bg-light border-0 styled-textarea"
+          (change)="update('comments', details.uiRaceDetails.comments)"
+          [(ngModel)]="details.uiRaceDetails.comments"
+          placeholder="Comments..."
+        ></textarea>
+        <div *ngIf="showSubmitButton" class="button-group text-right mt-3">
+          <button class="btn btn-md btn-primary text-md" (click)="submit.emit(); displayModal.hide()">
+            Submit Completion Data
+          </button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

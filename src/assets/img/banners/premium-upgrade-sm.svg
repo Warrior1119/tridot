@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 341 73">
+  <defs>
+    <style>
+      .premium-upgrade-sm-cls-1 {
+        fill: #414141;
+      }
+
+      .premium-upgrade-sm-cls-2 {
+        fill: #e40b14;
+      }
+
+      .premium-upgrade-sm-cls-3 {
+        fill: #fff;
+        font-size: 16px;
+        font-family: AzoSans-Bold, Azo Sans;
+        font-weight: 700;
+      }
+
+      .premium-upgrade-sm-cls-4 {
+        font-family: AzoSans-Italic, Azo Sans;
+        font-weight: 400;
+        font-style: italic;
+      }
+    </style>
+  </defs>
+  <g id="Group_1461" data-name="Group 1461" transform="translate(-926 -176)">
+    <rect id="Rectangle_561" data-name="Rectangle 561" class="premium-upgrade-sm-cls-1" width="341" height="73" rx="4" transform="translate(926 176)"/>
+    <g id="Group_837" data-name="Group 837" transform="translate(11)">
+      <g id="Group_836" data-name="Group 836" transform="translate(965.946 194)">
+        <path id="Path_1" data-name="Path 1" class="premium-upgrade-sm-cls-2" d="M32.443,9.273a6.5,6.5,0,0,1-7.379,4.091,5.448,5.448,0,0,1-1.338-.421l-1.415,1.338a4.768,4.768,0,0,1,.344,3.02,4.858,4.858,0,0,1-5.773,3.785,3.765,3.765,0,0,1-1.3-.459L14.32,21.814a3.573,3.573,0,1,1-2.371-1.682,6.589,6.589,0,0,1,.8.268l1.071-1.376a4.857,4.857,0,0,1,5.047-7.456,5.094,5.094,0,0,1,.726.191l1.185-1.491a6.655,6.655,0,0,1-.765-4.55,6.372,6.372,0,0,1,3.518-4.512A17.189,17.189,0,1,0,34.011,20.629,17.4,17.4,0,0,0,32.443,9.273Z" transform="translate(0.028 0.028)"/>
+      </g>
+      <text id="TriDot_Premium_Feature" data-name="TriDot Premium Feature" class="premium-upgrade-sm-cls-3" transform="translate(1013 217)"><tspan x="0" y="0">TriDot </tspan><tspan class="premium-upgrade-sm-cls-4" y="0">Premium Feature</tspan></text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,93 @@
+$sidebar_width: 300px;
+$mini_sidebar_width: 88px;
+
+.page-wrapper {
+  height: 100vh;
+
+  .page-content {
+    display: inline-block;
+    width: 100%;
+    transition: padding-left 0.3s ease;
+
+    &:not(.nosidebar) {
+      @media screen and (min-width: 575px) {
+        padding-left: $sidebar_width;
+      }
+      @media screen and (min-width: 1200px) {
+        margin-top: -100px;
+      }
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 998;
+      background: #000;
+      opacity: 0.5;
+      display: none;
+
+      &.show {
+        @media screen and (max-width: 575.98px) {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .sidebar {
+    left: 0px;
+  }
+
+  @media screen and (max-width: 575.98px) {
+    .sidebar {
+      display: none !important;
+    }
+  }
+
+  @media screen and (min-width: 575px) {
+    &.toggled {
+      .page-content:not(.nosidebar) {
+        padding-left: 88px;
+      }
+    }
+  }
+
+  .attribution {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    margin: 5px;
+    letter-spacing: 1px;
+  }
+}
+.page-wrapper.toggled .sidebar {
+  left: -($sidebar_width - $mini_sidebar_width);
+}
+
+// angular perfect scrollbar style
+.sidebar .ps.ps--scrolling-y > .ps__rail-y,
+.sidebar > .ps.ps--scrolling-x > .ps__rail-x,
+.ps .ps__rail-x:hover,
+.ps .ps__rail-y:hover,
+.ps .ps__rail-x:focus,
+.ps .ps__rail-y:focus,
+.ps .ps__rail-x.ps--clicking,
+.ps .ps__rail-y.ps--clicking {
+  background-color: transparent !important;
+}
+
+.sidebar .ps.ps--active-y > .ps__rail-y:hover,
+.sidebar > .ps.ps--active-y > .ps__rail-y.ps--clicking {
+  width: 10px !important;
+}
+
+.ps__thumb-y {
+  background-color: #fff !important;
+  width: 6px !important;
+  border-radius: 0px !important;
+  opacity: 0.5;
+}

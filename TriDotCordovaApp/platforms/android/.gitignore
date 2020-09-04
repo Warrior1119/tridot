@@ -1,0 +1,28 @@
+# Non-project-specific build files:
+build.xml
+local.properties
+/gradlew
+/gradlew.bat
+/gradle
+# Ant builds
+ant-build
+ant-gen
+# Eclipse builds
+gen
+out
+# Gradle build artifacts
+.gradle
+.gradletasknamecache
+/build
+/CordovaLib/build
+/app/build
+gradle-app.setting
+# Android Studio
+.idea
+
+#Ignore built bundles - these are to be rebuilt every time
+app/src/main/assets/www
+
+#Ignore generated images - these are to be regenerated every time
+app/src/main/res/drawable*/**/*.*
+app/src/main/res/mipmap*/**/*.*

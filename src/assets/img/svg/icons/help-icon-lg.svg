@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.203 37.203">
+  <defs>
+    <style>
+      .help-icon-cls-1 {
+        fill: #80878f;
+      }
+
+      .help-icon-cls-2 {
+        fill: #3a3d44;
+        font-size: 17px;
+        font-family: AzoSans-Bold, Azo Sans;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+    </style>
+  </defs>
+  <g id="Group_125" data-name="Group 125" transform="translate(-2470 -962)">
+    <circle id="Ellipse_30" data-name="Ellipse 30" class="help-icon-cls-1" cx="18.602" cy="18.602" r="18.602" transform="translate(2470 962)"/>
+    <text id="_" data-name="?" class="help-icon-cls-2" transform="translate(2488.309 986.902)"><tspan x="-4.369" y="0">?</tspan></text>
+  </g>
+</svg>

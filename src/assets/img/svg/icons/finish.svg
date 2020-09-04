@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="41.891" height="41.89" viewBox="0 0 41.891 41.89">
+  <g id="Group_1867" data-name="Group 1867" transform="translate(-834.832 -202.709)">
+    <g id="Group_489" data-name="Group 489" transform="translate(834.832 202.709)">
+      <g id="dumbbells">
+        <rect id="Rectangle_43" data-name="Rectangle 43" width="41.89" height="41.89" rx="20.945" fill="#f2da22"/>
+      </g>
+    </g>
+    <g id="trophy" transform="translate(844.658 212.724)">
+      <path id="Path_695" data-name="Path 695" d="M5.737,8.473H4.8A2.8,2.8,0,0,1,2,5.671V1H5.737" transform="translate(0 0)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.5"/>
+      <path id="Path_696" data-name="Path 696" d="M18,8.473h.934a2.8,2.8,0,0,0,2.8-2.8V1H18" transform="translate(-1.053 0)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.5"/>
+      <line id="Line_796" data-name="Line 796" y1="3.737" transform="translate(11.342 14.079)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.5"/>
+      <path id="Path_697" data-name="Path 697" d="M11.605,14.079h0A5.605,5.605,0,0,1,6,8.473V1H17.21V8.473A5.605,5.605,0,0,1,11.605,14.079Z" transform="translate(-0.263 0)" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5"/>
+      <path id="Path_698" data-name="Path 698" d="M17.21,22.737H6A3.737,3.737,0,0,1,9.737,19h3.737A3.737,3.737,0,0,1,17.21,22.737Z" transform="translate(-0.263 -1.185)" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

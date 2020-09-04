@@ -1,0 +1,40 @@
+.info {
+  font-size: 14px;
+
+  p {
+    margin-bottom: 0.35rem;
+  }
+}
+
+::ng-deep #search_places {
+  border-color: #e2e2e2;
+  border-radius: 4px;
+  outline: none;
+}
+
+.text-box-icon   { 
+    float: right;
+    margin-right: 6px;
+    margin-top: -35px;
+    position: relative;
+    z-index: 2;
+}
+
+.social-icon-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.social-icons {
+  width: 24px;
+}
+
+.coach-social-list {
+  li {
+    svg {
+      path.facebook-profile-cls-1 {
+        fill: #3A5CA9 !important;
+      }
+    }
+  }
+}

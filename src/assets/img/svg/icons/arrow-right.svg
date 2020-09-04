@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5.5 10">
+  <defs>
+    <style>
+      .arrow-right-cls-1 {
+        fill: none;
+        stroke: #738089;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <path id="Path_77" data-name="Path 77" class="arrow-right-cls-1" d="M6.5,3.5,11,8,6.5,12.5" transform="translate(-6 -3)"/>
+</svg>

@@ -1,0 +1,24 @@
+        <div class="card-box rounded-lg shadow">
+          <div class="d-flex align-items-center cursor-pointer justify-content-between p-3 border-bottom">
+            <span class="user-name d-block mb-0 line-height-sm">Privacy settings</span>
+          </div>
+          <div class="box-content p-0">
+            <div class="profile-nav">
+              <ul class="m-0 p-0" *ngIf="active">
+                <li class="d-flex align-items-center cursor-pointer justify-content-between p-3 border-bottom"
+                  *ngFor="let header of headers" [routerLink]="[header.link]">
+                  <span class="nav-title" [ngClass]="{'active': active.link == header.link}">{{header.name}}</span>
+                  <div class="nav-arrow mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/right-arrow.svg'" [autosize]="true"  style="width: 5px;"></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+

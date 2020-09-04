@@ -1,0 +1,162 @@
+<ng-template #unlock><app-unlock-overlay></app-unlock-overlay></ng-template>
+
+<div class="modal fade" id="emailInfoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Emaily workouts to me</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>Use this URL to subscribe to your TriDot training schedule via 3rd-party calendar application such as Google
+          Calendar, Apple's iCal, or Microsoft Outlook.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="calendarSyncModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Calendar Sync</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>Use this URL to subscribe to your TriDot training schedule via 3rd-party calendar application such as Google
+          Calendar, Apple's iCal, or Microsoft Outlook.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="pushToGarminModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Push to Garmin</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>Allow TriDot to push your workouts to Garmin Connect.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *isFeatureSubscribed="['dailyWorkoutEmail', 'calendarSync']; overlay unlock">
+  <div class="card card-box">
+    <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+      <div class="title">Notification Preferences</div>
+      <div class="float-right">
+        <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize mr-2"
+                *ngIf = "editMode === true" (click)="cancel()">
+          Cancel
+        </button>
+        <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+                (click)="editMode = true;" *ngIf = "editMode === false">
+          Edit
+        </button>
+        <button class="btn-success btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+                *ngIf = "editMode === true" (click)="updateNotificationPreference();">
+          Save<i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body card-body-md py-0">
+      <!-- Email me my daily worksouts. -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+        <div class="d-flex">
+          <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Email me my daily workouts.</div>
+          <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+                data-target="#emailInfoModal" class="cursor-pointer d-inline-block ml-2 d-inline-block" [ngClass]="{'mt-2' : isMobile}" ></div>
+        </div>
+        <ng-container *ngIf="!editMode">
+          <div class="d-flex w-50 justify-content-end">
+            <div class="text-right text-sm text-muted text-capitalize mb-0 small-text">
+              {{ this.emailPrefIdTime.getHours() > 12 ? this.emailPrefIdTime.getHours()-12 : this.emailPrefIdTime.getHours()  }}
+              :
+              {{ this.emailPrefIdTime.getMinutes() }}
+              {{ this.emailPrefIdTime.getHours() > 12 ? 'PM' : 'AM'  }} 
+            </div>
+            <div class="ml-2" [ngClass]="{'select-container': isEmailNotificationPreferred == true, 'select-container-false': isEmailNotificationPreferred == false}">
+              <div class="align-middle d-inline-block garmin-param cursor-pointer" 
+                  [ngClass]="{'selected-param': isEmailNotificationPreferred == true }">
+              </div>
+              <div class="align-middle d-inline-block garmin-param cursor-pointer"
+                [ngClass]="{'selected-param': isEmailNotificationPreferred == false }">
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="editMode">
+          <div class="d-flex" [ngClass]="{'d-flex' : !isMobile}">
+            <div class="timepicker-container">
+              <timepicker
+              class="custom-timepicker"
+              [ngModel]="emailPrefIdTime"
+              (ngModelChange)="onTimeChange($event)"
+              [disabled]="loading || !isEmailNotificationPreferred"
+              [showSpinners]="false"
+              [showMinutes]="true"
+              [showSeconds]="false"
+            ></timepicker>
+            </div>
+            <div [ngClass]="{'select-container-mobile' : isMobile}">
+              <div class="ml-3 email-selector" [ngClass]="{'ml-3' : !isMobile, 'select-container': isEmailNotificationPreferred == true, 'select-container-false': isEmailNotificationPreferred == false}">
+                <div class="align-middle d-inline-block garmin-param cursor-pointer" (click)="setEmailNotificationPreferred(true)"
+                  [ngClass]="{'selected-param': isEmailNotificationPreferred == true }">
+                  </div>
+                <div class="align-middle d-inline-block garmin-param cursor-pointer" (click)="setEmailNotificationPreferred(false)"
+                  [ngClass]="{'selected-param': isEmailNotificationPreferred == false }">
+                  </div>
+              </div>
+            </div>
+
+          </div>
+
+        </ng-container>
+      </div>
+
+      <!-- Calendar Sync -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+        <div class="d-flex">
+          <div class="text-left text-md mb-0" [ngClass]="{'itme-title' : isMobile}">Calendar Sync</div>
+          <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+                data-target="#calendarSyncModal" class="cursor-pointer d-inline-block ml-2 d-inline-block" [ngClass]="{'mt-2' : isMobile}"></div>
+        </div>
+        <ng-container *ngIf="!editMode">
+          <div class="d-flex">
+            <div class="text-left text-sm mb-0" style="padding-top:13px"><span>{{ calendar }}</span></div>
+            <div class="paperclip-item ml-2"><i class="fa fa-paperclip" aria-hidden="true"></i></div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="editMode">
+          <select class="custom-select-form-control custom-select custom-select-lg text-md"
+                  tooltip-class="tooltip-danger"
+                  [(ngModel)]="calendar"
+                  (ngModelChange)="selectCalendar($event)"
+                  [ngClass]="{'select-mobile-text' : isMobile}">
+            <option value="iCal">iCal</option>
+            <option value="Google Calendar">Google Calendar</option>
+          </select>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <app-workout-export-preferences [isMobileOrTablet] = "isMobileOrTablet" [isMobile] = "isMobile">
+  </app-workout-export-preferences>
+
+</div>

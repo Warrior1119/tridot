@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left mr-4 text-nowrap">{{metric.metricsName}}</h5>
+  <button type="button" class="close pull-right pt-3" aria-label="Close" (click)="closeModal()">
+    <i class="fal fa-times"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-row">
+    <input *ngIf="metric?.values === 'text' || !metric.values?.length" type="text" class="col form-control" placeholder="{{metric.metricsName}}?" [(ngModel)]="metric.model">
+    <select *ngIf="metric?.values !== 'text' && metric.values?.length" class="col custom-select custom-select-lg text-md pl-3" [(ngModel)]="metric.model">
+      <option value="" type="button" disabled>{{metric.metricsName}}?</option>
+      <option *ngFor="let value of metric.values" [value]="value" type="button">{{value}}</option>
+    </select>
+    <div class="ml-3">
+      <button type="button" class="btn btn-lg btn-success btn-block text-md mt-0" (click)="save(metric.model)">Submit</button>
+    </div>
+  </div>
+</div>

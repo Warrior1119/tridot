@@ -1,0 +1,286 @@
+<div class="main onboarding-process">
+  <div class="container green-borders">
+    <div class="row">
+      <div class="col-lg-6 col-xl-6 offset-lg-3">
+        <div class="box shadow-lg rounded-lg mb-4">
+          <div class="box-content">
+            <div class="logo-wrapper text-center">
+              <div class="tridot-scores-connected w-100">
+                <li>
+                  <div class="tridot-score swim score-lg"><span>{{ swimdot }}</span></div>
+                </li>
+                <li>
+                  <div class="tridot-score bike score-lg"><span>{{ bikedot }}</span></div>
+                </li>
+                <li>
+                  <div class="tridot-score run score-lg" [customTooltip]="'Based on your data, this is your current RunDot'" [isOpen]="rundot" placement="top"><span>{{ rundot }}</span></div>
+                </li>
+                <li class="active">
+                  <div class="tridot-score checkmark score-lg static active"></div>
+                </li>
+              </div>
+            </div>
+            <div class="header-wrapper text-center">
+              <h2 class="mb-1">Complete Your
+                <span class="swim-color">Swim Form</span> Diagnostic
+              </h2>
+              <div class="alert-info p-3 mb-3 rounded mt-3">
+                  Your swim performance is a determined by both fitness <em>and</em> form (technique). TriDot will optimize your training to improve both.
+              </div>
+            </div>
+            <div class="form-wrapper">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <form [formGroup]="swimProfileForm" #form="ngForm">
+                    <div class="row">
+                      <div class="col-12 col-md-6 pr-2 mb-4">
+                        <label class="mb-2" for="">
+                          In the pool, I feel...
+                        </label>
+
+                        <select
+                          class="custom-select custom-select-lg text-md {{form.submitted ? swimProfileForm.get('confidenceLevel').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.swimMindSet"
+                          formControlName="confidenceLevel">
+                          <option value="" disabled>How do you feel?</option>
+                          <option value="confident">Confident</option>
+                          <option value="neutral">Neutral</option>
+                          <option value="frustrated">Frustrated</option>
+                          <option value="anxious">Anxious</option>
+                        </select>
+
+                        <label class="select1-inside-label" for="confidenceLevel">
+                          <span class="custom-tooltip" *ngIf="swimProfileForm.hasError('required', 'confidenceLevel') && swimProfileForm.get('confidenceLevel').touched">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!swimProfileForm.hasError('required', 'confidenceLevel') && swimProfileForm.get('confidenceLevel').touched"></i>
+                        </label>
+                      </div>
+                      <div class="col-12 col-md-6 pl-2 mb-3">
+                        <label class="mb-2">
+                          Estimated Stroke Rate
+                          <button customTooltip="1-3 secs per 2-arm cycle is typical. Don't know? Use 1.5" style="cursor:pointer; opacity:.8; background: transparent; border: none; outline: none; height:15px;">
+                            <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 15px;" class="mx-auto d-inline-block"></div>
+                          </button>
+                        </label>
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? swimProfileForm.get('strokeRate').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.strokeRate"
+                          formControlName="strokeRate"
+                          mask="0.0" [dropSpecialCharacters]="false" step="0.1"
+                          placeholder="Don’t know? Use 1.5 seconds">
+
+                        <label class="text-inside-label" for="strokeRate">
+                          <span class="custom-tooltip" *ngIf="swimProfileForm.hasError('required', 'strokeRate') && swimProfileForm.get('strokeRate').touched">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="validateStrokeRate(profile.strokeRate) && swimProfileForm.get('strokeRate').touched">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              Must be between 1.0 and 3.0
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!swimProfileForm.hasError('required', 'strokeRate') && !swimProfileForm.hasError('incorrect', 'strokeRate') && swimProfileForm.get('strokeRate').touched"></i>
+                        </label>
+                      </div>
+                      <div class="col-12 mb-4">
+                        <label for="">
+                          How driven or competitive are you?
+                        </label>
+
+                        <select
+                          class="custom-select custom-select-lg text-md {{form.submitted ? swimProfileForm.get('howDriven').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.howDriven"
+                          formControlName="howDriven">
+                          <option value="" disabled>Choose one option (10 = most)</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                        </select>
+
+                        <label class="select1-inside-label" for="howDriven">
+                          <span class="custom-tooltip" *ngIf="swimProfileForm.hasError('required', 'howDriven') && swimProfileForm.get('howDriven').touched">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!swimProfileForm.hasError('required', 'howDriven') && swimProfileForm.get('howDriven').touched"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Have you swam competitively on a team?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio1" [(ngModel)]="profile.swamInSwimTeam"
+                                id="inlineRadio1" value="YES">
+                              <label class="custom-control-label" for="inlineRadio1">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio1" [(ngModel)]="profile.swamInSwimTeam"
+                                id="inlineRadio2" value="NO">
+                              <label class="custom-control-label" for="inlineRadio2">No</label>
+                            </div>
+                            <small *ngIf="swimProfileForm.hasError('required', 'radio1')  && swimProfileForm.get('radio1').touched"
+                              class="text-danger">
+                              This is a required field </small>
+                          </div>
+                        </div>
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Are you proficient in all swim strokes?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio2" [(ngModel)]="profile.threeStrokesProficiency"
+                                id="inlineRadio3" value="YES">
+                              <label class="custom-control-label" for="inlineRadio3">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio2" [(ngModel)]="profile.threeStrokesProficiency"
+                                id="inlineRadio4" value="NO">
+                              <label class="custom-control-label" for="inlineRadio4">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Can you swim a 400 without stopping?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio3" [(ngModel)]="profile.fourMetersNoStop"
+                                id="inlineRadio5" value="YES">
+                              <label class="custom-control-label" for="inlineRadio5">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio3" [(ngModel)]="profile.fourMetersNoStop"
+                                id="inlineRadio6" value="NO">
+                              <label class="custom-control-label" for="inlineRadio6">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Do you feel out of breath when you swim?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio4" [(ngModel)]="profile.outOfBreath"
+                                id="inlineRadio7" value="YES">
+                              <label class="custom-control-label" for="inlineRadio7">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio4" [(ngModel)]="profile.outOfBreath"
+                                id="inlineRadio8" value="NO">
+                              <label class="custom-control-label" for="inlineRadio8">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Do you swim well in open water relative to the pool?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio5" [(ngModel)]="profile.openWaterSwim"
+                                id="inlineRadio9" value="YES">
+                              <label class="custom-control-label" for="inlineRadio9">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio5" [(ngModel)]="profile.openWaterSwim"
+                                id="inlineRadio10" value="NO">
+                              <label class="custom-control-label" for="inlineRadio10">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Do you swim slower with a pull buoy than without?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio6" [(ngModel)]="profile.swimSlowerWithPullBuoy"
+                                id="inlineRadio11" value="YES">
+                              <label class="custom-control-label" for="inlineRadio11">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio6" [(ngModel)]="profile.swimSlowerWithPullBuoy"
+                                id="inlineRadio12" value="NO">
+                              <label class="custom-control-label" for="inlineRadio12">No</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row question-wrapper d-flex justify-content-between mb-3">
+                          <div class="question col-8">
+                            Do you normally breathe to both sides?
+                          </div>
+                          <div class="answer col-4 text-right">
+                            <div class="custom-control custom-radio custom-control-inline">
+                              <input class="custom-control-input" type="radio" formControlName="radio7" [(ngModel)]="profile.breathBothSides"
+                                id="inlineRadio13" value="YES">
+                              <label class="custom-control-label" for="inlineRadio13">Yes</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline mr-0">
+                              <input class="custom-control-input" type="radio" formControlName="radio7" [(ngModel)]="profile.breathBothSides"
+                                id="inlineRadio14" value="NO">
+                              <label class="custom-control-label" for="inlineRadio14">No</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                      <div class="col">
+                        <div class="progress btn-rounded">
+                          <div class="progress-bar btn-rounded" role="progressbar" style="width: 90%" aria-valuenow="90"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2">
+                        <a [routerLink]="['/run-profile']" class="btn-default btn btn-lg text-md btn-block">Go Back</a>
+                      </div>
+                      <div class="col pl-2">
+
+                        <button class="btn-primary swim-bg btn btn-lg text-md btn-block"
+                          (click)="referCoach(swimProfileForm.valid && !loading)">
+                          Complete Your Profile
+                          <i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+                        </button>
+
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-xl-3">
+        <!-- <app-dashboard-race-details></app-dashboard-race-details> -->
+      </div>
+    </div>
+  </div>
+</div>

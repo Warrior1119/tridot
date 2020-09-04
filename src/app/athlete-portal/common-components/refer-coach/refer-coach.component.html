@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Were you referred by a coach?</h4>
+</div>
+<div class="modal-body">
+  <input type="text" [(ngModel)]="selected" #debounceSearch (typeaheadOnSelect)="onCoachSelect($event)" typeaheadWaitMs="1000"
+    [typeahead]="searchResults" typeaheadOptionField="fullName" class="form-control"
+    placeholder="Enter your coach’s name">
+</div>
+
+<div class="modal-footer">
+  <button type="button" [disabled]="!selected || !coach" (click)="save('coach')" class="btn btn-lg btn-primary btn-block text-md mt-0">That's
+    My Coach!</button>
+  <button type="button" (click)="save('skip')" class="btn btn-lg btn-secondary btn-block text-md mt-0">Not referred by
+    Coach</button>
+</div>

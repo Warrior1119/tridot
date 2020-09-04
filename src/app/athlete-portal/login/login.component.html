@@ -1,0 +1,95 @@
+<div class="container h-100 green-borders">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-md-8 col-lg-6 col-xl-4 text-center">
+      <div [inlineSVG]="'/assets/img/tridot-logo.svg'" style="width: 200px;" class="mt-4 mb-5 mx-auto"></div>
+      <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+        <ng-container [ngSwitch]="errorCode">
+          <ng-container *ngSwitchCase="'18003'">
+            <div class="m-1">Username or password did not match.</div>
+            <div class="m-1"><strong>Don't have an account?</strong> Click the "Register for Free" link below</div>
+            <div class="m-1"><strong>If you've already registered</strong> you may have forgotten your password. Try again or click the "Forgot your password" link below</div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'18005'">
+            <span class="m-1">This email is not yet verified</span>
+            <ng-container [ngSwitch]="resendSuccess">
+              <a *ngSwitchCase="false" class="m-1 text-white cursor-pointer" (click)="resend(user.userName)"><u>Resend verification link</u></a>
+              <span *ngSwitchCase="true" class="m-1">Link sent</span>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>{{errorMessage}}</ng-container>
+        </ng-container>
+      </div>
+      <div class="box shadow rounded mb-4 pb-5">
+        <form [formGroup]="loginForm">
+          <div class="row mb-3">
+            <div class="col">
+              <button type="button" class="btn btn-lg btn-block btn-facebook text-md" (click)="signInWithFB()">
+                <i class="fab fa-facebook-f fa-lg mr-1"></i> Login with Facebook</button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <h6 class="line-behind mb-0">
+                <span>OR</span>
+              </h6>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+
+              <label class="inside-label inside-label-lg" for="email">
+                <span class="custom-tooltip" *ngIf="loginForm.hasError('email', 'email') && loginForm.get('email').touched">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> Please verify your email </span>
+                </span>
+
+                <i class="far fa-check-circle text-success cursor-pointer " title="Edit Mode" *ngIf="!loginForm.hasError('email', 'email') && loginForm.get('email').touched"></i>
+
+              </label>
+
+              <input type="username" class="form-control" formControlName="email" [(ngModel)]="user.userName" id="exampleInputusername1"
+                aria-describedby="usernameHelp" placeholder="Email or username">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <label class="inside-label inside-label-lg" for="password">
+                <span class="custom-tooltip" *ngIf="loginForm.hasError('required', 'password') && loginForm.get('password').touched">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> Please verify your password </span>
+                </span>
+
+                <i class="far fa-check-circle text-success" *ngIf="!loginForm.hasError('required', 'password') && loginForm.get('password').touched"></i>
+              </label>
+              <input type="password" formControlName="password" class="form-control" [(ngModel)]="user.password" id="exampleInputpassword1"
+                aria-describedby="passwordHelp" placeholder="Password">
+            </div>
+          </div>
+          <!-- <div class="row mb-3">
+            <div class="col text-left">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                <label class="custom-control-label" for="customCheck1">Remember Me</label>
+              </div>
+            </div>
+          </div> -->
+          <div class="row">
+            <div class="col">
+              <button type="submit" [disabled]="!loginForm.valid || loading" class="btn btn-lg btn-block btn-danger text-md mb-3"
+                (click)="signIn(user)">Login
+                <i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+              </button>
+              <p class="mb-0">
+                <a [routerLink]="['/forgot-password']" class="font-italic mb-0">Forgot your password?</a>
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <p>Don't have an account?
+        <a [routerLink]="['/onboard/sign-up']" class="font-italic text-dark">Register for Free</a>
+      </p>
+    </div>
+  </div>
+</div>
+<app-install-popup></app-install-popup>

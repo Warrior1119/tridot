@@ -1,0 +1,60 @@
+<ng-template #unlock><app-unlock-overlay [height]="300"></app-unlock-overlay></ng-template>
+
+<div class="rounded shadow mb-4 px-0 py-1">
+  <div class="table text-secondary mb-0">
+    <div class="px-4">
+      <div class="border-bottom border-1 gene-list-row font-weight-bold">
+        <div class="gene-list-item">Gene</div>
+        <div class="gene-list-item">Result</div>
+        <div class="gene-list-item">Effect</div>
+        <div class="gene-list-item">Summary</div>
+      </div>
+    </div>
+    <div *isFeatureSubscribed="['gennetics']; overlay unlock; notrial true">
+      <ng-container *ngFor="let gene of genetics; let i = index">
+        <div *ngIf="expandedRow !== i" class="px-4">
+          <div class="gene-list-row cursor-pointer border-bottom" (click)="expandedRow = i">
+            <div class="gene-list-item">
+                {{gene.gene}}
+                <i *ngIf="!getActiveGene(gene)" class="d-none d-sm-block ml-2 text-xs badge badge-secondary btn-default ml-auto">Not Genotyped</i>
+            </div>
+            <div class="gene-list-item">{{getActiveGene(gene)?.result || '--'}}</div>
+            <div class="gene-list-item gene-effects">
+              <div class="d-inline-block gene-effect-bar" [class.active]="isBarActive(gene, getActiveGene(gene), 0)" [class.empty]="!getActiveGene(gene)"></div>
+              <div class="d-inline-block gene-effect-bar" [class.active]="isBarActive(gene, getActiveGene(gene), 1)" [class.empty]="!getActiveGene(gene)"></div>
+            </div>
+            <div class="gene-list-item gene-summary">{{getActiveGene(gene)?.summary || 'A marker for this gene was not found in your genome file.'}}</div>
+            <div class="gene-list-item d-flex align-items-center"><i class="fal fa-angle-down text-xl"></i></div>
+          </div>
+        </div>
+        <div *ngIf="expandedRow === i" [@ngIfExpandHeight] class="gene-expanded px-4 py-3">
+          <button class="collapse-btn bg-white text-secondary d-flex align-items-center justify-content-center"
+            (click)="expandedRow = null">
+            <i class="fal fa-chevron-up text-sm"></i>
+          </button>
+          <div class="gene-sublist-row w-100">
+            <div class="gene-list-item gene-desc d-block">
+              <p class="mb-1"><strong>{{gene.gene}}:</strong> {{gene.name}}</p>
+              <p class="gene-desc-body">
+                {{gene.description}}
+                <span *ngIf="!getActiveGene(gene)" class="d-block mt-2 cursor-pointer"><i class="badge badge-secondary text-xs btn-default float-right">Not Genotyped</i></span>
+              </p>
+            </div>
+            <ng-container *ngFor="let result of gene.genetics; let i = index">
+              <div class="gene-sublist" [class.active]="result.isMemberResult">
+                <div class="gene-list-item" [class.font-weight-bold]="result.isMemberResult">
+                  {{ result.result }}
+                </div>
+                <div class="gene-list-item gene-effects">
+                  <div class="d-inline-block gene-effect-bar" [class.active]="isBarActive(gene, result, 0)"></div>
+                  <div class="d-inline-block gene-effect-bar" [class.active]="isBarActive(gene, result, 1)"></div>
+                </div>
+                <div class="gene-list-item gene-summary">{{ result.summary }}</div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27.5" height="19.617" viewBox="0 0 27.5 19.617">
+  <g id="bike" transform="translate(-1.674 -9.286)">
+    <circle id="Ellipse_307" data-name="Ellipse 307" cx="5.5" cy="5.5" r="5.5" transform="translate(17.424 17.153)" fill="none" stroke="#4b4b4b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5"/>
+    <circle id="Ellipse_308" data-name="Ellipse 308" cx="5.5" cy="5.5" r="5.5" transform="translate(2.424 17.153)" fill="none" stroke="#4b4b4b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5"/>
+    <line id="Line_1037" data-name="Line 1037" x1="5" transform="translate(6.424 11.153)" fill="none" stroke="#4b4b4b" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5"/>
+    <path id="Path_821" data-name="Path 821" d="M33.322,23.424,31.061,11.133c4.13-1.05,4.451-1.109,4.477-1.115" transform="translate(-9.355)" fill="none" stroke="#4b4b4b" stroke-miterlimit="10" stroke-width="1.5"/>
+    <path id="Path_822" data-name="Path 822" d="M25.533,18H12.441L10,26.543" transform="translate(-3.118 -3.118)" fill="none" stroke="#4b4b4b" stroke-miterlimit="10" stroke-width="1.5"/>
+  </g>
+</svg>

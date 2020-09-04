@@ -1,0 +1,803 @@
+<!-- <div *ngFor="let alert of alerts">
+  <alert [type]="alert.type" class="global-alert" [dismissOnTimeout]="alert.timeout" [dismissible]="true">
+    {{ alert.msg }}
+  </alert>
+</div> -->
+<div class="main">
+  <div class="container training-assessments-container">
+    <div class="row mb-3">
+      <div class="col-12">
+        <h4 class="page-title mt-2 mb-3 text-center text-md-left">
+          Training Assessments
+        </h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12" *ngIf="pastAssessments && selectedAssessment">
+        <div class="row justify-content-center" *ngIf="showCongratulations">
+          <div class="col-12">
+            <div class="bg-white p-5 mb-4 text-center rounded shadow">
+              <p>
+                Your estimated assessments are below. Make any necessary edits. As soon as you're able, complete your actual assessments and return here to enter your results.
+              </p>
+              <div class="button-group">
+                <button class="btn btn-sm btn-default text-sm px-4 py-2" [routerLink]="['/dashboard']">
+                  Return To Your Dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="nav nav-tabs d-flex icon-tabs training-assessments-tabs shadow" id="myTab" role="tablist">
+          <li class="nav-item flex-grow-1 text-center">
+            <a aria-controls="swim" aria-selected="true" class="nav-link {{(selectedSession == 'swim')? 'active': ''}} {{editing || creating ? 'disabled' : ''}} border-top-0 border-left-0 border-right-0"
+              data-toggle="tab" (click)="changeTab('swim')" id="swim-tab" role="tab">
+              <div class="my-2 my-lg-3 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/swim-logo-sm.svg'" [autosize]="true"  style="width: 50px;"></div>
+            </a>
+          </li>
+          <li class="nav-item flex-grow-1 text-center">
+            <a aria-controls="bike" aria-selected="false" class="nav-link {{(selectedSession == 'bike')? 'active': ''}} {{editing || creating ? 'disabled' : ''}} border-top-0 border-left-0 border-right-0"
+              data-toggle="tab" (click)="changeTab('bike')" id="bike-tab" role="tab">
+              <div class="my-2 my-lg-3 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/bike-logo-sm.svg'" [autosize]="true"  style="width: 50px;"></div>
+            </a>
+          </li>
+          <li class="nav-item flex-grow-1 text-center">
+            <a aria-controls="run" aria-selected="false" class="nav-link {{(selectedSession == 'run')? 'active': ''}} {{editing || creating ? 'disabled' : ''}} border-top-0 border-left-0 border-right-0"
+              data-toggle="tab" (click)="changeTab('run')" id="run-tab" role="tab">
+              <div class="my-2 my-lg-3 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/run-logo-sm.svg'" [autosize]="true"  style="width: 50px;"></div>
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content icon-tabs-content card card-box pb-0 pt-3 pt-lg-4" id="myTabContent">
+          <div aria-labelledby="swim-tab" class="tab-pane fade show {{(selectedSession == 'swim')? 'active': ''}} p-3 py-lg-4 px-lg-4"
+            id="swim" role="tabpanel">
+            <div class="row row-flex">
+              <div class="col-md-6 col-lg-4 col-sm-12 mb-3 mb-sm-0">
+                <div class="button-group d-flex justify-content-between mb-3">
+                  <button *ngIf="!editing && !creating" class="btn btn-default btn-sm text-uppercase px-3 flex-grow-1 mr-1" [disabled]="assessmentIndex == 0"
+                    (click)="goPrev()">
+                    <div class="mr-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 6px;"></div>
+                    <span class="d-none d-lg-inline">Prev</span>
+                  </button>
+                  <button class="btn btn-default btn-sm text-uppercase flex-grow-1 mx-1" (click)="openAssessmentModal(selectedAssessment)">{{getEditButton()}}</button>
+                  <button *ngIf="pastAssessments.length > 1" class="btn btn-default btn-sm text-uppercase flex-grow-1 mx-1" (click)="deleteAssessment()">Delete</button>
+                  <button class="btn btn-primary btn-sm text-uppercase flex-grow-1 mx-1" (click)="openAssessmentModal()">
+                    <span *ngIf="creating || editing" class="text-nowrap">Save</span>
+                    <span *ngIf="!creating && !editing" class="text-nowrap"><span class="d-none d-lg-inline">New</span> <div class="ml-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/plus-icon.svg'" [autosize]="true" style="width: 10px;"></div></span>
+                  </button>
+                  <button *ngIf="!editing && !creating" class="btn btn-default btn-sm text-uppercase px-3 flex-grow-1 ml-1" [disabled]="assessmentIndex == pastAssessments.length - 1"
+                    (click)="goNext()">
+                    <span class="d-none d-lg-inline">Next</span>
+                    <div class="ml-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 6px;"></div>
+                  </button>
+                </div>
+                <div class="dot-score-box swim-bg rounded mb-3">
+                  <div class="row align-items-center">
+                    <div class="col py-4 text-center">
+                      <h6 class="text-white text-sm text-uppercase mb-0">Date</h6>
+                      <span *ngIf="readOnly" class="date text-sm">
+                        {{formatDate(selectedAssessment.assessmentDate)}}
+                      </span>
+                      <input #dpRun="bsDatepicker" AutoSizeInput type="text"
+                        placeholder="00/00/00" class="form-control p-2 m-2" class="number-md-sm assessment-date" mask="00/00/00"
+                        (bsValueChange)="onDateChange($event)" [value]="formatDate(selectedAssessment.assessmentDate)"
+                        bsDatepicker [bsConfig]="bsConfig" [maxDate]="maxDate"
+                        iosDatepickerExtra #iosdpe="iosDatepickerExtra" (onShown)="iosdpe.onShowPicker($event)"
+                        autocomplete="off">
+                    </div>
+                    <div class="col py-4 border-left border-darken">
+                      <div class="tridot-score {{selectedSession}}-drk score-md">
+                        <span>{{selectedAssessment.dot}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="environment-info text-center">
+                  <div class="row mb-3">
+                    <div class="col-12 d-flex align-items-stretch">
+                      <span class="rounded border p-1">
+                          {{ selectedAssessment.trainAssessTime |timeFormat }}
+                      </span>
+                      <span *ngIf="selectedAssessment || accountAddress" class="w-100 mx-2 pt-1 rounded border p-1 text-truncate">
+                        {{ getLocationText() }}
+                      </span>
+                      <span class="border p-1 bg-light text-sm" style="border-radius: 20px;">
+                          <ng-container *ngIf="selectedAssessment.indoor == 'true'">Indoor</ng-container>
+                          <ng-container *ngIf="selectedAssessment.indoor != 'true'">Outdoor</ng-container>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Weight</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput #swimWeight class="number-md-sm font-weight-bold text-drk assessments-input"
+                              type="text" [readOnly]="true" placeholder="{{selectedAssessment.currentWeight}}"
+                              [ngModel]="selectedAssessment.currentWeight"
+                              [customTooltip]="selectedSession == 'swim' ? error.currentWeight : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="4">
+                            <span class="assessments-label"> {{getWeightUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Temp</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput #swimTemp class="number-md-sm font-weight-bold text-drk assessments-input"
+                              type="text" [readOnly]="true" [ngModel]="selectedAssessment.temperature"
+                              [customTooltip]="selectedSession == 'swim' ? error.temperature : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="3">
+                            <span class="assessments-label">  {{getTemperatureUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Humidity</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput #swimHumidity class="number-md-sm font-weight-bold text-drk assessments-input"
+                              type="text" [readOnly]="true" [ngModel]="selectedAssessment.humidity"
+                              [customTooltip]="selectedSession == 'swim' ? error.humidity : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="3">
+                            <span class="assessments-label"> &#37; </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Elev</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput #swimElev class="number-md-sm font-weight-bold text-drk assessments-input"
+                              type="text" [readOnly]="true" [ngModel]="selectedAssessment.elevation"
+                              [customTooltip]="selectedSession == 'swim' ? error.elevation : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="4">
+                            <span class="assessments-label"> {{getLengthUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4 col-sm-12 mb-3 mb-sm-0">
+                <div class="assessment-results border border-2 rounded p-3 v-100">
+                  <h6>Assessment Results</h6>
+                  <div class="row">
+                    <div class="col-6 border-right">
+                      <ul class="list-unstyled">
+                        <li class="font-weight-bold mb-1">Type</li>
+                        <li class="font-weight-bold mb-1">400</li>
+                        <li class="font-weight-bold mb-1">200</li>
+                        <li class="font-weight-bold mb-1">Course</li>
+                      </ul>
+                    </div>
+                    <div class="col-6 pr-0">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">
+                          <div *ngIf="selectedAssessment.assessmentType" class="">{{getAssessmentType()}}</div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative">
+                            <span *ngIf="readOnly" class="font-weight-bold text-drk">
+                              {{formatTime(selectedAssessment.css400)}}
+                            </span>
+                            <input AutoSizeInput #swimCss400 class="number-md-sm font-weight-bold text-drk assessments-input-lg"
+                              timeFormatMask type="text" [readOnly]="true"
+                              [ngModel]="selectedAssessment.css400"
+                              [customTooltip]="error.css400" placement="right" trigger="manual" tooltip-type="error">
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative">
+                            <span *ngIf="readOnly" class="font-weight-bold text-drk">
+                              {{formatTime(selectedAssessment.css200)}}
+                            </span>
+                            <input AutoSizeInput #swimCss200 class="number-md-sm font-weight-bold text-drk assessments-input-lg"
+                              timeFormatMask type="text" [readOnly]="true"
+                              [ngModel]="selectedAssessment.css200"
+                              [customTooltip]="error.css200" placement="right" trigger="manual" tooltip-type="error">
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <button type="button" class="dropdown-toggle {{editing || creating ? '': 'disabled'}}  border-0 d-flex p-0 align-items-center justify-content-between"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-body">{{getCourseName()}}</span>
+                            <span *ngIf="editing || creating">
+                              <div class="ml-2 d-inline-block" [inlineSVG]="'assets/img/svg/icons/arrow-down.svg'"  style="width: 10px;"></div>
+                            </span>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" *ngFor="let course of swim_course" (click)="selectedAssessment.courseType=course.id;">
+                              {{course.name}}
+                            </a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4 col-sm-12">
+                <div class="environment-normalized border border-2 rounded p-3 v-100 mt-3 mt-lg-0">
+                  <h6>Environment Normalized</h6>
+                  <div class="row">
+                    <div class="col-6 border-right">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">400 LCM</li>
+                        <li class="mb-1">200 LCM</li>
+                        <li class="mb-1">Threshold/100m</li>
+                      </ul>
+                    </div>
+                    <div class="col-6 pr-0">
+                      <ul class="list-unstyled">
+                        <li class="mb-1"><span class="font-weight-bold mr-1">{{formatTime(selectedAssessment.css400Env)}}</span>
+                          <div *ngIf="selectedAssessment.css400Env && assessmentIndex !== pastAssessments.length - 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.css400Env, pastAssessments[assessmentIndex + 1].css400Env) ? 'red-up-arrow': 'green-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.css400Env && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1"
+                            class="{{compare(selectedAssessment.css400Env, pastAssessments[assessmentIndex + 1].css400Env)? 'text-danger': 'text-success'}} font-weight-bold ml-1">
+                            {{formatTime(calculateDiff(selectedAssessment.css400Env, pastAssessments[assessmentIndex + 1].css400Env))}}
+                          </span></li>
+                        <li class="mb-1"><span class="font-weight-bold mr-1">{{formatTime(selectedAssessment.css200Env)}}</span>
+                          <div *ngIf="selectedAssessment.css200Env && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.css200Env, pastAssessments[assessmentIndex + 1].css200Env)? 'red-up-arrow': 'green-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.css200Env && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1"
+                            class="{{compare(selectedAssessment.css200Env, pastAssessments[assessmentIndex + 1].css200Env)? 'text-danger': 'text-success'}} font-weight-bold ml-1">
+                            {{formatTime(calculateDiff(selectedAssessment.css200Env, pastAssessments[assessmentIndex + 1].css200Env))}}</span></li>
+                        <li class="mb-1"><span class="font-weight-bold mr-1">{{formatTime(selectedAssessment.cssEnv)}}</span>
+                          <div *ngIf="selectedAssessment.cssEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.cssEnv, pastAssessments[assessmentIndex + 1].cssEnv)? 'red-up-arrow': 'green-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.cssEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1"
+                            class="{{compare(selectedAssessment.cssEnv, pastAssessments[assessmentIndex + 1].cssEnv)? 'text-danger': 'text-success'}} font-weight-bold ml-1">
+                            {{formatTime(calculateDiff(selectedAssessment.cssEnv, pastAssessments[assessmentIndex + 1].cssEnv))}}</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div aria-labelledby="bike-tab" class="tab-pane fade show {{(selectedSession == 'bike')? 'active': ''}} p-3 py-lg-4 px-lg-4"
+            id="bike" role="tabpanel">
+            <div class="row row-flex">
+              <div class="col-md-6 col-lg-4 col-sm-12 mb-3 mb-sm-0">
+                <div class="button-group d-flex justify-content-around mb-3">
+                  <button *ngIf="!editing && !creating" class="btn btn-default btn-sm text-uppercase px-3 flex-grow-1 mr-1" [disabled]="assessmentIndex == 0"
+                    (click)="goPrev()">
+                    <div class="mr-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 6px;"></div>
+                    <span class="d-none d-lg-inline">Prev</span>
+                  </button>
+                  <button class="btn btn-default btn-sm text-uppercase flex-grow-1 mx-1" (click)="openAssessmentModal(selectedAssessment)">{{getEditButton()}}</button>
+                  <button *ngIf="pastAssessments.length > 1" class="btn btn-default btn-sm text-uppercase flex-grow-1 mx-1"  (click)="deleteAssessment()">Delete</button>
+                  <button class="btn btn-primary btn-sm text-uppercase flex-grow-1 mx-1" (click)="openAssessmentModal()">
+                      <span *ngIf="creating || editing" class="text-nowrap">Save</span>
+                      <span *ngIf="!creating && !editing" class="text-nowrap"><span class="d-none d-lg-inline">New</span> <div class="ml-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/plus-icon.svg'" [autosize]="true" style="width: 10px;"></div></span>
+                  </button>
+                  <button *ngIf="!editing && !creating" class="btn btn-default btn-sm text-uppercase px-3 flex-grow-1 ml-1" [disabled]="assessmentIndex == pastAssessments.length - 1"
+                    (click)="goNext()">
+                    <span class="d-none d-lg-inline">Next</span>
+                    <div class="ml-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 6px;"></div>
+                  </button>
+                </div>
+                <div class="dot-score-box bike-bg rounded mb-3">
+                  <div class="row align-items-center">
+                    <div class="col py-4 text-center">
+                      <h6 class="text-white text-sm text-uppercase mb-0">Date</h6>
+                      <span *ngIf="readOnly" class="date text-sm">
+                        {{formatDate(selectedAssessment.assessmentDate)}}
+                      </span>
+                      <input AutoSizeInput #dpBike="bsDatepicker" AutoSizeInput type="text" placeholder="00/00/00"
+                        class="form-control p-2 m-2" class="number-md-sm assessment-date" mask="00/00/00"
+                        (bsValueChange)="onDateChange($event)" [value]="formatDate(selectedAssessment.assessmentDate)"
+                        bsDatepicker [bsConfig]="bsConfig" [maxDate]="maxDate">
+                    </div>
+                    <div class="col py-4 border-left border-darken">
+                      <div class="tridot-score {{selectedSession}}-drk score-md">
+                        <span>{{selectedAssessment.dot}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="environment-info text-center">
+                  <div class="row mb-3">
+                    <div class="col-12 d-flex align-items-stretch">
+                      <span class="rounded border p-1">
+                          {{ selectedAssessment.trainAssessTime |timeFormat }}
+                      </span>
+                      <span class="w-100 mx-2 pt-1 rounded border p-1 text-truncate">
+                        {{ getLocationText() }}
+                      </span>
+                      <span class="border p-1 bg-light text-sm" style="border-radius: 20px;">
+                          <ng-container *ngIf="selectedAssessment.indoor == 'true'">Indoor</ng-container>
+                          <ng-container *ngIf="selectedAssessment.indoor != 'true'">Outdoor</ng-container>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Weight</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [ngModel]="selectedAssessment.currentWeight"
+                              [customTooltip]="selectedSession == 'bike' ? error.currentWeight : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="4">
+                            <span class="assessments-label"> {{getWeightUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Temp</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [ngModel]="selectedAssessment.temperature"
+                              [customTooltip]="selectedSession == 'bike' ? error.temperature : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="3">
+                            <span class="assessments-label" >{{getTemperatureUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Humidity</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [ngModel]="selectedAssessment.humidity"
+                              [customTooltip]="selectedSession == 'bike' ? error.humidity : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="3">
+                            <span class="assessments-label"> &#37; </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Elev</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [ngModel]="selectedAssessment.elevation"
+                              [customTooltip]="selectedSession == 'bike' ? error.elevation : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="4">
+                            <span class="assessments-label"> {{getLengthUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4 col-sm-12 mb-3 mb-sm-0">
+                <div class="assessment-results border border-2 rounded p-3 v-100">
+                  <h6>Assessment Results</h6>
+                  <div class="row">
+                    <div class="col-6 border-right">
+                      <ul class="list-unstyled">
+                        <li class="font-weight-bold mb-1">Type</li>
+                        <li class="font-weight-bold mb-1">Time</li>
+                        <li class="font-weight-bold mb-1">Power</li>
+                        <li class="font-weight-bold mb-1">AHR</li>
+                        <li class="font-weight-bold mb-1">Bike</li>
+                      </ul>
+                    </div>
+                    <div class="col-6">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">
+                          <button type="button" class="p-0 dropdown-toggle {{editing || creating ? '': 'disabled'}} border-0 d-flex align-items-center justify-content-between"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span *ngIf="selectedAssessment.assessmentType" class="text-body float-left">{{getBikeAssessmentTypeName(selectedAssessment.assessmentType)}}</span>
+                            <span class="ml-2 float-right" *ngIf="editing || creating">
+                              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                            </span>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" *ngFor="let assType of bike_ass_type" (click)="selectBikeAssessment(assType.id)">
+                              {{assType.name}}
+                            </a>
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative">
+                            <span *ngIf="readOnly" class="font-weight-bold text-drk" (dblclick)="onDblClick($event);">
+                              {{formatTime(selectedAssessment.assessmentTime)}}
+                            </span>
+                            <input AutoSizeInput *ngIf="!readOnly" class="number-md-sm font-weight-bold text-drk assessments-input-lg time-input"
+                              type="text" [readOnly]="true" timeFormatMask includeHour="true"
+                              [customTooltip]="selectedSession == 'bike' ? error.assessmentTime : ''" placement="right" trigger="manual" tooltip-type="error"
+                              [ngModel]="selectedAssessment.assessmentTime">
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative">
+                            <input class="number-md-sm font-weight-bold text-drk assessments-input-lg force" mask="000" maxlength=3
+                              type="text" [readOnly]="true" [(ngModel)]="selectedAssessment.power"
+                              [customTooltip]="error.power" placement="right" trigger="manual" tooltip-type="error">
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative">
+                            <input class="number-md-sm font-weight-bold text-drk assessments-input-lg force" type="text" mask="000"
+                              maxlength=3 [readOnly]="true" [ngModel]="selectedAssessment.ahr"
+                              [customTooltip]="selectedSession == 'bike' ? error.ahr : ''" placement="right" trigger="manual" tooltip-type="error">
+                          </div>
+                        </li>
+                        <li *ngIf="profile && selectedSession == 'bike'">
+                          <button type="button" class="p-0 dropdown-toggle {{editing || creating ? '': 'disabled'}} border-0 d-flex align-items-center justify-content-between"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="text-body float-left">{{getBikeName()}}</span>
+                            <span class="ml-2 float-right" *ngIf="editing || creating">
+                              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                            </span>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" *ngFor="let bike of profile.bikes" (click)="selectedAssessment.bikeId = bike.bikeId; editBikeType = false;">
+                              {{bike.nickName}}
+                            </a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4 col-sm-12">
+                <div class="environment-normalized border border-2 rounded p-3 v-100 mt-3 mt-lg-0">
+                  <h6>Environment Normalized</h6>
+                  <div class="row">
+                    <div class="col-6 border-right">
+                      <ul class="list-unstyled">
+                        <li class="mb-1 text-capitalize">{{getBikeEnvTitle()}}</li>
+                        <li class="mb-1">FTP Power (Watts)</li>
+                      </ul>
+                    </div>
+                    <div class="col-6 pr-0">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">
+                          <span class="font-weight-bold mr-1">{{formatTime(selectedAssessment.assessmentTimeEnv)}}</span>
+                          <div *ngIf="selectedAssessment.assessmentTimeEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.assessmentTimeEnv, pastAssessments[assessmentIndex + 1].assessmentTimeEnv)? 'red-up-arrow': 'green-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.assessmentTimeEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1"
+                            class="{{compare(selectedAssessment.assessmentTimeEnv, pastAssessments[assessmentIndex + 1].assessmentTimeEnv)? 'text-danger': 'text-success'}} font-weight-bold ml-1">
+                            {{formatTime(calculateDiff(selectedAssessment.assessmentTimeEnv, pastAssessments[assessmentIndex + 1].assessmentTimeEnv))}}
+                          </span>
+                        </li>
+                        <li class="mb-1">
+                          <span class="font-weight-bold mr-1">{{getRoundValue(selectedAssessment.powerEnv)}}</span>
+                          <div *ngIf="selectedAssessment.powerEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.powerEnv, pastAssessments[assessmentIndex + 1].powerEnv) ? 'green-up-arrow' : 'red-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.powerEnvDiff && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1"
+                            class="{{compare(selectedAssessment.powerEnv, pastAssessments[assessmentIndex + 1].powerEnv)? 'text-success' : 'text-danger'}} font-weight-bold ml-1">
+                            {{calculateDiff(selectedAssessment.powerEnv, pastAssessments[assessmentIndex + 1].powerEnv)}}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div aria-labelledby="run-tab" class="tab-pane fade show {{(selectedSession == 'run')? 'active': ''}} p-3 py-lg-4 px-lg-4"
+            id="run" role="tabpanel">
+            <div class="row row-flex">
+              <div class="col-md-6 col-lg-4 col-sm-12 mb-3 mb-sm-0">
+                <div class="button-group d-flex justify-content-around mb-3">
+                  <button *ngIf="!editing && !creating" class="btn btn-default btn-sm text-uppercase px-3 flex-grow-1 mr-1" [disabled]="assessmentIndex == 0"
+                    (click)="goPrev()">
+                    <div class="mr-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 6px;"></div>
+                    <span class="d-none d-lg-inline">Prev</span>
+                  </button>
+                  <button class="btn btn-default btn-sm text-uppercase flex-grow-1 mx-1" (click)="openAssessmentModal(selectedAssessment)">{{getEditButton()}}</button>
+                  <button *ngIf="pastAssessments.length > 1" class="btn btn-default btn-sm text-uppercase flex-grow-1 mx-1" (click)="deleteAssessment()">Delete</button>
+                  <button class="btn btn-primary btn-sm text-uppercase flex-grow-1 mx-1" (click)="openAssessmentModal()">
+                      <span *ngIf="creating || editing" class="text-nowrap">Save</span>
+                      <span *ngIf="!creating && !editing" class="text-nowrap"><span class="d-none d-lg-inline">New</span> <div class="ml-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/plus-icon.svg'" [autosize]="true" style="width: 10px;"></div></span>
+                  </button>
+                  <button *ngIf="!editing && !creating" class="btn btn-default btn-sm text-uppercase px-3 flex-grow-1 ml-1" [disabled]="assessmentIndex == pastAssessments.length - 1"
+                    (click)="goNext()">
+                    <span class="d-none d-lg-inline">Next</span>
+                    <div class="ml-lg-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 6px;"></div>
+                  </button>
+                </div>
+                <div class="dot-score-box run-bg rounded mb-3">
+                  <div class="row align-items-center">
+                    <div class="col py-4 text-center">
+                      <h6 class="text-white text-sm text-uppercase mb-0">Date</h6>
+                      <span *ngIf="readOnly" class="date text-sm">
+                        {{formatDate(selectedAssessment.assessmentDate)}}
+                      </span>
+                      <input AutoSizeInput #dpSwim="bsDatepicker" AutoSizeInput type="text" placeholder="00/00/00"
+                        class="form-control p-2 m-2" class="number-md-sm assessment-date" mask="00/00/00"
+                        (bsValueChange)="onDateChange($event)" [value]="formatDate(selectedAssessment.assessmentDate)"
+                        bsDatepicker [bsConfig]="bsConfig" [maxDate]="maxDate">
+                    </div>
+                    <div class="col py-4 border-left border-darken">
+                      <div class="tridot-score {{selectedSession}}-drk score-md">
+                        <span>{{selectedAssessment.dot}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="environment-info text-center">
+                  <div class="row mb-3">
+                    <div class="col-12 d-flex align-items-stretch">
+                      <span class="rounded border p-1">
+                          {{ selectedAssessment.trainAssessTime |timeFormat }}
+                      </span>
+                      <span class="w-100 mx-2 pt-1 rounded border p-1 text-truncate">
+                        {{ getLocationText() }}
+                      </span>
+                      <span class="border p-1 bg-light text-sm" style="border-radius: 20px;">
+                          <ng-container *ngIf="selectedAssessment.indoor == 'true'">Indoor</ng-container>
+                          <ng-container *ngIf="selectedAssessment.indoor != 'true'">Outdoor</ng-container>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Weight</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [ngModel]="selectedAssessment.currentWeight"
+                              [customTooltip]="selectedSession == 'run' ? error.currentWeight : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="4">
+                            <span class="assessments-label"> {{getWeightUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Temp</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [ngModel]="selectedAssessment.temperature"
+                              [customTooltip]="selectedSession == 'run' ? error.temperature : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="3">
+                            <span class="assessments-label"> {{getTemperatureUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col border-right">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Humidity</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [(ngModel)]="selectedAssessment.humidity"
+                              [customTooltip]="selectedSession == 'run' ? error.humidity : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="3">
+                            <span class="assessments-label"> &#37; </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="stacked-number-container col">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Elev</h5>
+                        <span class="number-md-sm font-weight-bold">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <input AutoSizeInput class="number-md-sm font-weight-bold text-drk assessments-input" type="text"
+                              [readOnly]="true" [(ngModel)]="selectedAssessment.elevation"
+                              [customTooltip]="selectedSession == 'run' ? error.elevation : ''" placement="bottom" trigger="manual" tooltip-type="error"
+                              maxlength="4">
+                            <span class="assessments-label"> {{getLengthUnit()}} </span>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4 col-sm-12 mb-3 mb-sm-0">
+                <div class="assessment-results border border-2 rounded p-3 v-100">
+                  <h6>Assessment Results</h6>
+                  <div class="row">
+                    <div class="col-6 border-right">
+                      <ul class="list-unstyled">
+                        <li class="font-weight-bold mb-1">Type</li>
+                        <li class="font-weight-bold mb-1">Time</li>
+                        <li class="font-weight-bold mb-1">AHR</li>
+                      </ul>
+                    </div>
+                    <div class="col-6">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">
+                          <button type="button" class="dropdown-toggle {{editing || creating ? '': 'disabled'}} p-0 border-0 d-flex align-items-center justify-content-between"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span *ngIf="selectedAssessment.assessmentType" class="text-body float-left">
+                              {{getRunAssessmentTypeName(selectedAssessment.assessmentType)}}</span>
+                            <span class="ml-2 float-right" *ngIf="editing || creating">
+                              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                            </span>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" *ngFor="let course of run_ass_type" (click)="selectedAssessment.assessmentType = course.id; editRunAssType = false;">
+                              {{getRunAssessmentTypeName(course.id)}}
+                            </a>
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative ">
+                            <span *ngIf="readOnly" class="font-weight-bold text-drk" (dblclick)="onDblClick($event);">
+                              {{formatTime(selectedAssessment.assessmentTime)}}
+                            </span>
+                            <input AutoSizeInput *ngIf="!readOnly" class="number-md-sm font-weight-bold text-drk assessments-input-lg time-input"
+                              type="text" [readOnly]="true" timeFormatMask includeHour="true" [ngClass]="{'edit-active': !readOnly}"
+                              [customTooltip]="selectedSession == 'run' ? error.assessmentTime : ''" placement="right" trigger="manual" tooltip-type="error"
+                              [ngModel]="selectedAssessment.assessmentTime">
+                          </div>
+                        </li>
+                        <li class="mb-1">
+                          <div class="position-relative ">
+                            <input class="number-md-sm font-weight-bold text-drk assessments-input-lg force" mask="000"
+                              type="text" [readOnly]="readOnly" [ngModel]="selectedAssessment.ahr"
+                              [customTooltip]="selectedSession == 'run' ? error.ahr : ''" placement="right" trigger="manual" tooltip-type="error">
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4 col-sm-12">
+                <div class="environment-normalized border border-2 rounded p-3 v-100 mt-3 mt-lg-0">
+                  <h6>Environment Normalized</h6>
+                  <div class="row">
+                    <div class="col-6 border-right">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">Time</li>
+                        <li class="mb-1">Threshold {{paceUnit}}</li>
+                      </ul>
+                    </div>
+                    <div class="col-6 pr-0">
+                      <ul class="list-unstyled">
+                        <li class="mb-1">
+                          <span class="font-weight-bold mr-1">{{formatTime(selectedAssessment.assessmentTimeEnv)}}</span>
+                          <div *ngIf="selectedAssessment.assessmentTimeEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.assessmentTimeEnv, pastAssessments[assessmentIndex + 1].assessmentTimeEnv) ? 'red-up-arrow': 'green-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.assessmentTimeEnv && assessmentIndex !== pastAssessments.length - 1 && pastAssessments.length > 1"
+                            class="{{compare(selectedAssessment.assessmentTimeEnv, pastAssessments[assessmentIndex + 1].assessmentTimeEnv)? 'text-danger': 'text-success'}} font-weight-bold ml-1">
+                            {{formatTime(calculateDiff(selectedAssessment.assessmentTimeEnv, pastAssessments[assessmentIndex + 1].assessmentTimeEnv))}}
+                          </span>
+                        </li>
+                        <li class="mb-1">
+                          <span class="font-weight-bold mr-1">{{formatTime(profile.measurementSystem === 'standard' ? selectedAssessment.thresholdPaceEnv : selectedAssessment.thresholdPaceEnvKm)}}</span>
+                          <div *ngIf="selectedAssessment.thresholdPaceEnv && assessmentIndex !== pastAssessments.length - 1" [inlineSVG]="'assets/img/svg/icons/' + (compare(selectedAssessment.thresholdPaceEnv, pastAssessments[assessmentIndex + 1].thresholdPaceEnv)? 'red-up-arrow': 'green-down-arrow') + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                          <span *ngIf="selectedAssessment.thresholdPaceEnv && assessmentIndex !== pastAssessments.length - 1"
+                            class="{{compare(selectedAssessment.thresholdPaceEnv, pastAssessments[assessmentIndex + 1].thresholdPaceEnv)? 'text-danger': 'text-success'}} font-weight-bold ml-1">
+                            {{formatTime(calculateDiff(profile.measurementSystem === 'standard' ? selectedAssessment.thresholdPaceEnv : selectedAssessment.thresholdPaceEnvKm, profile.measurementSystem === 'standard' ? pastAssessments[assessmentIndex + 1].thresholdPaceEnv : pastAssessments[assessmentIndex + 1].thresholdPaceEnvKm))}}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="px-3 pt-4 px-lg-4" *ngIf="!readOnly || selectedAssessment.comments">
+            <div class="row">
+              <div class="col-12">
+                <!-- <img *ngIf="profile" class="mr-3 rounded-circle profile-assess border-2 border-info position-absolute shadow"
+                  [src]="endpoint + profile.profileImageSmall ||  '../assets/img/svg/icons/profile-icon.svg'" alt=""
+                  width="40" height="40"> -->
+                <textarea class="form-control assess-comments" placeholder="Enter Notes..." name="" id="" cols="30"
+                  rows="5" [readOnly]="true" [ngModel]="textEncodeDecode.getDecodedText(selectedAssessment.comments)"
+                  style="background:transparent;"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer mt-4">
+            <h6 class="font-weight-normal text-center mb-4">Past {{selectedSession | ucwords }} Assessments</h6>
+            <div class="table-responsive" (pan)="onPan($event)" (panend)="onPanEnd($event)">
+            <table class="table border-top-0 mb-0 text-sm mb-3" *ngIf="selectedSession == 'swim'">
+              <thead class="border-top-0 border-bottom-0">
+                <tr>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Date</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Type</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Raw 400</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Raw Pace (/100)</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">En Time (400LCM)</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Threshold (/100LCM)</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">SwimDot</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let assessment of reversePastAssessments | paginate: { itemsPerPage: 6, currentPage: page }; let i = index"
+                  [ngClass]="{'table-secondary': selectedAssessment.id === assessment.id}" (click)="changeSelectedAssessment(assessment);">
+                  <td>{{formatDate(assessment.assessmentDate)}}</td>
+                  <td>400/200 {{getNameSwim(assessment.courseType)}} </td>
+                  <td>{{formatTime(assessment.css400)}}</td>
+                  <td>{{formatTime(assessment.css)}}</td>
+                  <td>{{formatTime(assessment.css400Env)}}</td>
+                  <td>{{formatTime(assessment.cssEnv)}}</td>
+                  <td>
+                    <span style="width:28px;display:inline-block;">{{assessment.dot}}</span>
+                    <div *ngIf="assessment.dotDiff != 0"  [inlineSVG]="'assets/img/svg/icons/' + (assessment.dotDiff > 0 ? 'green-up-arrow': 'red-down-arrow')  + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="table border-top-0 mb-0 text-sm mb-3" *ngIf="selectedSession == 'bike'">
+              <thead class="border-top-0 border-bottom-0">
+                <tr>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Date</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Type</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Raw Time</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Raw Power</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">{{getBikeEnTableTitle()}}</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Threshold (watts)</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">BikeDot</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let assessment of reversePastAssessments | paginate: { itemsPerPage: 6, currentPage: page }; let i = index"
+                  [ngClass]="{'table-secondary': selectedAssessment.id === assessment.id}" (click)="changeSelectedAssessment(assessment);">
+                  <td>{{formatDate(assessment.assessmentDate)}}</td>
+                  <td>{{getNameBike(assessment.assessmentType)}} </td>
+                  <td>{{formatTime(assessment.assessmentTime)}}</td>
+                  <td>{{assessment.power}}</td>
+                  <td>{{formatTime(assessment.assessmentTimeEnv)}}</td>
+                  <td>{{ getRoundValue(assessment.powerEnv) }}</td>
+                  <td><span style="width:28px;display:inline-block;">{{assessment.dot}}</span> <div *ngIf="assessment.dotDiff != 0" [inlineSVG]="'assets/img/svg/icons/' + (assessment.dotDiff > 0 ? 'green-up-arrow': 'red-down-arrow')  + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table data-toggle="table" data-sort-name="date" data-sort-order="desc" class="table border-top-0 mb-0 text-sm mb-3"
+              *ngIf="selectedSession == 'run'">
+              <thead class="border-top-0 border-bottom-0">
+                <tr>
+                  <th data-field="date" data-sortable="true" scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Date</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Type</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Raw Time</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Raw Pace {{paceUnit}}</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">En Time (5k)</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">Threshold {{paceUnit}}</th>
+                  <th scope="col" class="text-xs border-top-0 font-weight-normal text-uppercase">RunDot</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let assessment of reversePastAssessments | paginate: { itemsPerPage: 6, currentPage: page }; let i = index"
+                  [ngClass]="{'table-secondary': selectedAssessment.id === assessment.id}" (click)="changeSelectedAssessment(assessment);">
+                  <td>{{formatDate(assessment.assessmentDate)}}</td>
+                  <td>{{getRunAssessmentSmallTypeName(assessment.assessmentType)}}</td>
+                  <td>{{formatTime(assessment.assessmentTime)}}</td>
+                  <td>{{formatTime(profile.measurementSystem === 'standard' ? assessment.thresholdPace : assessment.thresholdPaceKm )}}</td>
+                  <td>{{formatTime(assessment.assessmentTimeEnv)}}</td>
+                  <td>{{formatTime(profile.measurementSystem === 'standard' ? assessment.thresholdPaceEnv : assessment.thresholdPaceEnvKm)}}</td>
+                  <td><span style="width:28px;display:inline-block;">{{assessment.dot}}</span> <div *ngIf="assessment.dotDiff != 0" [inlineSVG]="'assets/img/svg/icons/' + (assessment.dotDiff > 0 ? 'green-up-arrow': 'red-down-arrow')  + '.svg'" [autosize]="true" style="width: 12px;" class="mx-auto d-inline-block assessment-ico"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+            <div class="load-more-btn text-center">
+              <pagination-controls
+                class="my-pager"
+                previousLabel=""
+                nextLabel=""
+                (pageChange)="page = $event">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

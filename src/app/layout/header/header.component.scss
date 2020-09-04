@@ -1,0 +1,105 @@
+app-header {
+  .nav-link:after {
+    margin: 0;
+    content: "";
+    border: none;
+    display: block;
+    height: 5px;
+    width: 0%;
+    background-color: grey !important;
+    position: absolute;
+    bottom: 0;
+    -webkit-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+  }
+  
+  .profile-img {
+    width:25px;
+    height:25px;
+    border-radius:25px;
+    overflow: hidden;
+    img {
+      height:auto;
+    }
+  }
+
+  .underline {
+    display: block;
+    height: 5px;
+    width: 100%;
+    background-color: #e00a15;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .higher-index-sub-menu {
+    z-index: 1001;
+  }
+
+  .submenu-icon {
+    max-height: 25px;
+    width: 40px;
+  }
+
+  .active-submenu {
+    background-color: #e9ecef;
+
+    .submenu-icon {
+      &-cls-1 {
+        stroke: #e00d20 !important;
+      }
+    }
+  }
+
+  .grey-underline {
+    display: block;
+    height: 5px;
+    width: 100%;
+    background-color: grey;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .toggle-underline:after {
+    width: 100%;
+  }
+
+  .custom-drop {
+    padding: 15px 0;
+    margin-top: 1px;
+  }
+
+  .headerOpen {
+    display: block;
+  }
+
+  .search-icon {
+    position: relative;
+    left: 32px;
+  }
+
+  .search-field {
+    padding-left: 28px !important;
+  }
+
+  .toast-container:not(#toast-container) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 20px 15px;
+    > #toast-container {
+      position: relative;
+      > .toast {
+        width: 100%;
+        box-shadow: none;
+        box-shadow: none;
+        &:hover {
+          box-shadow: none;
+        }
+        &.toast-success {
+          background-color: #61db55;
+        }
+      }
+    }
+  }
+}

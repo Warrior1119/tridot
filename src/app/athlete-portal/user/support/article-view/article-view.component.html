@@ -1,0 +1,26 @@
+<div *ngIf="loading" class="text-center"><i class="fas fa-2x fa-spinner fa-spin"></i></div>
+<div *ngIf="!loading">
+  <div class="row">
+    <div class="col-10">
+      <h5 class="text-muted" style="display: inline-block; cursor: pointer" (click)="backToHome()">Support </h5>
+      <div class="icon-fix-md mx-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true"  style="width: 7px;" ></div>
+      <h5 class="text-muted" style="display: inline-block; cursor: pointer" (click)="backToList()"> {{sectionTitle}} </h5>
+      <div class="icon-fix-md mx-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true"  style="width: 7px;" ></div>
+      <h5 style="display: inline-block" innerHtml="{{articleInfo.title}}"></h5>
+    </div>
+    <div class="col-2 text-right">
+      <span (click)="toggleRecommendation()" [tooltip]="isRecommended() ? 'Remove from recommended articles' : 'Add to recommended articles'"
+        placement="left" container="body">
+        <i class="fa-star" [ngClass]="isRecommended() ? 'fas' : 'far'"></i>
+      </span>
+    </div>
+  </div>
+  <hr class="short-line" />
+  <div *ngIf="articleInfo.articleType=='video' && articleInfo.sourceUrl">
+    <video width="320" height="240" controls>
+      <source [src]="articleInfo.sourceUrl" type="video/mp4"> Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="excerpt" [innerHtml]="htmlDecode(articleInfo.body)">
+  </div>
+</div>

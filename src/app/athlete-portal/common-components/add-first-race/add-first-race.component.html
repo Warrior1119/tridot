@@ -1,0 +1,18 @@
+<div class="h-100 pt-0 pb-0">
+  <div class="bg-light rounded v-100 add-a-race-block">
+    <div class="card-img">
+      <div class="mb-4 mt-5 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/run-icon.svg'" [autosize]="true"  style="width: 130px;"></div>
+    </div>
+    <div class="card-body d-flex flex-column">
+      <h3 class="card-title font-weight-normal">Add Your First Race</h3>
+      <p class="card-text">
+        TriDot optimizes your training phases by the races you select.
+        Get started by adding your first race using the Season Planner. 
+      </p>
+      <button class="btn btn-lg btn-block text-md text-uppercase btn-primary"
+        [routerLink]="['/season-planner/training-phase/add-a-race']" >
+        ADD A RACE <img class="mb-1 ml-2" width="15" [src]=" '../assets/img/svg/icons/plus-icon.svg'">
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">My Bike Profiles</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="wistia_responsive_padding" style="padding: 56.25% 0 0 0; position: relative;">
+    <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%;">
+      <div class="wistia_video_foam_dummy" data-source-container-id="" style="border: 0px; display: block; height: 0px; margin: 0px; padding: 0px; position: static; visibility: hidden; width: auto;"></div><iframe
+        class="wistia_embed" src="//fast.wistia.net/embed/iframe/t0co821rnq?videoFoam=true" name="wistia_embed" width="784"
+        height="441" frameborder="0" scrolling="no" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen"
+        webkitallowfullscreen="webkitallowfullscreen" oallowfullscreen="oallowfullscreen" msallowfullscreen="msallowfullscreen"
+        style="width: 784px; height: 441px;"></iframe>
+    </div>
+  </div>
+  <script src="//fast.wistia.net/assets/external/E-v1.js" async=""></script>
+  <p>&nbsp;</p>
+  <p>In your Profile &amp; Preferences, you can enter the specifications for one or more bikes or bike setups you use
+    during training and racing. &nbsp;These specs are used when analyzing training and race data as well as when
+    predicting future performances.</p>
+  <p>** This data is VERY important in predicting future performances and normalizing your training and race results as
+    well as projecting your bike splits.</p>
+  <p>&nbsp;You can also set up two separate "bikes" that represent two different bike setups such as this:</p>
+  <p>Bike 1: &nbsp;Cervelo TT - Racing Setup<br>With this Bike, you can select your racing position and aero helmet, if
+    you use one. &nbsp;You can also select a custom CdA if you've calculated that based on your race posture. &nbsp;If
+    not, we'll estimate one for you based on your posture, height, and weight.</p>
+  <p>Bike 2: Cervelo TT - Training Setup<br>With this Bike, you can select your typical training position and road
+    helmet. &nbsp;As with Bike 1, you can select a custom CdA if you know yours.&nbsp;</p>
+  <p>&nbsp;</p>
+  <p><strong>Key Data</strong></p>
+  <p>The two data elements that are easiest to estimate or measure and have the greatest impact on analysis are the
+    weight of the bike and the drag coefficient (CdA).</p>
+  <p style="padding-left: 30px;"><strong>Bike Weight</strong> - This is the weight of your bike <em>and</em> all gear
+    carried or used while riding (shoes, helmet, bottles, kit...everything except your body weight). &nbsp;You can
+    measure bike (and equipment) weight using hanging scale if you have one. &nbsp;Alternatively, you can use a regular
+    bathroom scale while holding your bike and then subtract your body weight.</p>
+  <p style="padding-left: 30px;"><strong>Bike Position (CdA)</strong> - Your Bike Position has the greatest impact on
+    your CdA because it determines&nbsp;your Frontal Area exposed and creating wind drag. &nbsp;The four "aero"
+    position options listed in the drop down are in order from least to most aggressive positioning. &nbsp;i.e.
+    &nbsp;Most wind drag (much of torso exposed to wind) to least wind drag (torso almost parallel to the ground).
+    &nbsp;You can adjust this value and see how the system changes your projected bike splits based on different
+    positions. &nbsp;BE SURE this value is accurate.&nbsp;</p>
+  <p style="padding-left: 30px;"><strong>Aerodynamic Drag (CdA)</strong> - This is a measure of the force required to
+    overcome wind drag at different velocities. &nbsp;You can select a Bike Position from the drop down list to
+    estimate your CdA based on this position and your height and weight. &nbsp;If you've measured or calculated your
+    CdA, please enter that data here. &nbsp;CdA = Drag Coefficient (Cd) x Frontal Area (A)</p>
+  <p>&nbsp;</p>
+  <h4>Default Values</h4>
+  <p>Following are the default bike spec values used for normalization.</p>
+  <p style="padding-left: 30px;">Weight: &nbsp;8 kg (includes bike and equipment)<br>CdA: &nbsp;.25<br>Crr: .005<br>Drivetrain
+    Loss: &nbsp;3%</p>
+</div>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25.4 29">
+  <defs>
+    <style>
+      .support-icon-cls-1 {
+        fill: none;
+        stroke: #808e98;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g id="single-copy-04" transform="translate(-2)">
+    <rect id="Rectangle_841" data-name="Rectangle 841" class="support-icon-cls-1" width="19.8" height="23.4" transform="translate(3 4.6)"/>
+    <line id="Line_738" data-name="Line 738" class="support-icon-cls-1" x2="10.8" transform="translate(7.5 10.9)"/>
+    <line id="Line_739" data-name="Line 739" class="support-icon-cls-1" x2="10.8" transform="translate(7.5 16.3)"/>
+    <line id="Line_740" data-name="Line 740" class="support-icon-cls-1" x2="3.6" transform="translate(7.5 21.7)"/>
+    <path id="Path_605" data-name="Path 605" class="support-icon-cls-1" d="M6,1H26.7V25.3" transform="translate(-0.3)"/>
+  </g>
+</svg>

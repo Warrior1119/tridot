@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22.275 29.648">
+  <defs>
+    <style>
+      .device-icon-cls-1 {
+        fill: none;
+        stroke: #808e98;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .device-icon-cls-2 {
+        fill: #808e98;
+      }
+    </style>
+  </defs>
+  <g id="watch-heart" transform="translate(-4)">
+    <path id="Path_595" data-name="Path 595" class="device-icon-cls-1" d="M9,1.922V1H21.9v.922" transform="translate(-0.314)"/>
+    <path id="Path_596" data-name="Path 596" class="device-icon-cls-1" d="M21.9,30v.922H9V30" transform="translate(-0.314 -2.273)"/>
+    <path id="Path_597" data-name="Path 597" class="device-icon-cls-1" d="M25.276,23.432a1.843,1.843,0,0,1-1.843,1.843H6.843A1.843,1.843,0,0,1,5,23.432V6.843A1.843,1.843,0,0,1,6.843,5H23.432a1.843,1.843,0,0,1,1.843,1.843Z" transform="translate(0 -0.314)"/>
+    <path id="Path_598" data-name="Path 598" class="device-icon-cls-2" d="M20.131,11.494a3.176,3.176,0,0,0-4.6.117,3.173,3.173,0,1,0-4.6,4.368l4.6,4.6,4.6-4.6a3.174,3.174,0,0,0,0-4.487Z" transform="translate(-0.392 -0.75)"/>
+  </g>
+</svg>

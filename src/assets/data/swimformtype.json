@@ -1,0 +1,72 @@
+[
+	{
+		"typeId": "lightweight",
+		"characteristics": [
+			"Low-power version of Tarzan",
+			"Anxious",
+			"Often kick action from knees",
+			"Head out of water to breathe",
+			"Straight-arm pull"
+		],
+		"insights": "As a Lightweight, you'll need to really focus on your ooomph and confidence.  You may not have much experience in the pool, but that won't be true for long.  Focus on making small improvements each session.  Try to relax in the water and focus on strong execution of your prescribed drills.  Much of your improvement will come from having a positive mindset as you go into each session.  Swimming is not 'natural' for humans.  It's learned.  You can learn to be a great swimmer!"
+	},
+	{
+		"typeId": "tarzan",
+		"characteristics": [
+			"Fights water",
+			"Legs sink",
+			"Midline crossover",
+			"Pronounced scissor kick",
+			"Lifts head to breathe",
+			"Slows dramatically after 100"
+		],
+		"insights": "As a Tarzan, you'll need to learn to rely less on your strength and athleticism and more on skill and technique.  As you execute your prescribed drills, learn to work with the water rather than fighting against it.  Focus on reducing drag and having a long, balanced body position.  Relax and let your body glide through the water.  Improving your swim form can take time.  It's often not a matter of more effort, rather it's patience as you repeat the movements (drills) over, and over, and over until they come naturally."
+	},
+	{
+		"typeId": "overglider",
+		"characteristics": [
+			"Intentionally glides",
+			"Deadspot at front of stroke",
+			"Good body position and rotation",
+			"Often only breaths to one side"
+		],
+		"insights": "As an Overglider, you're likely over thinking your swim form and trying to stay streamlined at the expense of generating propulsion.  Swim speed is Distance per Stroke (DPS) x Stroke Rate (SR)--not just DPS.  It's likely you'll see solid improvements by focusing more on increasing your stroke rate and generating more propulsion even if you sacrifice your streamline a little.  Remember that the most streamlined gliding position doesn't have any propulsion.  Make the mental shift from pursuing only form to pursuing fitness too.  Work on your prescribed drills, and you'll find the right balance."
+	},
+	{
+		"typeId": "overkicker",
+		"characteristics": [
+			"Strong, continuous kick",
+			"Often lacks body rotation",
+			"Not faster proportionally with kickboard",
+			"Slower with pull bouy",
+			"Good rhythm",
+			"Often breathless"
+		],
+		"insights": "As an Overkicker, you're able to swim at least at a moderate pace and may not perceive the 'need' for much form improvement.  However, with a little more emphasis on generating propulsion form your front quadrant and reducing your kick you'll be able to swim further, faster, and with less energy.  Focus on each of your prescribed drills and be open to re-thinking and re-learning how you swim."
+	},
+	{
+		"typeId": "swinger",
+		"characteristics": [
+			"Wide arm recovery",
+			"Fast stroke-rate",
+			"Minimal kick",
+			"Good body position",
+			"Likes to swim fast for long time",
+			"May have shoulder injury or pain",
+			"May appear choppy but still fast"
+		],
+		"insights": "As a Swinger, you're already a relatively fast swimmer.  Understand that the Swinger form isn't a 'lesser' form than the Classic.  You can achieve great results with either.  The amount of 'form correction' you'll want to pursue will be relative to your fitness and results.  If you're already turning in strong swim performances and are not experiencing shoulder pain, you may not want to change too much.  Work on your prescribed drills as a Classic would to maintain and refine your form not overhaul it."
+	},
+	{
+		"typeId": "classic",
+		"characteristics": [
+			"Appears effortless",
+			"Enjoys other strokes",
+			"Strong 6-beat kick",
+			"Flip-turns and other skills",
+			"Good rhythm",
+			"Good pacing"
+		],
+		"insights": "As a Classic, you're already a very strong swimmer.  You'll always want to watch that bad habits don't creep in and impact your form.  Don't take your swim form for granted and neglect doing the drills that are prescribed in your swim sessions.  As a triathlete, you will do well to spend time working on open-water skills such as sighting and drafting."
+	}
+]

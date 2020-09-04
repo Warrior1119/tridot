@@ -1,0 +1,87 @@
+<ng-template #chartControls>
+  <div class="chart-controls">
+    <div>
+      <div class="d-inline-block">
+        <button type="button" class="dropdown-toggle"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div class="color-icon" [ngStyle]="{'background': getMetricColor(selBaseMetricY)}"></div>
+          {{selBaseMetricY}}
+          <div [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true" style="width: 10px;" class="mx-auto d-inline-block"></div>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" *ngFor="let metric of baseMetricsX" 
+            (click)="selectBaseMetricY(metric)">
+            <div class="color-icon" [ngStyle]="{'background': getMetricColor(metric)}"></div>
+            {{metric}}
+          </a>
+        </div>
+      </div>
+      &nbsp;
+      <div class="d-inline-block">
+        <div class="btn-group">
+          <label class="btn btn-default mb-0" (click)="selectBaseMetricX('Over Time')" btnRadio="Time" tabindex="0" role="button" [ngClass]="{'bg-white': selBaseMetricX == 'Over Time'}">
+            Time
+          </label>
+          <label class="btn btn-default mb-0" (click)="selectBaseMetricX('Over Distance')" btnRadio="Distance" tabindex="0" role="button"  [ngClass]="{'bg-white': selBaseMetricX == 'Over Distance'}">
+            Distance
+          </label>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="d-inline-block" *ngFor="let overlay of selOverlays">
+        <button type="button" style="color: white;" [ngStyle]="{'background': getMetricColor(overlay)}">
+          {{overlay}}&nbsp;&nbsp;
+          <a (click)="toggleOverlay(overlay)"><i class="fas fa-sm fa-times"></i></a>
+        </button>
+        &nbsp;
+      </div>
+      <div class="d-inline-block">
+        <button type="button" class="dropdown-toggle"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Add Metric
+          <div [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true" style="width: 10px;" class="mx-auto d-inline-block"></div>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div class="dropdown-item" *ngFor="let overlay of overlays" [hidden]="overlay == selBaseMetricY">
+            <label>
+              <input type="checkbox" (click)="toggleOverlay(overlay)" [checked]="selOverlays.indexOf(overlay) > -1"
+              [disabled]="selOverlays.length === 3 && selOverlays.indexOf(overlay) == -1" />
+              &nbsp;{{overlay}}
+            </label>
+          </div>
+        </div>
+      </div>
+      <button *ngIf="!maximized" title="Expand chart modal" (click)="openModal(modalTemplate)">
+        <i class="fas fa-expand"></i>
+      </button>
+      <button *ngIf="maximized" title="Close chart modal" (click)="modalRef.hide()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+<div class="chart-container shadow" *ngIf="!maximized">
+  <ng-template *ngIf="!maximized" [ngTemplateOutlet]="chartControls"></ng-template>
+  <canvas baseChart 
+    [datasets]="chartData"
+    [labels]="chartLabels"
+    [options]="chartOptions"
+    [colors]="chartColors"
+    [legend]="chartLegend"
+    [chartType]="chartType">
+  </canvas>
+</div>
+<ng-template #modalTemplate>
+  <div class="modal-body">
+    <ng-template [ngTemplateOutlet]="chartControls"></ng-template>
+    <canvas baseChart
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
+      [colors]="chartColors"
+      [legend]="chartLegend"
+      [chartType]="chartType">
+    </canvas>
+  </div>
+</ng-template>

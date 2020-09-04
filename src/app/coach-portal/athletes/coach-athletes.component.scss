@@ -1,0 +1,234 @@
+.profile-picture {
+  height:55px;
+  width:55px;
+  position:relative;
+  z-index:1;
+  margin:0 auto 10px !important;
+  img {
+    height:55px;
+    width:55px;
+    overflow:hidden;
+    border-radius:50px;
+  }
+}
+
+.ngx-pagination {
+  a {
+    cursor: pointer;
+  }
+}
+
+.btn-highlighted {
+  color:white;
+  background-color: #ff00fd !important;
+  box-shadow:0 3px 12px rgba(255, 0, 253,0.5);
+}
+
+.status-btn {
+  height:12px;
+  width:12px;
+  border-radius:24px;
+  background-color:#ccc;
+  position:absolute;
+  left:22px;
+  bottom:-6px;
+  z-index:2;
+  &.active {
+    background-color:#00e41d;
+  }
+  &.inactive {
+    background-color:#f4001d;
+  }
+}
+
+.tridot-score {
+  width:40px;
+  height:40px;
+}
+
+.athlete-menu {
+  .custom-menu__button {
+    position:relative;
+    right:0;
+    top:0;
+    padding:0;
+    line-height:1;
+    > div {
+      margin:0 auto;
+    }
+  }
+}
+
+.available-seat-number {
+  font-weight: bold;
+  font-size: 25px;
+}
+.tooltip-panel {
+  padding: 0;
+  width: unset;
+  margin-left: 0;
+  transform: translateX(-50%);
+
+  box-shadow: 0 0 10px -1px rgba(158,158,158,0.3);
+  background-color: #ffffff;
+
+  &::after {
+    border-top-color: #ffffff;
+  }
+}
+
+.athlete-search-field {
+  border-radius:50px;
+  background-position:right 20px center;
+  background-repeat:no-repeat;
+  background-image:url(../../../assets/img/svg/icons/search-icon-alt.svg);
+  &::placeholder {
+    color:#BFC8CE;
+  }
+}
+
+.toggle-container {
+  display: inline-block;
+  border-radius: 3px;
+  padding: 2px;
+  background-color: #efefef;
+  font-size: 10px;
+}
+
+.btn-toggle {
+  margin: 0 4rem;
+  padding: 0;
+  position: relative;
+  border: none;
+  height: 1.5rem;
+  width: 3rem;
+  border-radius: 1.5rem;
+  color: #6b7381;
+  background: #bdc1c8;
+}
+.btn-toggle.focus.active {
+  outline: none;
+}
+.btn-toggle:before,
+.btn-toggle:after {
+  line-height: 1.5rem;
+  width: 4rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: absolute;
+  bottom: 0;
+  transition: opacity 0.25s;
+}
+.btn-toggle:before {
+  content: 'Off';
+  left: -4rem;
+}
+.btn-toggle:after {
+  content: 'On';
+  right: -4rem;
+  opacity: 0.5;
+}
+.btn-toggle > .handle {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 1.125rem;
+  background: #fff;
+  transition: left 0.25s;
+}
+.btn-toggle.active {
+  transition: background-color 0.25s;
+}
+.btn-toggle.active > .handle {
+  left: 1.6875rem;
+  transition: left 0.25s;
+}
+.btn-toggle.active:before {
+  opacity: 0.5;
+}
+.btn-toggle.active:after {
+  opacity: 1;
+}
+.btn-toggle.btn-xs:before,
+.btn-toggle.btn-xs:after {
+  display: none;
+}
+.btn-toggle:before,
+.btn-toggle:after {
+  color: #6b7381;
+}
+.btn-toggle.active {
+  background-color: #7bd777;
+}
+.btn-toggle.btn-xs {
+  margin: 0 0;
+  padding: 0;
+  position: relative;
+  border: none;
+  height: 1rem;
+  width: 2rem;
+  border-radius: 1rem;
+}
+.btn-toggle.btn-xs:focus,
+.btn-toggle.btn-xs.focus,
+.btn-toggle.btn-xs:focus.active,
+.btn-toggle.btn-xs.focus.active {
+  outline: none;
+}
+.btn-toggle.btn-xs:before,
+.btn-toggle.btn-xs:after {
+  line-height: 1rem;
+  width: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: absolute;
+  bottom: 0;
+  transition: opacity 0.25s;
+}
+.btn-toggle.btn-xs:before {
+  content: 'Off';
+  left: 0;
+}
+.btn-toggle.btn-xs:after {
+  content: 'On';
+  right: 0;
+  opacity: 0.5;
+}
+.btn-toggle.btn-xs > .handle {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  transition: left 0.25s;
+}
+.btn-toggle.btn-xs.active {
+  transition: background-color 0.25s;
+}
+.btn-toggle.btn-xs.active > .handle {
+  left: 1.125rem;
+  transition: left 0.25s;
+}
+.btn-toggle.btn-xs.active:before {
+  opacity: 0.5;
+}
+.btn-toggle.btn-xs.active:after {
+  opacity: 1;
+}
+.dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.btn.dropdown-toggle {
+  min-width: 120px;
+}

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.188 28.187">
+  <defs>
+    <style>
+      .facebook-cls-1 {
+        fill: #c3c6cc;
+      }
+
+      .facebook-cls-2 {
+        fill: #ecedf0;
+      }
+    </style>
+  </defs>
+  <g id="logo-fb-simple" transform="translate(0.001 0)">
+    <rect id="Rectangle_35" data-name="Rectangle 35" class="facebook-cls-1" width="28.187" height="28.187" rx="14.093"/>
+    <g id="Group_58" data-name="Group 58" transform="translate(10.57 7.487)">
+      <path id="Path_82" data-name="Path 82" class="facebook-cls-2" d="M9.965,14.212V8.487H8V5.845H9.965V4a2.782,2.782,0,0,1,3.066-3,16.64,16.64,0,0,1,1.812.093v2.1H13.6c-.975,0-1.2.463-1.2,1.143V5.845h2.642l-.881,2.642H12.4v5.725Z" transform="translate(-8 -1)"/>
+    </g>
+  </g>
+</svg>

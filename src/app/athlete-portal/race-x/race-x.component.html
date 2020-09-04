@@ -1,0 +1,85 @@
+<!-- <div *ngFor="let alert of alerts">
+  <alert [type]="alert.type" class="racex-alert" [dismissOnTimeout]="alert.timeout" [dismissible]="true">{{ alert.msg
+    }}</alert>
+</div> -->
+
+<div class="main">
+    <ng-container *ngIf="loading || !raceNutrition; then loadingOverlay"></ng-container>
+  <div *ngIf="!loading && raceNutrition" class="container daily-workout-container">
+    <div class="row mb-3">
+      <div class="col-sm-12 d-flex align-items-center justify-content-between">
+        <h4 class="page-title mt-2 mb-3 text-center text-md-left">
+          RaceX
+        </h4>
+        <custom-menu *ngIf="selectedRace && raceDetails" menuClass="racex-menu-wrap">
+            <li><h6 class="custom-menu__title mb-0 p-0">Options</h6></li>
+            <ul class="custom-menu__list text-left">
+              <li *ngIf="selectedRace.daysTillRace == 0 " (click)="openSurveyModal()">Edit Race Completion Details</li>
+              <li routerLink="/season-planner/training-phase/add-a-race">Add a Race</li>
+              <li *ngIf="canDeleteRace" (click)="deleteRace()">Delete this Race</li>
+            </ul>
+            <li><h6 *ngIf="nutritionImportSources?.length > 0" class="custom-menu__title mb-0 p-0 text-nowrap">Import Nutrition Data From</h6></li>
+            <ul *ngIf="nutritionImportSources?.length > 0" class="custom-menu__list text-left">
+              <li *ngFor="let race of nutritionImportSources" (click)="importNutritionDataFrom(race)">{{race.raceName}}</li>
+            </ul>
+          </custom-menu>
+      </div>
+    </div>
+    <div class="row">
+      <div *ngIf="selectedRace && raceDetails" class="col-lg-3 col-xl-3">
+        <app-race-x-sidebar [races]="futureRaces" [race]="selectedRace" [details]="raceDetails" (updateRaceX)="updateRaceX($event)"
+          (selectedRace)="updateRace($event)"></app-race-x-sidebar>
+      </div>
+      <div [className]="selectedRace && raceDetails ? 'col-lg-9 col-xl-9' : 'col-lg-12 col-xl-12'">
+        <ng-container *ngIf="selectedRace && selectedRace.daysTillRace == 0 && !selectedRaceAnySurveyFilled">
+
+          <!-- <dismissable [id]="'dismiss-congratulations-for-race-'+selectedRace.raceId" #congratulations> -->
+            <div *ngIf="showBottomSurvey" class="row justify-content-center">
+              <div class="col-12">
+                <div class="bg-white p-5 mb-4 text-center rounded shadow">
+                  <h3>Congratulations on finishing {{selectedRace.raceName}}</h3>
+                  <p>Please take some time to fill in the details of your race below to complete your RaceX data</p>
+                  <div class="button-group">
+                    <button class="btn btn-sm btn-default text-sm ml-2 px-4 py-2" (click)="showBottomSurvey = false; openSurveyModal()">
+                      Fill in completion details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- </dismissable> -->
+
+          <!-- <ng-container *ngIf="!congratulations.visible">
+            <dismissable [id]="'dismiss-survey-for-race-'+selectedRace.raceId" #survey>
+              <app-race-x-survey [race]="selectedRace" [details]="raceDetails" (updateRaceX)="updateRaceX($event)"
+                [showSubmitButton]="true" (submit)="survey.hide();submitSurvey()"></app-race-x-survey>
+            </dismissable>
+          </ng-container> -->
+        </ng-container>
+
+        <app-race-x-main
+          #main
+          [loading]="loading"
+          [race]="selectedRace"
+          [details]="raceDetails"
+          [nutrition]="raceNutrition" 
+          [showBottomSurvey]="showBottomSurvey"
+          [surveyFilled]="selectedRaceAnySurveyFilled"
+          (updateRaceX)="updateRaceX($event)"
+          [hasNextRace]="hasNextRace()"
+          [hasPrevRace]="hasPrevRace()"
+          (nextRace)="onNextRace()"
+          (prevRace)="onPrevRace()"
+        ></app-race-x-main>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
+
+<ng-template #loadingOverlay>
+  <ng-container [ngSwitch]="isMobile">
+    <app-loading-overlay *ngSwitchCase="false" style="margin-top: 40vh;"></app-loading-overlay>
+    <app-loading-mobile *ngSwitchCase="true" [loadingText]="'Loading your RaceX data...'"></app-loading-mobile>
+  </ng-container>
+</ng-template>

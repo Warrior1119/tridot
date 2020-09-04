@@ -1,0 +1,240 @@
+<div class="card-deck weekly-summary mb-4 position-relative px-2">
+  <div class="card card-box bg-white workout-card col-sm-gutter rounded mx-md-2 mb-3 mb-sm-0" *ngFor="let day of week.days"
+    [ngClass]="{'active-day shadow': verifyIfToday(day.date)}">
+    <div class="card-header bg-white box-header border-0 p-0 d-flex align-items-center justify-content-between">
+      <h2 class="small-header m-0 cursor-pointer" (click)="goToDailyWorkout(day)">
+        <span class="d-inline d-md-none d-lg-inline">{{day.date | amDateFormat: prefDateFormatMd}}</span> {{day.date | amDateFormat: 'ddd'}}
+      </h2>
+      <div class="card-menu position-relative">
+        <custom-menu menuClass="burger-wrap" #burgerMenu>
+          <li *ngIf="day.sessions?.length" (click)="moveOrCopy('move','day', day)">Move</li>
+          <li *ngIf="day.sessions?.length" (click)="moveOrCopy('copy','day', day)">Copy</li>
+          <li (click)="add(day)">Add</li>
+          <li (click)="restore(day,'day')">Restore</li>
+        </custom-menu>
+      </div>
+    </div>
+    <div class="card-body box-content p-0 mt-2 mb-0 position-relative" dragula={{getDracula()}} [attr.data-date]="day.date">
+      <div class="workout-block no-session-available flex-column" *ngIf="day.sessions.length == 0">
+        <small> No sessions scheduled for today </small>
+        <!-- <button class="btn btn-default btn-block btn-sm text-uppercase text-xs mt-2"
+        (click)="add(day)">Add a Session <i class="fal fa-plus ml-1"></i></button> -->
+      </div>
+      <div class="workout-block" *ngFor="let session of day.sessions; let first = first" [ngClass]="{'workout-complete': session.actualTotal > 0}"
+        [attr.data-sessionid]="session.sessionId">
+
+        <div class="workout-header d-flex align-items-center justify-content-between">
+          <div class="workout-title text-sm w-100 d-flex align-items-center justify-content-between pr-4" (mouseenter)="session.showDetails1 = true">
+            <span class="flex-grow-1 text-truncate">{{ session.sessionZoneLabel }}</span>
+            <div *ngIf="session.linkedFiles?.length" class="p-1 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/data-file-sm.svg'" [autosize]="true" ></div>
+            <div *ngIf="session.isAthleteCreated == 'true'" class="p-1 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/athlete-created-icon.svg'" [autosize]="true" ></div>
+            <div *ngIf="session.isCoachCreated == 'true'" class="p-1 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/coach-created-icon.svg'" [autosize]="true" ></div>
+          </div>
+          <div class="workout-menu position-relative">
+            <custom-menu menuClass="ellipsis-wrap" iconName="elipse-menu" [style.display]="first && burgerMenu.isOpen ? 'none' : 'inherit'">
+              <li *ngIf="shouldMoveBeEnabled(session)" (click)="moveOrCopy('move','session', session)">Move
+                <i class="fal fa-spinner fa-spin" *ngIf="session.moveLoading"></i>
+              </li>
+              <li (click)="moveOrCopy('copy','session', session)">Copy
+                <i class="fal fa-spinner fa-spin" *ngIf="session.copyLoading"></i>
+              </li>
+              <li *ngIf="shouldRestoreBeEnabled(session)" (click)="restore(session,'session')">Restore</li>
+              <li *ngIf="shouldDeleteBeEnabled(session)" (click)="delete(session,'session')">Delete</li>
+              <li *ngIf="shouldUploadBeEnabled(session)" (click)="upload(session)">Upload Data File</li>
+              <li *ngIf="shouldUnlinkBeEnabled(session)" (click)="unlinkFile(session)">Unlink Data File</li>
+            </custom-menu>
+          </div>
+        </div>
+        <div class="workout-details" [ngClass]="[session.actualTotal > 0 ? 'workout-'+session.sessionType : '']">
+          <div class="card-box p-3 workout-summary text-body shadow-lg rounded position-absolute d-flex flex-column"
+            (click)="goToSelectedSession(day,session.sessionId)"
+            (mouseleave)="session.showDetails1 = false" [class.showDetails]="session.showDetails1">
+            <div *ngIf="session.sessionDetail && session.sessionDetail.mainSet" class="set text-xs mr-2 h-100"
+              [perfectScrollbar]="scrollbarWorkoutSummary">
+              <div *ngIf="!isSessionDetailEmpty(session.sessionDetail.mainSet)" class="set-title">Main Set</div>
+              <div class="set-details">
+                <span *ngIf="!isSessionDetailEmpty(session.sessionDetail.mainSet)" [innerHTML]="session.sessionDetail.mainSet"></span>
+              </div>
+            </div>
+            <div class="btn text-xxs btn-default btn-block text-uppercase mt-2 py-2 rounded text-center">View Session</div>
+          </div>
+          <div class="d-flex align-items-center justify-content-center text-center">
+            <div class="col col-sm-gutter" [class.col-2]="isMobile()">
+              <div class="workout-icon" *ngIf="!session.actualTotal">
+                <div class="drag-handle"></div>
+                <div aria-label="My icon" class="workout-icon" [inlineSVG]="'../assets/img/svg/'+session.sessionType.toLowerCase()+'-logo-sm.svg'"></div>
+              </div>
+              <div class="workout-complete-icon-container" *ngIf="session.actualTotal > 0">
+                <div aria-label="My icon" class="workout-complete-icon icon-correction fix-up-2" [inlineSVG]="'../assets/img/svg/icons/checkmark-white.svg'"></div>
+              </div>
+            </div>
+
+            <ng-container *ngIf="!isMobile()">
+              <div class="d-flex flex-fill align-items-center justify-content-center text-center">
+                <div class="col col-sm-gutter border-darken d-flex flex-column" [class.border-left]="!session.actualTotal">
+                  <div class="planned-time text-xs {{ session.actualTotal ? 'border-bottom pb-1 mb-1' : '' }}" style="border-color: rgba(0, 0, 0, 0.133) !important;"
+                    customTooltip="Planned" placement="top">
+                    <ng-container *ngIf="session.plannedTotal">{{ convertToHHMM(session.plannedTotal) }}</ng-container>
+                    <ng-container *ngIf="!session.plannedTotal"><span class="text-muted">0:00</span></ng-container>
+                  </div>
+                  <div *ngIf="session.actualTotal" class="actual-time text-xs"
+                    customTooltip="Actual" placement="bottom">
+                    {{ convertToHHMM(session.actualTotal) }}
+                  </div>
+                </div>
+                <div *ngIf="session.actualTotal" class="trainx-score-wrapper position-relative mx-2">
+                  <span class="trainx-score" customTooltip="TrainX Score" placement="top">{{ getScore(session) }}</span>
+                </div>
+                <div *ngIf="!session.actualTotal" class="col col-sm-gutter border-left border-darken">
+                  <div class="actual-time text-xs"><span class="text-muted">0:00</span></div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="isMobile()">
+              <div class="col col-sm-gutter border-darken">
+                <div class="planned-time text-xs" style="border-color: rgba(0, 0, 0, 0.133) !important;"
+                  customTooltip="Planned" placement="top">
+                  <ng-container *ngIf="session.plannedTotal">{{ convertToHHMM(session.plannedTotal) }}</ng-container>
+                  <ng-container *ngIf="!session.plannedTotal"><span class="text-muted">0:00</span></ng-container>
+                </div>
+              </div>
+              <div *ngIf="session.actualTotal" class="col col-sm-gutter border-left border-darken">
+                <div class="actual-time text-xs"
+                  customTooltip="Actual" placement="top">
+                  <ng-container *ngIf="session.actualTotal">{{ convertToHHMM(session.actualTotal) }}</ng-container>
+                  <ng-container *ngIf="!session.actualTotal"><span class="text-muted">0:00</span></ng-container>
+                </div>
+              </div>
+              <div *ngIf="session.actualTotal" class="trainx-score-wrapper position-relative mx-2">
+                <span class="trainx-score" customTooltip="TrainX Score" placement="top">{{ getScore(session) }}</span>
+              </div>
+              <div *ngIf="!session.actualTotal" class="col col-sm-gutter border-left border-darken mr-5">
+                <div class="actual-time text-xs"><span class="text-muted">0:00</span></div>
+              </div>
+            </ng-container>
+
+          </div>
+        </div>
+        <div class="workout-zones d-flex" [ngClass]="[session.actualTotal > 0 || session.sessionType === 'strength' ? 'workout-'+session.sessionType : '']">
+          <div *ngFor="let zone of session.zones" [ngClass]="getZoneClass(session, zone)"
+            [ngStyle]="getZoneStyle(session, zone)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer box-footer bg-white px-0 pb-0 pt-0">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="data-file-container pt-3" *ngIf="!day.unlinkedFiles.length">
+          <div *ngIf="canComplete(day)" class="data-file-icon" tooltip="Upload Data File" (click)="upload(session)" [inlineSVG]="'../assets/img/svg/icons/data-file-default.svg'"></div>
+          <div *ngIf="!canComplete(day)" class="data-file-icon" [inlineSVG]="'../assets/img/svg/icons/data-file-default.svg'"></div>
+        </div>
+        <div class="custom-tooltip data-file-container" *ngIf="day.unlinkedFiles.length">
+          <ng-container [ngSwitch]="hasLinkedFile(day)">
+            <div *ngSwitchCase="true" class="data-file-icon" [inlineSVG]="'../assets/img/svg/icons/data-file-success.svg'"></div>
+            <div *ngSwitchDefault class="data-file-icon" [inlineSVG]="'../assets/img/svg/icons/data-file.svg'"></div>
+          </ng-container>
+          <div class="custom-tooltiptext animated-tooltip text-left p-2">
+            <h6 class="mb-2 text-sm text-white text-uppercase">Unlinked files</h6>
+            <div *ngFor="let file of day.unlinkedFiles">
+              <div class="data-file-header my-1 d-flex align-items-center justify-content-between" (click)="file.showMenu = !file.showMenu">
+                <div>
+                  <span class="text-uppercase mr-1">{{file.sessionType}}</span>
+                  <small> ({{file.duration}}) </small>
+                </div>
+                <i class="fal fa-angle-down ml-1"></i>
+              </div>
+              <div class="data-file-details" *ngIf="file.showMenu">
+                <ul class="list-unstyled text-left cursor-pointer mb-0 ml-2">
+                  <li class="my-1" (click)="createSession(file)">
+                    <strong> Create Session <i class="fal fa-plus ml-1"></i></strong>
+                  </li>
+                  <li class="my-1" (click)="linkToSession(file)">
+                    <strong> Link to Session <i class="fal fa-link text-xxs ml-1"></i></strong>
+                  </li>
+                  <li *ngIf="shouldMergeBeEnabled(file, day.sessions)" class="my-1" (click)="linkAndMerge(file, day.sessions)">
+                    <strong> Link and Merge <i class="fal fa-link text-xxs ml-1"></i></strong>
+                  </li>
+                  <li class="my-1" (click)="deleteUnlinkedFile(file)">
+                    <strong> Delete <i class="fal fa-times ml-1"></i></strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="card time-card position-absolute text-center text-xs d-block d-sm-flex" *ngIf="weekStats"> -->
+  <div class="card" *ngIf="weekStats" [ngClass]="{'time-card position-absolute text-center text-xs d-block d-sm-flex' : isMobile(), 'card-box bg-white workout-card col-sm-gutter rounded mx-md-2 mb-3 mb-sm-0 weekStats' : !isMobile() }">
+    <div class="time-card-block border-bottom">
+      <div class="blank-time-block" *ngIf="!isMobile()"></div>
+      <div class="d-inline-block d-md-block text-uppercase">
+        Swim
+      </div>
+      <div class="d-inline-block d-md-block">
+        {{weekStats.swim.planned}}
+      </div>
+    </div>
+    <div class="time-card-block border-bottom">
+      <div class="blank-time-block" *ngIf="!isMobile()"></div>
+      <div class="d-inline-block d-md-block text-uppercase">
+        Bike
+      </div>
+      <div class="d-inline-block d-md-block">
+        {{weekStats.bike.planned}}
+      </div>
+    </div>
+    <div class="time-card-block border-bottom">
+      <div class="blank-time-block" *ngIf="!isMobile()"></div>
+      <div class="d-inline-block d-md-block text-uppercase">
+        Run
+      </div>
+      <div class="d-inline-block d-md-block">
+        {{weekStats.run.planned}}
+      </div>
+    </div>
+    <div class="time-card-block total-time">
+      <div class="blank-time-block" *ngIf="!isMobile()"></div>
+      <div class="d-inline-block d-md-block text-uppercase">
+        Total
+      </div>
+      <div class="d-inline-block d-md-block">
+        {{weekStats.totalPlannedTime}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row trainx-progress mb-4" *ngIf="weekStats">
+  <div class="col" style="align-self: center;">
+    <div class="progress rounded-progress bg-white progress-tooltip justify-content-between" (mousemove)="onMouseMove($event)">
+      <div [ngClass]="{
+        'trainx-bg-50': weekStats.achievements <= 50,
+        'trainx-bg-60': weekStats.achievements  > 50 && weekStats.achievements <= 60,
+        'trainx-bg-70': weekStats.achievements  > 60 && weekStats.achievements <= 70,
+        'trainx-bg-80': weekStats.achievements  > 70 && weekStats.achievements <= 80,
+        'trainx-bg-100': weekStats.achievements  > 80
+      }"
+        class="rounded-progress d-flex justify-content-end align-items-center" role="progressbar" [ngStyle]="{'width': weekStats.achievements+'%' }" aria-valuenow="75"
+        aria-valuemin="0" aria-valuemax="100">
+        <span *ngIf="weekStats.achievements && weekStats.achievements > 50" class="d-sm-none mr-2 text-uppercase text-sm text-white">
+          Weekly TrainX <strong class="text-md">{{weekStats.achievements}}</strong>
+        </span></div>
+      <span *ngIf="weekStats.achievements && weekStats.achievements <= 50" class="d-sm-none mr-2 text-uppercase text-sm align-self-center">
+        Weekly TrainX <strong class="text-md">{{weekStats.achievements}}</strong>
+      </span>
+      <div class="progressbar-tooltiptext custom-tooltiptext" [ngStyle]="{'left': trainXScoreXPosition }">
+        <span class="trainx-title"> TrainX Score </span>
+        <div class="progress-score">
+          <span>{{weekStats.achievements}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="trainx-summary d-none d-sm-block">
+    <div class="trainx-score d-flex align-items-center justify-content-center v-100">
+      <span> {{weekStats.achievements}} </span>
+    </div>
+  </div>
+</div>

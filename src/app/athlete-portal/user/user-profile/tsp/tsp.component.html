@@ -1,0 +1,742 @@
+<!-- Modal -->
+<div  class="modal modal-open fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" [class.modal-open]="sideBarToggled()">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <perfect-scrollbar style="max-height: 400px;" class="modal-lg" [config]="config">
+          <p>Your Training Stress Profile™ (TSP™) is a series of metrics that describe your ability to absorb different
+            types of training stress over different time periods for each discipline. Each TSP metric ranges from 0 to 10
+            with 10 being the most training stress of a particular type, time period, and discipline.</p>
+
+          <p>TSP is far more effective at managing training stress than simplistic metrics that only measure average
+            intensity over a total duration.</p>
+
+          <p>One athlete may be able to absorb a high level of one type of training stress in one session but not be able
+            to do so very often. Another athlete may only be able to absorb a moderate amount in one session, but may be
+            able to do so regularly.</p>
+
+          <p>Most of your PhysiFactors influence your TSP such as age, sport age, performance level, body compensation,
+            weight, life stress, and so forth. Your TSP will also change over time as your body changes.</p>
+
+          Types of Training Stress
+          <p>
+            The following are types of training stress included in your TSP and their respective zones as you may see
+            them in your
+            training schedule.
+          </p>
+
+          <p>Aerobic (Zone 2)</p>
+          <p>Threshold (Zone 4)</p>
+          <p>Muscular (Zone 5)</p>
+          <p>Neural (Zone 6)</p>
+          <p>Time Periods</p>
+          <p>The following are time periods over which different training types are managed.</p>
+
+          <p>Session</p>
+          <p>Week (Microcycle - typically one week)</p>
+          <p>Month (Mesocycle - typically four weeks)</p>
+          <p>TSP Metrics</p>
+          <p>The following are TSP metrics used for each discipline.</p>
+
+          <p>ASpW - Aerobic Stress per Week</p>
+          <p>ASpM - Aerobic Stress per Month</p>
+          <p>TSpS - Threshold Stress per Session</p>
+          <p>TSpW - Threshold Stress per Week</p>
+          <p>TSpM - Threshold Stress per Month</p>
+          <p>MSpS - Muscular Stress per Session</p>
+          <p>MSpM - Muscular Stress per Month</p>
+          <p>NSpS - Neural Stress per Session</p>
+          <p>NSpM - Neural Stress per Month</p>
+
+
+          <p>NOTE:</p>
+
+          <p>
+            The TSP metrics above are not a comprehensive list of stress metrics managed by TriDot.
+            Training Stress Profile™ and TSP™ are trademarks of Predictive Fitness, LLC.
+          </p>
+        </perfect-scrollbar>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-12" *ngIf="tsp">
+        <div class="card card-box mb-4">
+          <div class="card-title card-header text-left pl-3 pr-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <div  [inlineSVG]="'../assets/img/svg/swim-logo-sm.svg'" [autosize]="true" style="width: 20px;" class="mr-2 d-inline-block"></div> My Training Stress Profile - Swim
+            </div>
+
+            <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 20px;" class="ml-2 d-inline-block" data-toggle="modal"
+              data-target="#infoModal"></div>
+          </div>
+          <div class="card-body card-body-md py-3">
+            <div class="row d-flex align-items-center">
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">ASpW</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">ASpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.aspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.aspw}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.aspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.aspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg">{{tsp.swimTsp.overallAerobicStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Aerobic
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpW</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.tsps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.tsps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.tspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.tspw}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.tspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.tspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg">{{tsp.swimTsp.overallThresholdStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Threshold
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">MSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">MSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.msps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.msps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.mspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.mspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg">{{tsp.swimTsp.overallMuscularStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Muscular
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">NSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">NSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-device" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.nsps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.nsps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-device" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.swimTsp.nspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.swimTsp.nspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg">{{tsp.swimTsp.overallNeuralStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Neural
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-box mb-4">
+          <div class="card-title card-header text-left pl-3 pr-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center"><div  [inlineSVG]="'../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 20px;" class="mr-2 d-inline-block"></div>
+              My Training Stress Profile - Bike</div>
+            <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 20px;" class="ml-2 d-inline-block" data-toggle="modal"
+              data-target="#infoModal"></div>
+          </div>
+          <div class="card-body card-body-md py-3">
+            <div class="row d-flex align-items-center">
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">ASpW</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">ASpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.aspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.aspw}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.aspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.aspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg"> {{tsp.bikeTsp.overallAerobicStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Aerobic
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpW</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.tsps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.tsps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.tspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.tspw}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.tspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.tspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg">{{tsp.bikeTsp.overallThresholdStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Threshold
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">MSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">MSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.msps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.msps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.mspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.mspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg"> {{tsp.bikeTsp.overallMuscularStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Muscular
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">NSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">NSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-device" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.nsps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.nsps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-device" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.bikeTsp.nspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.bikeTsp.nspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg"> {{tsp.bikeTsp.overallNeuralStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Neural
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-box mb-4">
+          <div class="card-title card-header text-left pl-3 pr-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center"><div  [inlineSVG]="'../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 20px;" class="mr-2 d-inline-block"></div>
+              My Training Stress Profile - Run</div>
+            <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 20px;" class="ml-2 d-inline-block" data-toggle="modal"
+              data-target="#infoModal"></div>
+          </div>
+          <div class="card-body card-body-md py-3">
+            <div class="row d-flex align-items-center">
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">ASpW</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">ASpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.aspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.aspw}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.aspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.aspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg"> {{tsp.runTsp.overallAerobicStress}} </span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Aerobic
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpW</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">TSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.tsps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.tsps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.tspw + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.tspw}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.tspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.tspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg"> {{tsp.runTsp.overallThresholdStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Threshold
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">MSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">MSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.msps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.msps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.mspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.mspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg"> {{tsp.runTsp.overallMuscularStress}} </span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Muscular
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="tsp-container">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <h6 class="text-sm">NSpS</h6>
+                        </div>
+                        <div class="col-4">
+                          <h6 class="text-sm">NSpM</h6>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 offset-2">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-device" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.nsps + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.nsps}}
+                          </span>
+                        </div>
+                        <div class="col-4">
+                          <div class="progress progress-bar-vertical">
+                            <div class="progress-bar bg-device" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                              aria-valuemax="100" [ngStyle]="{'height': tsp.runTsp.nspm + '0%'}">
+                            </div>
+                          </div>
+                          <span class="rating font-weight-bold">
+                            {{tsp.runTsp.nspm}}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="stacked-number-container">
+                            <div class="stacked-number-inner">
+                              <span class="number-lg">{{tsp.runTsp.overallNeuralStress}}</span>
+                              <span class="stress-rating text-muted text-uppercase font-weight-bold text-md">Neural
+                                Stress Rating</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,54 @@
+.avatar {
+  //width: 100px;
+  //height: 100px;
+  border-radius: 50%;
+
+  img {
+    display: block;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
+.info {
+  font-size: 14px;
+}
+
+.btn-social {
+  width: 32px;
+}
+.upload {
+  &-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: rgba(228, 235, 240, 0.8)
+  }
+  &-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40%;
+    width: 40%;
+    border: 2px dashed currentColor;
+    transform: translate(-50%, -50%);
+  }
+}
+.pull-right {
+  float: right;
+}
+
+.info-form {
+  .btn.dropdown-toggle {
+    height: 50px;
+  }
+}

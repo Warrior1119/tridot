@@ -1,0 +1,25 @@
+.excerpt {
+  h1 {
+    font-weight:normal !important;
+    font-size:24px !important;
+  }
+  h2 {
+    font-weight:normal !important;
+    font-size:22px !important;
+  }
+  h3 {
+    font-weight:normal !important;
+    font-size:18px !important;
+    text-transform:capitalize !important;
+    strong {
+      font-weight:normal !important;
+      font-size:18px !important;
+      text-transform:capitalize !important;
+      a {
+        font-weight:normal !important;
+        font-size:18px !important;
+        text-transform:capitalize !important;
+      }
+    }
+  }
+}

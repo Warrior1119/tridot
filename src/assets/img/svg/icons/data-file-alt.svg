@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 24">
+  <defs>
+    <style>
+      .data-file-alt-cls-1 {
+        fill: #e2e2e3;
+      }
+    </style>
+  </defs>
+  <g id="chart-bar" transform="translate(-1)">
+    <path id="Path_395" data-name="Path 395" class="data-file-alt-cls-1" d="M22,0H2A1,1,0,0,0,1,1V23a1,1,0,0,0,1,1H22a1,1,0,0,0,1-1V1A1,1,0,0,0,22,0ZM9,17H7V13H9Zm4,0H11V7h2Zm4,0H15V10h2Z"/>
+  </g>
+</svg>

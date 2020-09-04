@@ -1,0 +1,53 @@
+.score {
+  padding-left: 8px;
+  padding-right: 8px;
+  div {
+    background: #f2f2f2;
+  }
+}
+
+.total-runbike {
+  border-left: solid 4px white;
+  border-right: solid 4px white;
+}
+
+.brick-bike {
+  background: #ed7c37;
+  padding: 0;
+  border-left: solid 4px white;
+  border-right: solid 4px white;
+  border-radius: 2px;
+  &.total {
+    border: none;
+  }
+  &.empty {
+    background: #d5dbdb;
+  }
+}
+
+.brick-run {
+  background: #55da69;
+  padding: 0;
+  border-left: solid 4px white;
+  border-right: solid 4px white;
+  border-radius: 2px;
+  &.total {
+    border: none;
+  }
+  &.empty {
+    background: #d5dbdb;
+  }
+}
+
+.selected-param {
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 50px;
+  background: #9b50cf;
+  color: white !important;
+}
+
+.param-size {
+  padding: 10px 15px;
+  font-size: 14px;
+}

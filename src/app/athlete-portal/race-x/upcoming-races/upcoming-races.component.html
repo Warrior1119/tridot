@@ -1,0 +1,46 @@
+<div class="upcoming-races-block card-box rounded shadow mb-4">
+  <div class="box-content pt-3">
+     <div class="button-container align-items-center">
+        <span>Upcoming races</span>
+        <button class="race-avatar border-0 p-0" [routerLink]="['/season-planner/training-phase/add-a-race']">
+          <div  [inlineSVG]="'../assets/img/svg/icons/plus-add.svg'" class="mx-auto d-inline-block"></div>
+        </button>
+    </div>
+    <custom-menu menuClass="racex-menu-wrap my-4">
+        <li><h6 class="custom-menu__title mb-0 p-0">Options</h6></li>
+        <ul class="custom-menu__list text-left p-0">
+          <li class="m-0" routerLink="/season-planner">View current season</li>
+          <li class="m-0" routerLink="/racex">View RaceX page</li>
+        </ul>
+      </custom-menu>
+    <hr/>
+    <!--Rows in the upcoming races block-->
+    <div class="upcoming-races-list mt-4">
+      <div class="row mb-4" *ngFor="let race of futureRaces" (click)="updateRace(race)">   
+        <div class="col-3" >
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <span class="date-month text-uppercase" >{{race.raceDate| amLocal | amDateFormat: 'MMM'}}</span>
+            <span class="date-day date-font-size">{{race.raceDate| amLocal | amDateFormat: 'DD'}}</span>
+            <span class="date-year">{{race.raceDate | amLocal | amDateFormat: 'YYYY'}}</span>
+          </div>
+        </div>
+        <div class="col-9 border-left" >
+          <div class="race-title">
+            <h6 class="font-weight-bold text-sm mb-1">{{race.raceName}}</h6>
+            <h6 class="font-weight-normal text-sm mb-1">{{race.raceLocation}}</h6>
+            <div class="d-flex align-items-center">
+              <div class="distance-type distance-type-pill text-sm px-3 py-1 mr-1 text-uppercase font-weight-bold">{{race.raceDistanceName}}</div>
+              <div class="race-avatar text-sm text-uppercase">{{race.raceCategory}}</div>
+            </div>
+          </div>
+        </div>   
+      </div>
+    </div>
+    <!--Rows in the upcoming races block-->
+
+    <div class="distance-container d-flex align-items-center">
+      <button _ngcontent-c12="" class="btn btn-primary btn-sm btn-block text-sm mr-0 mr-sm-1 mt-0" [routerLink] = "['/season-planner/training-phase/add-a-race']">Add a Race +</button>
+      <button class="btn btn-tertiary btn-sm btn-block text-sm ml-0 ml-sm-1 mt-3 mt-sm-0" [routerLink] = "['/season-planner']">Season Planner</button>
+    </div>
+  </div>
+</div>

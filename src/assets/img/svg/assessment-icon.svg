@@ -1,0 +1,30 @@
+<svg id="badge-13" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">
+  <defs>
+    <style>
+      .assessments-icon-cls-1 {
+        fill: #b55f75;
+      }
+
+      .assessments-icon-cls-2 {
+        fill: #dd9cac;
+      }
+
+      .assessments-icon-cls-3, .assessments-icon-cls-4 {
+        fill: #904d5e;
+      }
+
+      .assessments-icon-cls-3 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <rect id="Rectangle_19" data-name="Rectangle 19" class="assessments-icon-cls-1" width="130" height="130" rx="64"/>
+  <g id="Group_22" data-name="Group 22" transform="translate(33.854 39.271)">
+    <path id="Path_51" data-name="Path 51" class="assessments-icon-cls-2" d="M45.187,7.917a4.063,4.063,0,0,1-4.062-4.062A1.358,1.358,0,0,0,39.762,2.5H23.53a1.364,1.364,0,0,0-1.363,1.354,4.063,4.063,0,0,1-8.125,0A1.36,1.36,0,0,0,12.694,2.5H3.208A2.714,2.714,0,0,0,.5,5.212V51.246a2.714,2.714,0,0,0,2.717,2.712H60.075a2.719,2.719,0,0,0,2.717-2.712V5.212A2.7,2.7,0,0,0,60.084,2.5H50.6A1.356,1.356,0,0,0,49.25,3.854,4.063,4.063,0,0,1,45.187,7.917Z" transform="translate(-0.5 -2.5)"/>
+    <path id="Path_52" data-name="Path 52" class="assessments-icon-cls-3" d="M13.5,10.354A1.358,1.358,0,0,1,14.863,9H31.095a1.354,1.354,0,1,1,0,2.708H14.863A1.355,1.355,0,0,1,13.5,10.354Z" transform="translate(21.708 8.604)"/>
+    <path id="Path_53" data-name="Path 53" class="assessments-icon-cls-3" d="M13.5,13.354A1.358,1.358,0,0,1,14.863,12H31.095a1.354,1.354,0,1,1,0,2.708H14.863A1.355,1.355,0,0,1,13.5,13.354Z" transform="translate(21.708 13.729)"/>
+    <path id="Path_54" data-name="Path 54" class="assessments-icon-cls-3" d="M13.5,16.354A1.347,1.347,0,0,1,14.858,15h6.763a1.354,1.354,0,1,1,0,2.708H14.858A1.353,1.353,0,0,1,13.5,16.354Z" transform="translate(21.708 18.854)"/>
+    <path id="Path_55" data-name="Path 55" class="assessments-icon-cls-3" d="M15.687,13.5H10.271A6.771,6.771,0,0,0,3.5,20.271a1.358,1.358,0,0,0,1.363,1.354H21.095a1.364,1.364,0,0,0,1.363-1.354A6.771,6.771,0,0,0,15.687,13.5Z" transform="translate(4.625 16.292)"/>
+    <circle id="Ellipse_19" data-name="Ellipse 19" class="assessments-icon-cls-4" cx="5.417" cy="5.417" r="5.417" transform="translate(12.188 16.25)"/>
+  </g>
+</svg>

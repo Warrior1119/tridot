@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">Select date to which you want to {{MoveOrCopy}} the {{dayOrSession}}</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="moveOrCopyForm">
+
+    <div class="row">
+      <div class="col">
+        <label class="inside-label" for="name">
+          
+          <span class="custom-tooltip" *ngIf="moveOrCopyForm.hasError('required', 'selectedDate') && moveOrCopyForm.get('selectedDate').touched">
+            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+            <span class="custom-tooltiptext"> Please enter a valid date </span>
+          </span>
+
+          <i class="far fa-check-circle text-success" *ngIf="!moveOrCopyForm.hasError('required', 'selectedDate') && moveOrCopyForm.get('selectedDate').touched"></i>
+        </label>
+        <input type="text" placeholder="Date" formControlName="selectedDate" class="form-control" [(ngModel)]="selectedDate"
+          bsDatepicker [bsConfig]="bsConfig" [outsideClick]="false"
+          iosDatepickerExtra #iosdpe="iosDatepickerExtra" (onShown)="iosdpe.onShowPicker($event)" readonly="true"
+          autocomplete="off">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-block btn-default mt-0" (click)="closeModal()">Cancel</button>
+  <button type="button" class="btn btn-block btn-success mt-0" [disabled]="!moveOrCopyForm.valid" (click)="decision(selectedDate)">Confirm</button>
+  
+</div>

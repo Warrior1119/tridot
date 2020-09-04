@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">Select A Session To Link File To</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Activity</th>
+        <th scope="col">Duration</th>
+        <th scope="col">Session</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of files" (click)="selectedSession = file" [ngClass]="{'table-primary': file == selectedSession}">
+        <th scope="row">
+          {{file.date | amDateFormat: 'LL' }}
+        </th>
+        <td>
+          <div class="workout-icon unlinked-session-icon">
+            <div aria-label="My icon" class="workout-icon" [inlineSVG]="'../assets/img/svg/'+file.sessionName.toLowerCase()+'-logo-sm.svg'"></div>
+          </div>
+        </td>
+        <td>{{ convertToHHMM(file.plannedTotal) }}</td>
+        <td> {{file.sessionZoneLabel | ucwords}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-lg btn-block btn-info text-md" (click)="closeModal()">Cancel</button>
+  <button type="button" class="btn btn-lg btn-block btn-success text-md mt-0" [disabled]="!selectedSession" (click)="getSession(selectedSession)">Confirm</button>
+</div>

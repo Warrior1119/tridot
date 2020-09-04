@@ -1,0 +1,175 @@
+<div class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-3" *ngIf="!isMobileOrTablet">
+        <app-menus></app-menus>
+      </div>
+      <div [ngClass]="{'col-9' : !isMobileOrTablet, 'col-12' : isMobileOrTablet}">
+        <div class="row justify-content-center" *ngIf="!showFirstDeviceConnectedMessage && !profile?.athleteDoNotHaveDevice && !profile?.deviceConnected">
+          <div class="col-12">
+            <div class="bg-white p-5 mb-4 text-center rounded shadow">
+              <p>Please connect your training device or account.</p>
+              <div class="button-group">
+                <button class="btn btn-sm btn-default text-sm px-4 py-2" (click)="dontHaveDevice()">I do not have a device</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row justify-content-center" *ngIf="showFirstDeviceConnectedMessage">
+          <div class="col-12">
+            <div class="bg-white p-5 mb-4 text-center rounded shadow">
+              <p>Thanks! Adding a device and connecting accounts is an important part of using TriDot.</p>
+              <div class="button-group">
+                <button class="btn btn-sm btn-default text-sm px-4 py-2" [routerLink]="['/']">Return To Your Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="card card-box">
+          <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+            <div>Connectioins & Apps</div>
+          </div>
+          <div class="card-body card-body-md pb-0 pt-0">
+            <!-- Garmin -->
+            <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+              <div class="d-flex">
+                <div class="text-left text-sm mb-0">Garmin</div>
+                <div class="text-left text-sm mb-0 text-muted ml-2" *ngIf="!devices.garmin && !isMobile">
+                  You'll be redirected to Garmin's website to connect your device.
+                </div>
+              </div>
+
+              <div class="d-flex">
+                <div class="text-left text-sm mb-0 text-muted mr-2" *ngIf="devices.garmin && !isMobile">
+                  <span> Last Sync: {{devices.garmin.devices[0].lastSyncDate | amUtc | amLocal | amDateFormat:prefDateTimeFormat }} </span>
+                </div>
+
+                <button *ngIf="!devices.garmin" class="btn device-btn btn-lg btn-default text-sm rounded-pill px-3 py-1"
+                          (click)="connect('Garmin')">
+                  Connect Garmin
+                </button>
+                <button *ngIf="devices.garmin && !devices.garmin.disconnect" class="btn device-btn btn-lg btn-success text-sm rounded-pill px-3 py-1" 
+                        (mouseover)="devices.garmin.disconnect = true">
+                      Connected
+                </button>
+                <button (mouseleave)="devices.garmin.disconnect = false" class="btn device-btn btn-lg btn-danger text-md rounded-pill px-3 py-1"
+                       *ngIf="devices.garmin && devices.garmin.disconnect == true" (click)="disconnect(devices.garmin)">
+                  Disconnect
+                </button>
+              </div>
+            </div>
+
+            <!-- Garmin Health -->
+            <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+              <div class="d-flex connection-item" [ngClass]="{'justify-content-between' : devices.garmin}">
+                <div class="text-left text-sm mb-0">Garmin Health</div>
+                <div class="text-left text-sm mb-0 text-muted ml-2" *ngIf="!devices.garmin && !isMobile">
+                  You'll be redirected to Garmin's website to connect your device.
+                </div>
+                <div class="text-left text-sm mb-0 text-muted mr-2" *ngIf="devices.garmin && !isMobile">
+                  <span> Last Sync: {{devices.garmin.devices[0].lastSyncDate | amUtc | amLocal | amDateFormat:prefDateTimeFormat }} </span>
+                </div>
+              </div>
+              <div class="d-flex">
+                <button class="btn device-btn btn-lg btn-default text-sm rounded-pill px-3 py-1" (click)="connect('GarminHealth')" *ngIf="!devices.garminhealth">
+                  Connect Garmin Health
+                </button>
+                <button  *ngIf="devices.garminhealth && !devices.garminhealth.disconnect" class="btn device-btn btn-lg btn-success text-sm rounded-pill px-3 py-1"
+                        (mouseover)="devices.garminhealth.disconnect = true">
+                  Connected
+                </button>
+                <button *ngIf="devices.garminhealth && devices.garminhealth.disconnect == true" class="btn device-btn btn-lg btn-danger text-sm rounded-pill px-3 py-1"
+                  (click)="disconnect(devices.garminhealth)"
+                  (mouseleave)="devices.garminhealth.disconnect = false">
+                  Disconnect
+                </button>
+              </div>
+            </div>
+
+            <!-- Garmin Training -->
+            <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+              <div class="d-flex connection-item" [ngClass]="{'justify-content-between' : devices.garmin}">
+                <div class="text-left text-sm mb-0">Garmin Training</div>
+                <div class="text-left text-sm mb-0 text-muted ml-2" *ngIf="!devices.garmin && !isMobile">
+                  You'll be redirected to Garmin's website to connect your device.
+                </div>
+                <div class="text-left text-sm mb-0 text-muted mr-2" *ngIf="devices.garmin && !isMobile">
+                  <span> Last Sync: {{devices.garmin.devices[0].lastSyncDate | amUtc | amLocal | amDateFormat:prefDateTimeFormat }} </span>
+                </div>
+              </div>
+              <div class="d-flex">
+                <button class="btn device-btn btn-lg btn-default text-sm rounded-pill px-3 py-1" (click)="connect('GarminTraining')" *ngIf="!devices.garmintraining">
+                  Connect Garmin Training
+                </button>
+                <button *ngIf="devices.garmintraining && !devices.garmintraining.disconnect" class="btn device-btn btn-lg btn-success text-sm rounded-pill px-3 py-1"
+                        (mouseover)="devices.garmintraining.disconnect = true">
+                  Connected
+                </button>
+                <button *ngIf="devices.garmintraining && devices.garmintraining.disconnect == true" class="btn device-btn btn-lg btn-danger text-sm rounded-pill px-3 py-1" 
+                  (click)="disconnect(devices.garmintraining)"
+                  (mouseleave)="devices.garmintraining.disconnect = false">
+                  Disconnect
+                </button>
+              </div>
+            </div>
+
+            <!-- Strava -->
+            <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+              <div class="d-flex connection-item" [ngClass]="{'justify-content-between' : devices.strava}">
+                <div class="text-left text-sm mb-0">Strava</div>
+                <div class="text-left text-sm mb-0 text-muted ml-2" *ngIf="!devices.strava && !isMobile">
+                  You'll be redirected to Strava to connect your account.
+                </div>
+                <div class="text-left text-sm mb-0 text-muted mr-2" *ngIf="devices.strava && !isMobile">
+                  Last Sync: {{devices.strava.devices[0].lastSyncDate | amUtc | amLocal | amDateFormat:prefDateTimeFormat }}
+                </div>
+              </div>
+              <div class="d-flex ml-2">
+
+                <button class="btn device-btn btn-lg btn-default text-sm rounded-pill px-3 py-1" (click)="connect('Strava')" *ngIf="!devices.strava">
+                  Connect to Strava
+                </button>
+                <button (mouseover)="devices.strava.disconnect = true" class="btn device-btn btn-lg btn-success text-sm rounded-pill px-3 py-1"
+                  *ngIf="devices.strava && !devices.strava.disconnect">Connected
+                </button>
+                <button (mouseleave)="devices.strava.disconnect = false" class="btn device-btn btn-lg btn-danger text-sm rounded-pill px-3 py-1"
+                  *ngIf="devices.strava && devices.strava.disconnect == true" (click)="disconnect(devices.strava)">
+                  Disconnect
+                </button>
+              </div>
+            </div>
+
+            <!-- Polar -->
+            <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+              <div class="d-flex connection-item" [ngClass]="{'justify-content-between' : devices.polar}">
+                <div class="text-left text-sm mb-0">Polar</div>
+                <div class="text-left text-sm mb-0 text-muted ml-2" *ngIf="!devices.polar && !isMobile">
+                  You'll be redirected to Polar to connect your device.
+                </div>
+                <div class="text-left text-sm mb-0 text-muted mr-2" *ngIf="devices.polar && !isMobile">
+                  Last Sync: {{devices.polar.devices[0].lastSyncDate | amUtc | amLocal | amDateFormat:prefDateTimeFormat }}
+                </div>
+              </div>
+              <div class="d-flex">
+                <button class="btn device-btn btn-lg btn-default text-sm rounded-pill px-3 py-1" (click)="connect('Polar')" *ngIf="!devices.polar">
+                  Connect to Polar
+                </button>
+                <button (mouseover)="devices.polar.disconnect = true" class="btn device-btn btn-lg btn-success text-sm rounded-pill px-3 py-1"
+                  *ngIf="devices.polar && !devices.polar.disconnect">Connected
+                </button>
+                <button (mouseleave)="devices.polar.disconnect = false" class="btn device-btn btn-lg btn-danger text-sm rounded-pill px-3 py-1"
+                  *ngIf="devices.polar && devices.polar.disconnect == true" (click)="disconnect(devices.polar)">
+                  Disconnect
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,47 @@
+<div class="p-0 rounded shadow mb-4 text-secondary bg-white">
+  <ul class="nav nav-tabs border-0 nav-justified align-items-stretch flex-nowrap scroll-h">
+    <li *ngFor="let tab of geneticsData?.geneEffectSummary; let i = index" class="nav-item">
+      <a class="nav-link py-3 h-100 d-flex align-items-center justify-content-center" [class.active]="activeTab === i" (click)="activeTab = i">{{ tab.geneEffectName }}</a>
+    </li>
+  </ul>
+  <div class="tab-content px-4">
+    <div class="row">
+      <div class="col-sm-12 col-lg-3 py-5 text-center gauge-chart-container">
+        <ng-container [ngSwitch]="activeTab">
+          <gauge-chart-svg *ngSwitchCase="0" chartType="power" title="Training Intensity Response" [result]="geneticsData?.geneEffectSummary[activeTab].geneEffectScore"></gauge-chart-svg>
+          <gauge-chart-svg *ngSwitchCase="1" chartType="aerobic" title="Aerobic Potential" [result]="geneticsData?.geneEffectSummary[activeTab].geneEffectScore"></gauge-chart-svg>
+          <gauge-chart-svg *ngSwitchCase="2" chartType="recovery" title="Recovery Rate" [result]="geneticsData?.geneEffectSummary[activeTab].geneEffectScore"></gauge-chart-svg>
+          <gauge-chart-svg *ngSwitchCase="3" chartType="injury" title="Injury Predisposition" [result]="geneticsData?.geneEffectSummary[activeTab].geneEffectScore"></gauge-chart-svg>
+        </ng-container>
+      </div>
+      <div class="col-sm-12 col-lg-9 d-inline-flex">
+        <div class="col-lg-6 border-left border-2 px-4 py-2">
+          <div class="mx-sm-4">
+            <h5>{{ geneticsData?.geneEffectSummary[activeTab].geneEffectName }}</h5>
+            <p>{{ geneticsData?.geneEffectSummary[activeTab].geneEffectDescription }}</p>
+          </div>
+        </div>
+        <div class="col-lg-6 px-4 py-2">
+          <div class="bg-light p-2 px-sm-5 py-sm-4">
+            <ng-container [ngSwitch]="activeTab">
+              <h5>Training Impact</h5>
+              <ng-container *ngSwitchCase="0">
+                <p>Training Intensity Response influences your training emphasis and improvement expectations, specifically related to differences between training above your functional (aerobic) threshold versus at or below it. Proper emphasis and expectations help to ensure that training time and intensities are optimized to achieve improvements that are the most beneficial to overall performance.</p>
+              </ng-container>
+              <ng-container *ngSwitchCase="1">
+                <p>Aerobic Potential influences how quickly and to what degree you are able to increase your aerobic fitness. This can impact improvement-rate expectations used when optimizing training focus and periodization of training blocks in both short and long training phases.</p>
+              </ng-container>
+              <ng-container *ngSwitchCase="2">
+                <p>Your Recovery Rate primarily influences training intensity and frequency, specifically with regard to higher intensity sessions. It can be used proactively when prescribing training to help ensure planned sessions don’t include more training stress than you have time to recovery from prior to your next high-intensity session. Recovery Rate can also impact how much time is required to taper for or recover from a race.</p>
+              </ng-container>
+              <ng-container *ngSwitchCase="3">
+                <p>Your Injury Predisposition primarily influences training intensity and volume, specifically related to high-intensity sessions and rates of increasing volume and long session durations. It can also influence the type warm-up drills and strength training routines that contain high-impact, ballistic movements.</p>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>

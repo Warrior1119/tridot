@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 27.902">
+  <defs>
+    <style>
+      .data-file-cls-1 {
+        fill: #f4f4f4;
+      }
+
+      .data-file-cls-2 {
+        fill: none;
+        stroke: #a4acb2;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+      }
+
+      .data-file-cls-3 {
+        fill: #ed2b2b;
+      }
+    </style>
+  </defs>
+  <g id="Group_745" data-name="Group 745" transform="translate(-690 -393.098)">
+    <g id="Group_318" data-name="Group 318" transform="translate(5.098 2.098)">
+      <circle id="Ellipse_51" data-name="Ellipse 51" class="data-file-cls-1" cx="13.902" cy="13.902" r="13.902" transform="translate(684.902 391)"/>
+      <g id="chart-bar" transform="translate(693.346 397.743)">
+        <rect id="Rectangle_262" data-name="Rectangle 262" class="data-file-cls-2" width="11.322" height="13.838"/>
+        <line id="Line_147" data-name="Line 147" class="data-file-cls-2" y2="5.032" transform="translate(5.661 4.403)"/>
+        <line id="Line_148" data-name="Line 148" class="data-file-cls-2" y2="1.258" transform="translate(3.145 8.177)"/>
+        <line id="Line_149" data-name="Line 149" class="data-file-cls-2" y2="3.145" transform="translate(8.177 6.29)"/>
+      </g>
+    </g>
+    <circle id="Ellipse_61" data-name="Ellipse 61" class="data-file-cls-3" cx="5" cy="5" r="5" transform="translate(711 411)"/>
+  </g>
+</svg>

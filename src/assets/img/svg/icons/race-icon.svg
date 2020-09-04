@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.48 28.041">
+  <defs>
+    <style>
+      .race-icon-cls-1, .race-icon-cls-2 {
+        fill: none;
+        stroke: #808e98;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .race-icon-cls-2 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <g id="Group_530" data-name="Group 530" transform="translate(-1224.084 -79.783)">
+    <line id="Line_26" data-name="Line 26" class="race-icon-cls-1" x1="3.034" y2="0.91" transform="translate(1241.21 93.415)"/>
+    <line id="Line_27" data-name="Line 27" class="race-icon-cls-1" x1="3.035" y2="0.883" transform="translate(1242.049 96.495)"/>
+    <path id="Path_67" data-name="Path 67" class="race-icon-cls-2" d="M31.115,23.236H27.451L24.7,13.16l-.016-.022c-.146.013-.293.022-.442.022a5.03,5.03,0,0,1-4.56-7.169L18.291,4,11.258,8.923a2.748,2.748,0,0,0-.761,3.7L21.039,29.648H33.863V25.984A2.748,2.748,0,0,0,31.115,23.236Z" transform="translate(1218.702 77.176)"/>
+    <line id="Line_28" data-name="Line 28" class="race-icon-cls-2" x2="4.58" transform="translate(1230.58 105.908)"/>
+    <line id="Line_29" data-name="Line 29" class="race-icon-cls-2" x2="4.58" transform="translate(1227.832 102.244)"/>
+    <line id="Line_30" data-name="Line 30" class="race-icon-cls-2" x2="4.58" transform="translate(1225.084 98.58)"/>
+  </g>
+</svg>

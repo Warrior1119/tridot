@@ -1,0 +1,62 @@
+<div class="athlete-panel">
+  <div class="d-flex justify-content-between border-bottom">
+    <div class="d-flex align-items-center">
+      <div class="profile-picture rounded-circle shadow-sm">
+        <img alt="" width="55" [src]="athletePhotoThumbnail">
+        <div class="status-btn" [ngClass]="assignmentStatusStyle"></div>
+      </div>
+      <div class="text-left">
+        <div class="athlete-name font-weight-bold text-md">
+          {{athleteDetails.firstName}} {{athleteDetails.lastName}}
+        </div>
+        <div class="text-xs">
+          {{athleteDetails.subscriptionName}}
+        </div>
+        <div class="text-xs">
+          {{ athleteDetails.city }}, {{ athleteDetails.state }} {{ athleteDetails.country }}
+        </div>
+      </div>
+    </div>
+
+    <div class="text-right">
+      <a class="badge badge-default font-weight-normal text-xs rounded-pill" href = "mailto:{{athleteDetails.email}}" target="_top">Email User</a>
+      <div class="mt-2 text-xs">{{ athleteDetails.primaryDistance }} / {{ performanceLevels[athleteDetails && athleteDetails.performanceLevel] }}</div>
+    </div>
+  </div>
+
+  <div>
+    <span class="badge badge-default font-weight-normal text-xs rounded-pill">{{ athleteDetails.gender === 'm' ? 'Male' : 'Female' }}</span>
+    <span class="badge badge-default font-weight-normal text-xs rounded-pill" [customTooltip]="athleteDetails.dob | date: 'MM/dd/yyyy'">{{ athleteDetails.age }}</span>
+    <span class="badge badge-default font-weight-normal text-xs rounded-pill">{{ getHeight() }}</span>
+    <span class="badge badge-default font-weight-normal text-xs rounded-pill">{{ athleteDetails.weigth }} {{ getWeightPostfix() }}</span>
+    <span class="badge badge-default font-weight-normal text-xs rounded-pill">BMI {{ athleteDetails.bmi }}</span>
+  </div>
+
+  <div class="contact">
+    <span class="mr-1 text-nowrap" *ngIf="athleteDetails.phone"><i class="fas fa-mobile-alt"></i> <span class="text-xs">{{ athleteDetails.phone }}</span></span>
+    <span class="ml-1 text-nowrap" *ngIf="athleteDetails.email"><i class="far fa-envelope"></i> <span class="text-xs">{{ athleteDetails.email }}</span></span>
+  </div>
+
+  <div class="info border-bottom">
+    <dl class="row">
+      <dt class="col-6 text-left">Swim Volume</dt>
+      <dd class="col-6 text-right">{{ athleteDetails.swimVolume }}</dd>
+      <dt class="col-6 text-left">Bike Volume</dt>
+      <dd class="col-6 text-right">{{ athleteDetails.bikeVolume }}</dd>
+      <dt class="col-6 text-left">Run Volume</dt>
+      <dd class="col-6 text-right">{{ athleteDetails.runVolume }}</dd>
+      <dt class="col-6 text-left">Long Run</dt>
+      <dd class="col-6 text-right">{{ athleteDetails.longRunDay || 'none' }}</dd>
+      <dt class="col-6 text-left">Long Bike</dt>
+      <dd class="col-6 text-right">{{ athleteDetails.longBikeDay || 'none' }}</dd>
+      <dt class="col-6 text-left">Day Off</dt>
+      <dd class="col-6 text-right">{{ athleteDetails.dayOff }}</dd>
+    </dl>
+  </div>
+
+  <div class="text-center py-2">
+    <a class="my-2 btn btn-xs bg-light btn-rounded text-xs btn-highlighted"
+       (click)="navigateToAtheleteDashboard()">User Dashboard</a>
+  </div>
+
+</div>

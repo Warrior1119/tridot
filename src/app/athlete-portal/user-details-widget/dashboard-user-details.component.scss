@@ -1,0 +1,34 @@
+app-dashboard-user-details {
+    .edit-icon-wrap {
+        .edit-icon { 
+            display: none; 
+            width: 55px;
+            height: 55px;
+            > svg {
+                width: 55px;
+                height: 55px;
+                #Ellipse_50 {
+                    fill: #a4acb3;
+                }
+                #Path_247, #Path_248 {
+                    fill: #fff;
+                }
+            }
+        }
+        .profile-img {
+            width:55px;
+            height:55px;
+            overflow:hidden;
+        }
+        .profile-picture {
+            width:100%;
+            display: block;
+            height: auto;
+        }
+        &:hover {
+            .edit-icon { display: block; }
+            .profile-picture { display: none; }
+            .profile-img { display: none; }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.268 17.268">
+  <defs>
+    <style>
+      .plus-icon-cls-1 {
+        fill: black;
+        stroke: black;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
+        stroke-dasharray: 36.77 36.77;
+      }
+    </style>
+  </defs>
+  <g id="add-to-check" transform="translate(-1 -1)">
+    <g id="Group_8" data-name="Group 8" transform="translate(2 2)">
+      <path id="Path_12" data-name="Path 12" class="plus-icon-cls-1" d="M16,2V17.268" transform="translate(-8.366 -2)"/>
+      <path id="Path_13" data-name="Path 13" class="plus-icon-cls-1" d="M17.268,16H2" transform="translate(-2 -8.366)"/>
+    </g>
+  </g>
+</svg>

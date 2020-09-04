@@ -1,0 +1,45 @@
+<div off-canvas="slidebar-1 left reveal" id="slidebar1">
+  <button class="js-close-left-slidebar btn-icon">
+    <div   [inlineSVG]="'../assets/img/svg/icons/small-remove.svg'" [autosize]="true" style="width: 24px;" class="mx-auto d-inline-block"></div>
+  </button>
+  <div class="slidebar-header text-center mb-3">
+    <img *ngIf="profilePicture" alt="" class="profile-img mb-2 d-block mx-auto" [src]="profilePicture" width="80">
+    <span class="profile-name d-block font-weight-bold">{{profile.firstName | ucwords}}
+        {{profile.lastName | ucwords}}</span>
+  </div>
+  <ul class="list-unstyled mobile-nav-slidebar-menu pl-2">
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/coaches"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/coach-icon.svg'" [autosize]="true"  style="width: 18px;"></div>My Profile</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/genetics"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/dna-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Athletes</a></li>
+  </ul>
+  <div class="">
+    <form class="form-search form-inline mr-2 input-group-sm ng-untouched ng-pristine ng-valid visible align-self-end"
+      novalidate="" ng-reflect-klass="form-search form-inline mr-2 i" ng-reflect-ng-class="[object Object]">
+      <input aria-label="Search" class="form-control input-group-sm mr-sm-2 ng-pristine ng-valid ng-touched"
+        [(ngModel)]="query"
+        (ngModelChange)="search()"
+        [ngModelOptions]="{standalone: true}" placeholder="Search" type="search" ng-reflect-options="[object Object]">
+    </form>
+  </div>
+</div>
+
+<div off-canvas="slidebar-2 right shift" id="slidebar2">
+  <button class="js-close-right-slidebar btn-icon mb-3">
+    <div   [inlineSVG]="'../assets/img/svg/icons/small-remove.svg'" [autosize]="true" style="width: 24px;" class="mx-auto d-inline-block"></div>
+  </button>
+  <div class="slidebar-header mb-2">
+    <span class="profile-name d-block font-weight-bold pl-2">My Profile</span>
+  </div> 
+  <ul class="list-unstyled mobile-nav-slidebar-menu pl-2">
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/user-profile/athlete-profile-settings">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/profile-icon-alt.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Profile
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/login">
+        Logout
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,22 @@
+<svg id="cloud-sun-19" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <defs>
+    <style>
+      .weather-cloudy-icon-cls-1, .weather-cloudy-icon-cls-2 {
+        fill: none;
+        stroke: #a4acb2;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .weather-cloudy-icon-cls-2 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <path id="Path_489" data-name="Path 489" class="weather-cloudy-icon-cls-1" d="M10.3,10.8A6.342,6.342,0,0,1,16.46,6a6.419,6.419,0,0,1,6.4,6.4,6.539,6.539,0,0,1-.64,2.8" transform="translate(-1.86 -1)"/>
+  <line id="Line_601" data-name="Line 601" class="weather-cloudy-icon-cls-2" y2="0.8" transform="translate(14.6 1)"/>
+  <line id="Line_602" data-name="Line 602" class="weather-cloudy-icon-cls-2" x1="0.56" y2="0.56" transform="translate(21.4 4.04)"/>
+  <line id="Line_603" data-name="Line 603" class="weather-cloudy-icon-cls-2" x1="0.8" transform="translate(24.2 11.4)"/>
+  <line id="Line_604" data-name="Line 604" class="weather-cloudy-icon-cls-2" x2="0.56" y2="0.56" transform="translate(7.24 4.04)"/>
+  <path id="Path_490" data-name="Path 490" class="weather-cloudy-icon-cls-2" d="M19.56,16.32a5.1,5.1,0,0,0-3.52,1.36A7.638,7.638,0,1,0,8.6,27.2H19.48a5.44,5.44,0,0,0,.08-10.88Z" transform="translate(0 -2.2)"/>
+</svg>

@@ -1,0 +1,307 @@
+<div class="main">
+  <div class="container season-planner-container">
+    <div class="row mb-3">
+      <div class="col">
+        <h4 class="page-title mt-2">
+          <span class="mr-2">My Training Season</span>
+          <button [routerLink]="['../']" class="btn-default btn btn-md d-inline-flex py-2" customTooltip="Back to Season Planner">
+            <svg version="1.1" viewBox="0 0 32 32" xml:space="preserve" width="18" height="18">
+              <g class="nc-icon-wrapper" fill="#A5ACB1">
+                <path fill="#A5ACB1" d="M1,15L15,2v8c10.497,0.35,16,5.544,16,16.383V30c-3.938-6.688-5.812-9-16-9v8L1,15z"></path>
+              </g>
+            </svg>
+          </button>
+          
+        </h4>
+      </div>
+      <div *ngIf="!isMobile" class="col text-right">
+        <button class="btn btn-outline-secondary pull-right pr-4 pl-4 py-2" routerLink="/season-planner/training-phase/add-a-race">Add a Race +</button>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col">
+        <div class="d-inline-flex align-items-center justify-content-between position-relative">
+          <div class="btn-group" dropdown>
+            <button type="button" class="btn dropdown-toggle rounded-left shadow px-3 py-2" [disabled]="loading" dropdownToggle>
+              <span class="text-body mr-2">
+                <ng-container *ngIf="!loading">
+                  {{ currentPlan.seasonName || 'Select Season' }}
+                  <ng-container *ngIf="currentPlan && currentPlan.isThisPrimarySeason === 'true'">(live)</ng-container>
+                </ng-container>
+                <ng-container *ngIf="loading">
+                  <i class="fal fa-spinner fa-spin"></i>
+                </ng-container>
+              </span>
+              <span>
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu" *dropdownMenu>
+              <button class="dropdown-item" *ngFor="let plan of plans" type="button" (click)="getPlanById(plan)">
+                {{plan.seasonName}}
+                <ng-container *ngIf="plan.isThisPrimarySeason === 'true'">(live)</ng-container>
+              </button>
+            </div>
+            <div class="ml-1 season-menu-btn btn btn-lg btn-white shadow rounded-right pl-2 pr-0 pt-1 pb-2 m-0" style="height: 40px; width: 40px;">
+              <custom-menu menuClass="season-menu-wrap" buttonClass="btn-lg pl-2 pr-0 pt-1 pb-2 m-0 session-menu__button">
+                <li><h6 class="custom-menu__title mb-0 p-0">Season Menu</h6></li>
+                <li (click)="addNewSeason(currentPlan)">Add Season</li>
+                <li (click)="renameSeason(currentPlan)">Rename Season</li>
+                <li *ngIf="currentPlan?.isThisPrimarySeason !== 'true' && plans?.length > 1" (click)="makeLiveSeason(currentPlan)">Make Live</li>
+                <li (click)="deleteSeason(currentPlan)">Delete Season</li>
+              </custom-menu>
+            </div>
+          </div>
+          <button *ngIf="isMobile" class="ml-2 btn btn-md add-race-button text-light"
+            routerLink="/season-planner/training-phase/add-a-race"
+          >
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+
+      </div>
+      <div *ngIf="!isMobile" class="col d-inline-flex justify-content-end align-items-center">
+        <div class="legend-container d-inline-flex">
+          <div class="legend d-inline-flex align-items-center ml-3">
+            <div class="color-graph prep-phase mr-2"></div>
+            <div class="legend-title">
+              Race Prep Phase
+            </div>
+          </div>
+          <div class="legend d-inline-flex align-items-center ml-3">
+            <div class="color-graph dev-phase mr-2"></div>
+            <div class="legend-title">
+              Development Phase
+            </div>
+          </div>
+          <div class="legend d-inline-flex align-items-center ml-3">
+            <div class="color-graph no-phase mr-2"></div>
+            <div class="legend-title">
+              No Phase
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-loading-overlay *ngIf="!entirePhase?.phase" style="margin-top: 40vh;"></app-loading-overlay>
+    <div class="row mb-4" *ngIf="entirePhase?.phase">
+      <div class="col">
+        <div class="card-box phase-block highlighted-phase shadow rounded {{getEntirePhaseBorder()}}">
+          <div class="row">
+            <div class="col" [class.col-lg-10]="entirePhase.lastWeek.raceData">
+              <div class="phase-header pt-4 mb-3 font-weight-bold text-uppercase">
+                <div class="phase-date-range text-center">
+                  <span>{{ entirePhase.phase.phaseStartDate | amDateFormat: prefDateFormatLong || 'LL' }}</span>
+                  <span class="seperator">-</span>
+                  <span>{{ entirePhase.phase.phaseEndDate | amDateFormat: prefDateFormatLong || 'LL' }}</span>
+                  <button *ngIf="!isMobile" class="preferences-btn btn btn-default btn-sm" (click)="openTrainingPreferences()">
+                    <div class="preferences-icon mr-1 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/cog-icon.svg'" [autosize]="true" style="width: 20px;"></div>
+                    <span>Preferences</span></button>
+                </div>
+
+              </div>
+              <div *ngIf="!isMobile" class="col phase-info d-flex align-items-center justify-content-center text-center text-uppercase text-sm">
+                <div class="phase-type ml-3 mr-3">
+                  <div class="phase-title font-weight-bold">Phase Type</div>
+                  <div class="phase-def">{{entirePhase.race.raceType}}</div>
+                </div>
+                <div class="phase-race-name ml-3 mr-3">
+                  <div class="phase-title font-weight-bold">Race Name</div>
+                  <div class="phase-def">{{entirePhase.race.raceName}}</div>
+                </div>
+                <div class="phase-race-distance ml-3 mr-3">
+                  <div class="phase-title font-weight-bold">Race Distance</div>
+                  <div class="phase-def">{{entirePhase.race.raceDistanceName}}</div>
+                </div>
+                <div class="phase-start ml-3 mr-3">
+                  <div class="phase-title font-weight-bold">Phase Start Date</div>
+                  <div class="phase-def">{{ entirePhase.phase.phaseStartDate | amDateFormat: prefDateFormatLong || 'LL' }}</div>
+                </div>
+                <div class="phase-race-start ml-3 mr-3">
+                  <div class="phase-title font-weight-bold">Phase Race Date</div>
+                  <div class="phase-def">{{ entirePhase.phase.phaseEndDate | amDateFormat: prefDateFormatLong || 'LL' }}</div>
+                </div>
+                <div class="phase-duration ml-3 mr-3">
+                  <div class="phase-title font-weight-bold">Phase Duration</div>
+                  <div class="phase-def">{{entirePhase.phase.phaseDuration}} Weeks</div>
+                </div>
+              </div>
+              <div *ngIf="isMobile" class="col mb-4 phase-info d-flex flex-wrap align-items-center justify-content-center text-center text-uppercase text-sm">
+                <div class="btn btn-md text-light text-nowrap {{phaseClass}}">
+                  {{entirePhase.race.raceType}}</div>
+                <div class="btn btn-md btn-dark text-light text-nowrap ml-2">{{entirePhase.race.raceDistanceName}}</div>
+                <div class="btn btn-md btn-dark text-light text-nowrap ml-2">{{entirePhase.phase.phaseDuration}} Weeks</div>
+                <button class="btn btn-md btn-default text-drk ml-2" (click)="openTrainingPreferences()">
+                  <div  [inlineSVG]="'../assets/img/svg/icons/cog-icon.svg'" [autosize]="true" style="width: 20px;" class="mx-auto d-inline-block"></div>
+                </button>
+              </div>
+              <div class="row mb-4" *ngIf="!loading">
+                <div class="col mt-4" [class.mx-4]="!isMobile">
+                  <div class="d-flex justify-content-center align-items-center phase-calendar">
+                    <ng-container *ngFor="let week of weeks; let i = index; let last = last">
+                      <div class="week-span cursor-pointer {{expandedWeek === i ? borderClass : '' }} {{isMobile && (i < weeks.length - weeks.length % 6) && !isRowExpanded(getRowEnd(i)) ? 'border-3 border-bottom' : ''}}"
+                        [class.flex-grow-1]="isMobile" (click)="expandedWeek = i">
+                        <div class="stacked-number-container" [class.cursor-pointer]="week.raceData"
+                          [customTooltip]="!isMobile && week.raceData && raceTemplate" [tooltipContext]="{week:week}" [offset]="-75"
+                          (click)="week.raceData && goToRace(week)">
+                          <div class="stacked-number-inner" [class.current-date]="!isMobile && week.raceData">
+                            <span class="number-lg-sub">{{week.weekdayStartDate | amLocal | amDateFormat: 'MMM'}}</span>
+                            <span class="number-lg">{{week.weekdayStartDate | amLocal | amDateFormat: 'DD'}} </span>
+                            <span *ngIf="!isMobile && week.raceData" class="race-type mb-4 px-3">{{week.raceData.raceDistanceName}}</span>
+                          </div>
+                        </div>
+                        <ng-template #raceTemplate let-week="week">
+                          <div class="px-2 py-2">
+                            <div class="mb-1"><strong>{{week.raceData.raceName | ucwords}}</strong></div>
+                            <div class="mb-1">Date: <strong>{{week.raceData.raceDate | amDateFormat: 'LL'}}</strong></div>
+                            <div class="mb-1">Type: <strong>{{week.raceData.raceDistanceName}}</strong></div>
+                          </div>
+                        </ng-template>
+                      </div>
+                      <div *ngIf="isMobile && isRowExpanded(i)" [@ngIfExpandHeight] class="info-box w-100 phase-info">
+                        <div class="rounded text-light px-3 py-4 mx-2 text-center {{phaseClass}}">
+                          <h6 class="text-light">Weekly Hours</h6>
+                          <div class="pb-2 mb-1 text-uppercase border-bottom border-1 mb-4"> {{weeks[expandedWeek].weekdayStartDate | amLocal | amDateFormat: 'll'}} - {{weeks[expandedWeek].weekEndDate | amLocal | amDateFormat: 'll'}}</div>
+                          <div class="d-flex flex-row align-items-center justify-content-around">
+                            <div class="stacked-number-container mr-2">
+                              <div class="stacked-number-inner">
+                                <h5 class="text-xs mb-2 text-uppercase font-weight-bold text-light">Swim</h5>
+                                <span class="number-xs font-weight-bold">{{weeks[expandedWeek].totalSwimHrs | timeFormat}}</span>
+                              </div>
+                            </div>
+                            <div class="stacked-number-container mr-2">
+                              <div class="stacked-number-inner">
+                                <h5 class="text-xs mb-2 text-uppercase font-weight-bold text-light">Bike</h5>
+                                <span class="number-xs font-weight-bold">{{weeks[expandedWeek].totalBikeHrs | timeFormat}}</span>
+                              </div>
+                            </div>
+                            <div class="stacked-number-container mr-2">
+                              <div class="stacked-number-inner">
+                                <h5 class="text-xs mb-2 text-uppercase font-weight-bold text-light">Run</h5>
+                                <span class="number-xs font-weight-bold">{{weeks[expandedWeek].totalRunHrs | timeFormat}}</span>
+                              </div>
+                            </div>
+                            <div class="stacked-number-container mr-2">
+                              <div class="stacked-number-inner">
+                                <h5 class="text-xs mb-2 text-uppercase font-weight-bold text-light">Total</h5>
+                                <span class="number-xs font-weight-bold">{{weeks[expandedWeek].totalHrs | timeFormat}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="divider" *ngIf="!isMobile && !last"></div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-2" *ngIf="expandedWeek == null && entirePhase.lastWeek.raceData">
+              <div class="week-span phase-last-week {{isMobile ? 'px-4 pb-4' : ''}}">
+                <div class="race-block cursor-pointer {{isMobile ? 'rounded pb-4' : ''}}"
+                  [customTooltip]="weekTemplate" [tooltipContext]="{week:entirePhase.lastWeek}"
+                  (click)="goToRace(entirePhase.lastWeek)"
+                  [class.race-block-c]="entirePhase.lastWeek.raceData.raceCategory === 'C'">
+                  <custom-menu menuClass="race-menu-wrap" iconName="burger-icon-alt">
+                    <li (click)="addRace(entirePhase.lastWeek)">Add a New Race</li>
+                    <li (click)="goToRace(entirePhase.lastWeek)">View RaceX Details</li>
+                    <li (click)="deleteRace(entirePhase.lastWeek)">Delete Race</li>
+                  </custom-menu>
+                  <div *ngIf="entirePhase.lastWeek.raceData.raceCategory !== 'nrp'" class="race-priority">
+                    <span>{{entirePhase.lastWeek.raceData.raceCategory}}</span>
+                  </div>
+                  <ng-container *ngIf="isMobile">
+                    <h4 class="text-light font-weight-bold">{{entirePhase.lastWeek.raceData.raceName | ucwords}}</h4>
+                    <h5 class="text-light font-weight-normal">{{entirePhase.lastWeek.raceData.raceLocation}}</h5>
+                    <h5 class="text-light font-weight-bold mb-4">{{entirePhase.lastWeek.raceData.raceDate | amDateFormat: 'L'}}</h5>
+                    <span class="border border-1 px-3 py-2 text-muted text-uppercase" style="border-radius: 100px;">
+                      {{entirePhase.lastWeek.raceData.raceDistanceName}}</span>
+                  </ng-container>
+                  <ng-container *ngIf="!isMobile">
+                    <div class="race-name">{{entirePhase.lastWeek.raceData.raceName | ucwords}}</div>
+                    <div class="race-date">{{entirePhase.lastWeek.raceData.raceDate | amDateFormat: 'LL'}}</div>
+                    <div class="race-title">{{entirePhase.lastWeek.raceData.raceType}}</div>
+                    <div class="race-type">
+                      <span class="btn btn-outline btn-outline-white text-white">{{entirePhase.lastWeek.raceData.raceDistanceName}}</span>
+                    </div>
+                  </ng-container>
+                </div>
+                <ng-template #weekTemplate let-week="week">
+                  <div class="px-2 py-2">
+                    <div class="mb-1"> {{week.weekdayStartDate | amLocal | amDateFormat: 'll'}} - {{week.weekEndDate |
+                      amLocal |
+                      amDateFormat: 'll'}} </div>
+                    <div class="mb-1"> <strong> Weekly Hours </strong> </div>
+                    <div class="mb-1">Swim: <strong> {{week.totalSwimHrs}} </strong> </div>
+                    <div class="mb-1">Bike: <strong> {{week.totalBikeHrs}} </strong> </div>
+                    <div class="mb-1">Run: <strong> {{week.totalRunHrs}} </strong> </div>
+                    <div>Total Hours: <strong> {{week.totalHrs}} </strong> </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <season-planner-calendar
+      *ngIf="!isMobile && !loading && currentPlan"
+      [currentPlan]="currentPlan"
+      (deleteRace)="deleteRace($event)"
+    ></season-planner-calendar>
+    <div *ngIf="isMobile && !loading && currentPlan" class="container">
+      <season-planner-calendar-mobile
+        [currentPlan]="currentPlan"
+        (deleteRace)="deleteRace($event)"
+      ></season-planner-calendar-mobile>
+    </div>
+
+    <!-- <div *ngIf="!loading && currentPlan && !isMobile" class="row mb-4 season-planner-row-container" style="margin-right: -22px;">
+      <div *ngFor="let row of currentPlan?.rowData" class="d-flex align-items-center mt-4 ml-4 w-100">
+        <ng-container *ngFor="let data of row">
+          <div class="season-planner-row card-box phase-block d-flex justify-content-between align-items-center flex-fill shadow rounded {{getPhaseBorder(data[0])}} mr-4"
+            (mouseenter)="setHoverPhase(data)"
+            (mouseleave)="removeHoverPhase()"
+            [class.phase-block-hover]="isHoverPhase(data)">
+            <ng-container *ngFor="let week of data; let index = index">
+              <div class="week-span cursor-pointer"
+                (click)="goToTrainingPhase(week)">
+                <div class="race-block cursor-pointer" *ngIf="week.raceData"
+                  (click)="goToRace(week)"
+                  [customTooltip]="weekTemplate" [tooltipContext]="{week:week}"
+                  [class.race-block-c]="week.raceData.raceCategory === 'C'">
+                  <custom-menu menuClass="race-menu-wrap" iconName="burger-icon-alt">
+                    <li (click)="addRace(week)">Add a New Race</li>
+                    <li (click)="goToRace(week)">View RaceX Details</li>
+                    <li (click)="deleteRace(week)">Delete Race</li>
+                  </custom-menu>
+                  <div *ngIf="week.raceData.raceCategory !== 'nrp'" class="race-priority">
+                    <span>{{week.raceData.raceCategory}}</span>
+                  </div>
+                  <div class="race-name mt-2">{{week.raceData.raceName | ucwords}}</div>
+                  <div class="race-date">{{week.raceData.raceDate | amDateFormat: 'LL'}}</div>
+                  <div class="race-title">{{week.raceData.raceType}}</div>
+                  <div class="race-type">
+                    <span class="btn btn-outline btn-outline-white text-white">{{week.raceData.raceDistanceName}}</span>
+                  </div>
+                </div>
+
+                <div class="stacked-number-container" *ngIf="!week.raceData" (click)="goToTrainingPhase(week)"
+                  [ngClass]="{ 'stacked-number-container-col-1': data.length == 2 || data.length == 1 }">
+                  <div class="stacked-number-inner">
+                    <span class="number-lg-sub">{{week.weekdayStartDate | amLocal | amDateFormat: 'MMM'}}</span>
+                    <span class="number-lg">{{week.weekdayStartDate | amLocal | amDateFormat: 'DD'}}</span>
+                  </div>
+                </div>
+
+              </div>
+              <div class="divider" *ngIf="!data[index]?.raceData && !data[index+1]?.raceData && index < (data.length - 1)"></div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div> -->
+  </div>
+</div>
+<app-footer></app-footer>

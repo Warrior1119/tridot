@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.115 12.596">
+  <defs>
+    <style>
+      .email-icon-cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="email-83" transform="translate(0 -2)">
+    <path id="Path_381" data-name="Path 381" class="email-icon-cls-1" d="M14.486,2H.63A.6.6,0,0,0,0,2.63V4.519a.661.661,0,0,0,.315.567L7.243,8.865a.568.568,0,0,0,.315.063.568.568,0,0,0,.315-.063L14.8,5.086a.661.661,0,0,0,.315-.567V2.63A.6.6,0,0,0,14.486,2Z" transform="translate(0)"/>
+    <path id="Path_382" data-name="Path 382" class="email-icon-cls-1" d="M8.439,12.49a1.446,1.446,0,0,1-.882.252,1.446,1.446,0,0,1-.882-.252L0,8.9v7.621a.6.6,0,0,0,.63.63H14.486a.6.6,0,0,0,.63-.63V8.9Z" transform="translate(0 -2.554)"/>
+  </g>
+</svg>

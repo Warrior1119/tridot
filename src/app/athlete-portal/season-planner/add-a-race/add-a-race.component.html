@@ -1,0 +1,148 @@
+<div class="main">
+  <div class="container season-planner-container">
+    <div class="row mb-3">
+      <div class="col">
+        <h4 class="page-title mt-2">
+          Add a Race
+        </h4>
+      </div>
+    </div>
+
+    <app-loading-overlay *ngIf="loading || !currentPlan" style="margin-top: 40vh;"></app-loading-overlay>
+    <ng-container *ngIf="!loading && currentPlan">
+      <div *ngIf="!isMobile" class="row">
+        <div class="col-12 mb-4">
+          <app-add-a-race-form
+            [loadingRace]="loadingRace"
+            (racePriority)="racePriorityChanged($event)"
+            (raceCategory)="raceCategoryChanged($event)"
+            (addRace) = "addRace($event)">
+          </app-add-a-race-form>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col" style="z-index: 9;">
+          <div class="d-inline-flex align-items-center justify-content-between position-relative">
+            <div class="btn-group">
+              <button type="button" class="btn rounded-left dropdown-toggle shadow px-3" [disabled]="loading" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="text-body mr-2">
+                  <ng-container *ngIf="!loading">
+                    {{ currentPlan.seasonName || 'Select Season' }}
+                    <ng-container *ngIf="currentPlan && currentPlan.isThisPrimarySeason === 'true'">(live)</ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="loading">
+                    <i class="fal fa-spinner fa-spin"></i>
+                  </ng-container>
+                </span>
+                <span>
+                  <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                </span>
+              </button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item" *ngFor="let plan of plans" type="button" (click)="getPlanById(plan)">
+                  {{plan.seasonName}}
+                  <ng-container *ngIf="plan.isThisPrimarySeason === 'true'">(live)</ng-container>
+                </button>
+              </div>
+              <div class="ml-1 season-menu-btn btn btn-lg btn-white shadow rounded-right pl-2 pr-0 pt-1 pb-2 m-0" style="height: 40px; width: 40px;">
+                <custom-menu menuClass="season-menu-wrap" buttonClass="btn-lg pl-2 pr-0 pt-1 pb-2 m-0 session-menu__button">
+                  <li><h6 class="custom-menu__title mb-0 p-0">Season Menu</h6></li>
+                  <li (click)="addNewSeason()">Add Season</li>
+                  <li (click)="renameSeason(currentPlan)">Rename Season</li>
+                  <li *ngIf="currentPlan?.isThisPrimarySeason !== 'true' && plans?.length > 1" (click)="makeLiveSeason(currentPlan)">Make Live</li>
+                  <li (click)="deleteSeason(currentPlan)">Delete Season</li>
+                </custom-menu>
+              </div>
+            </div>
+            <button *ngIf="isMobile" class="ml-2 btn btn-md btn-dark text-light"
+              style="height: 40px; width: 50px"
+              (click)="addARaceForm.goback()"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!isMobile && !loading && currentPlan" class="col d-inline-flex justify-content-end align-items-center">
+          <div class="legend-container d-inline-flex">
+            <div class="legend d-inline-flex align-items-center ml-3">
+              <div class="color-graph avail mr-2"></div>
+              <div class="legend-title">
+                Available
+              </div>
+            </div>
+            <div class="legend d-inline-flex align-items-center ml-3">
+              <div class="color-graph not-opt mr-2"></div>
+              <div class="legend-title">
+                Not Optimal
+              </div>
+            </div>
+            <div class="legend d-inline-flex align-items-center ml-3">
+              <div class="color-graph not-avail mr-2"></div>
+              <div class="legend-title">
+                Unavailable
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="isMobile">
+        <app-add-a-race-form-mobile
+          [currentPlan]="currentPlan"
+          [loadingRace]="loadingRace"
+          (racePriority)="racePriorityChanged($event)"
+          (raceCategory)="raceCategoryChanged($event)"
+          (addRace) = "addRace($event)">
+        </app-add-a-race-form-mobile>
+        <season-planner-calendar-mobile
+          *ngIf="!loading && currentPlan"
+          [currentPlan]="currentPlan"
+          (deleteRace)="deleteRace($event)"
+        ></season-planner-calendar-mobile>
+      </ng-container>
+
+      <div class="row mb-4" style="margin-right: -22px;" *ngIf="!isMobile && loading != true">
+        <div *ngFor="let row of currentPlan?.rowData" class="d-flex align-items-center mt-4 ml-4 w-100">
+          <ng-container *ngFor="let data of row">
+            <div class="card-box phase-block d-flex justify-content-between align-items-center flex-fill shadow rounded {{getPhaseBorder(data[0])}} mr-4"
+              (mouseenter)="setHoverPhase(data)"
+              (mouseleave)="removeHoverPhase()"
+              [class.phase-block-hover]="isHoverPhase(data)">
+              <ng-container *ngFor="let week of data; let index = index">
+                <div class="week-span cursor-pointer"
+                  (click)="setWeek(week)">
+                  <div *ngIf="!week.raceData" class="stacked-number-container add-a-race {{getColorStatus(week)}}"
+                    [ngClass]="{
+                    'selected': (selectedWeek)? week.phaseId == selectedWeek.phaseId : '',
+                    'stacked-number-container-col-1': data.length == 2 || data.length == 1}">
+                    <div class="stacked-number-inner">
+                      <span class="number-lg-sub">{{week.weekdayStartDate | amLocal | amDateFormat: 'MMM'}}</span>
+                      <span class="number-lg">{{week.weekdayStartDate | amLocal | amDateFormat: 'DD'}}</span>
+                    </div>
+                  </div>
+                  <div class="race-block" *ngIf="week.raceData"
+                    [class.race-block-c]="week.raceData.raceCategory === 'C'"
+                    [routerLink]="['/racex']" [queryParams]="{'raceId': week.raceData.raceId}">
+                    <div *ngIf="week.raceData.raceCategory !== 'nrp'" class="race-priority">
+                      <span>{{week.raceData.raceCategory}}</span>
+                    </div>
+                    <div class="race-name mt-2">{{week.raceData.raceName}}</div>
+                    <div class="race-date">{{week.raceData.raceDate | amDateFormat: prefDateFormatLong || 'LL' }}</div>
+                    <div class="race-title">{{week.raceData.raceType}}</div>
+                    <div class="race-type">
+                      <span class="btn btn-outline btn-outline-white text-white">{{week.raceData.raceDistanceName}}</span>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="divider" *ngIf="!data[index]?.raceData && !data[index+1]?.raceData && index < (data.length - 1)"></div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<ng-template #needUpgradeTooltip><a routerLink="/user/subscription-options" class="text-danger"><strong>Upgrade account</strong></a> to add a race</ng-template>
+<ng-template #needUpgradeTooltipB><a routerLink="/user/subscription-options" class="text-danger"><strong>Upgrade account</strong></a> to add a B race</ng-template>

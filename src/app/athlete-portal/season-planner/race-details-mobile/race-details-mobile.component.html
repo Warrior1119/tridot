@@ -1,0 +1,15 @@
+<div class="text-center my-4">
+  <h3 class="font-weight-bold">{{race.raceName}}</h3>
+  <h4 class="font-weight-normal">{{race.raceLocation}}</h4>
+  <h4 class="font-weight-bold">{{race.raceDate | amLocal | amDateFormat: prefDateFormatLong || 'L'}}</h4>
+  <div class="mt-4 pb-4 border-bottom border-2">
+    <h5 class="d-inline border border-3 py-2 px-3 mr-2 text-muted text-uppercase" style="border-radius: 100px;">{{race.raceDistanceName}}</h5>
+    <h4 class="d-inline btn btn-default py-2 px-3 position-relative text-drk"
+      style="top: -5px; border-radius: 100px; font-size: 1.5rem;">{{race.raceCategory}}</h4>
+  </div>
+  <div class="mt-4 mx-4 phase-info d-flex align-items-center justify-content-around">
+    <button class="btn btn-md btn-dark text-light flex-grow-1 mr-3" (click)="action.emit('delete')">Delete Race</button>
+    <button class="btn btn-md text-light flex-grow-1 {{race.raceEventTypeName === 'Race Prep' ? 'prep-phase' : 'dev-phase'}}"
+      (click)="action.emit('view')">View Race</button>
+  </div>
+</div>

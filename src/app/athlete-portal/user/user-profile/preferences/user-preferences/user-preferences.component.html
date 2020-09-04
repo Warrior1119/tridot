@@ -1,0 +1,112 @@
+<div class="card card-box">
+  <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+    <div class="title">User Preferences</div>
+    <div>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize mr-2"
+              *ngIf = "editMode === true" (click)="cancel()">
+        Cancel
+      </button>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+              (click)="editMode = true;" *ngIf = "editMode === false">
+        Edit
+      </button>
+      <button class="btn-success btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize" [disabled]="isSaveDisabled()"
+              *ngIf = "editMode === true" (click)="updateMemberPreferences();">
+        Save<i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body card-body-md py-0">
+    <!-- Date Preference -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left text-md mb-0" [ngClass]="{'text-mobile' : isMobile}">Date Preference</div>
+      <ng-container *ngIf="!editMode">
+        <div class="text-right text-mb text-muted text-capitalize" [ngClass]="{'text-mobile' : isMobile}">
+          {{ dobFormatIntl == true ? 'US' : '' }}
+          {{ dobFormatIntl == false ? 'International' : '' }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="editMode">
+        <span class="selection-container">
+          <span class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="dobFormatIntl = false"
+                [ngClass]="{'selected-param': dobFormatIntl == false }" [ngClass]="{'text-mobile' : isMobile}">
+            International </span>
+          <span class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="dobFormatIntl = true"
+                [ngClass]="{'selected-param': dobFormatIntl == true }" [ngClass]="{'text-mobile' : isMobile}">
+            US </span>
+        </span>
+      </ng-container>
+    </div>
+
+    <!-- Units of Measurement -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left text-md mb-0" [ngClass]="{'text-mobile' : isMobile}">Units of Measurement</div>
+      <ng-container *ngIf="!editMode">
+        <div class="text-right text-mb text-muted text-capitalize" [ngClass]="{'text-mobile' : isMobile}">
+          {{ measurementSystem === 'standard' ? 'Standard' : '' }}
+          {{ measurementSystem === 'metric' ? 'Metric' : '' }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="editMode">
+        <span class="selection-container">
+          <span class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="editMode && setMeasurementUnit('standard')"
+                [ngClass]="{'selected-param': measurementSystem === 'standard', 'text-mobile' : isMobile }">
+            Standard </span>
+          <span class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="editMode && setMeasurementUnit('metric')"
+                [ngClass]="{'selected-param': measurementSystem === 'metric', 'text-mobile' : isMobile }">
+            Metric </span>
+        </span>
+      </ng-container>
+    </div>
+
+    <!-- Default Indoor Settings -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-2 px-0 border-bottom">
+      <div class="text-left text-md mb-0" [ngClass]="{'text-mobile' : isMobile}">Default Indoor Settings</div>
+      <ng-container *ngIf="!editMode">
+        <div [ngClass]="{'d-flex' : !isMobile}">
+          <div class="setting-item text-sm text-center flex-item">Temperature {{ tempValue }} {{ temperatureUnit }}</div>
+          <div class="setting-item text-sm text-center flex-item"> Humidity {{ humidityValue }} %</div>
+          <div class="setting-item text-sm text-center flex-item"> Elevation {{ elevationValue }} {{ elevationUnit }}</div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="editMode">
+        <div [ngClass]="{'d-flex' : !isMobile}">
+          <div class="d-flex flex-item position-relative">
+            <div class="text-sm text-center pt-2">Temperature</div>
+            <input
+                type="text"
+                [(ngModel)]="tempValue"
+                class="text-center indoor-input ml-2"
+                [class.input-error]="!isTempValid()"
+                [placeholder]="('temperatureUnit')"
+                [customTooltip]="!isTempValid() ? 'Temperature must be in between '+ tempRange[0] +' and '+ tempRange[1] : null" placement="top" tooltip-type="error" />
+          </div>
+          <div class="d-flex ml-3 flex-item">
+            <div class="text-sm text-center pt-2">Humidity</div>
+            <input
+              type="text"
+              [(ngModel)]="humidityValue"
+              [ngClass]="{'ml-3 mt-1':isMobile}"
+              class="text-center indoor-input ml-2"
+              [class.input-error]="!isHumidityValid()"
+              [placeholder]="'%'"
+              [customTooltip]="!isHumidityValid() ? 'Humidity must be in between '+ humidityRange[0] +' and '+ humidityRange[1] : null" placement="top" tooltip-type="error"
+            />
+          </div>
+          <div class="d-flex ml-3 flex-item">
+            <div class="text-sm text-center pt-2">Elevation</div>
+            <input
+              type="text"
+              [(ngModel)]="elevationValue"
+              class="text-center indoor-input ml-2"
+              [ngClass]="{'ml-3 mt-1':isMobile}"
+              [class.input-error]="!isElevationValid()"
+              [placeholder]="('elevationUnit')"
+              [customTooltip]="!isElevationValid() ? 'Elevation must be in between '+ elevationRange[0] +' and '+ elevationRange[1] : null" placement="top" tooltip-type="error"
+            />
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

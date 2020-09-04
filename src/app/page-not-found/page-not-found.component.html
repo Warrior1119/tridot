@@ -1,0 +1,12 @@
+<form #ssoRedirect type="hidden" method="GET">
+  <input *ngFor="let param of queryParams" type="hidden" name="{{param.name}}" value="{{param.value}}">
+</form>
+<div *ngIf="display404" class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-xl-6 text-center">
+      <div class="row justify-content-center card  p-4 m-4">
+        <span class="text-danger"> Page Not Found! </span>
+      </div>
+    </div>
+  </div>
+</div>

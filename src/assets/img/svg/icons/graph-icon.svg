@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.649 27.648">
+  <defs>
+    <style>
+      .graph-icon-cls-1, .graph-icon-cls-2 {
+        fill: none;
+        stroke: #808e98;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .graph-icon-cls-1 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <g id="Group_529" data-name="Group 529" transform="translate(-1350 -80.176)">
+    <rect id="Rectangle_26" data-name="Rectangle 26" class="graph-icon-cls-1" width="4.663" height="10.493" transform="translate(1361.493 96.332)"/>
+    <rect id="Rectangle_27" data-name="Rectangle 27" class="graph-icon-cls-1" width="4.663" height="4.663" transform="translate(1351 102.161)"/>
+    <rect id="Rectangle_28" data-name="Rectangle 28" class="graph-icon-cls-1" width="4.663" height="16.322" transform="translate(1371.985 90.502)"/>
+    <path id="Path_68" data-name="Path 68" class="graph-icon-cls-2" d="M6,11.327,11.829,5.5l4.663,4.663L24.653,2" transform="translate(1347.332 79.176)"/>
+    <path id="Path_69" data-name="Path 69" class="graph-icon-cls-1" d="M29,2h5.246V7.246" transform="translate(1337.739 79.176)"/>
+  </g>
+</svg>

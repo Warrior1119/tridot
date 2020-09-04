@@ -1,0 +1,10 @@
+<div class="{{menuClass}} custom-menu-wrap" dropdown #dropdown="bs-dropdown" (isOpenChange)="onOpenChange($event)" [ngClass]="{'custom-menu-wrap-desktop' : !isMobileOrTablet && (resources | json) == '{}', 'custom-menu-wrap-mobileOrtablet' : isMobileOrTablet && (resources | json) != '{}'}">
+    <button class="btn d-inline-flex btn-md {{buttonClass}} custom-menu__button" dropdownToggle [class.burger-active]="dropdown.isOpen">
+        <div #icon [inlineSVG]="'../assets/img/svg/'+iconName+'.svg'" (click)="toggle($event)"></div>
+    </button>
+    <div class="custom-menu" *dropdownMenu>
+        <ul *ngIf="dropdown.isOpen" class="custom-menu__list text-left" (click)="hide($event)">
+            <ng-content></ng-content>
+        </ul>
+    </div>
+</div>

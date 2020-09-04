@@ -1,0 +1,93 @@
+<div class="card-box rounded shadow" *ngIf="athleteProfile">
+  <div class="box-header d-flex align-items-center">
+    <div class="user-img">
+      <input style="display: none" type="file" (change)="uploadPicture($event)" #fileInput>
+      <a class="edit-icon-wrap" (click)="fileInput.click()">
+        <div class="mr-3 edit-icon" inlineSVG="../assets/img/svg/icons/edit-circle.svg"></div>
+        <div class="profile-img mr-3 rounded-circle"><img *ngIf="profilePicture" class=" profile-picture" [src]="profilePicture" alt=""></div>
+      </a>
+    </div>
+    <div class="user-info">
+      <span class="user-name d-block font-weight-bold mb-0 line-height-sm">{{athleteProfile.firstName | ucwords}}
+        {{athleteProfile.lastName | ucwords}} </span>
+      <span class="user-details d-block text-xs mb-0 line-height-sm">Level:
+        {{athleteProfile.performanceLevelName
+        | ucwords}}
+      </span>
+      <span class="user-swimform d-block text-xs mb-0 line-height-sm">Primary Distance:
+        {{athleteProfile.primaryDistanceName |
+        ucwords}}</span>
+    </div>
+  </div>
+  <div class="box-content" *ngIf="currentRace">
+    <div class="row mb-4">
+      <div class="col-8 border-right border-2">
+        <h5><a role="button" class="cursor-pointer" (click)="goToRace(currentRace.raceId)">{{currentRace.raceName |
+            ucwords}}</a></h5>
+        <span class="race-title text-sm d-block mb-0">{{currentRace.raceDistanceName | ucwords}}</span>
+        <span class="race-location text-sm d-block mb-0">{{currentRace.raceLocation | ucwords}}</span>
+        <span class="race-time text-sm d-block mb-0"> {{currentRace.raceDate}}</span>
+      </div>
+      <div class="col-4">
+        <!-- <div class="success-icon ml-2" *ngIf="currentRace.daysTillRace <= 0">
+          <div  [inlineSVG]="'../../../assets/img/svg/icons/checkmark-white.svg'" [autosize]="true"  class="mx-auto d-inline-block"></div>
+        </div> -->
+        <div class="days-to-race stacked-number-container">
+          <div class="stacked-number-inner">
+            <span class="number-lg">{{currentRace.daysTillRace}}</span>
+            <span class="number-lg-sub">Days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="hasPreviousRace() || hasNextRace()" class="row">
+      <div class="col pr-2">
+        <button class="btn btn-default btn-block btn-sm text-uppercase" [disabled]="!hasPreviousRace()" (click)="previousRace()">
+          <div class="mr-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 6px;"></div>Prev
+          Race</button>
+      </div>
+      <div class="col pl-2">
+        <button class="btn btn-default btn-block btn-sm text-uppercase" [disabled]="!hasNextRace()" (click)="nextRace()">Next
+          Race
+          <div class="ml-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 6px;"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-none box-footer score-container">
+    <div class="row">
+      <div class="col-3 pl-0 pr-0">
+        <div class="score-header text-center animated fadeInDown">
+          <span class="mb-1 d-block">Comp</span>
+        </div>
+        <div class="tridot-score comp" [customTooltip]="athleteProfile.tridot? 'TriDot Composite Score' : ''">
+          <span>{{athleteProfile.tridot}}</span>
+        </div>
+      </div>
+      <div class="col-3 pl-0 pr-0">
+        <div class="score-header text-center animated fadeInDown">
+          <span class="mb-1 d-block">SwimDot</span>
+        </div>
+        <div class="tridot-score swim" [customTooltip]="getToolTip('Swim')" [isOpen]="isOpen('Swim')" placement="top">
+          <span>{{athleteProfile.swimdot}}</span>
+        </div>
+      </div>
+      <div class="col-3 pl-0 pr-0">
+        <div class="score-header text-center animated fadeInDown">
+          <span class="mb-1 d-block">BikeDot</span>
+        </div>
+        <div class="tridot-score bike" [customTooltip]="getToolTip('Bike')" [isOpen]="isOpen('Bike')" placement="top">
+          <span>{{athleteProfile.bikedot}}</span>
+        </div>
+      </div>
+      <div class="col-3 pl-0 pr-0">
+        <div class="score-header text-center animated fadeInDown">
+          <span class="mb-1 d-block">RunDot</span>
+        </div>
+        <div class="tridot-score run" [customTooltip]="getToolTip('Run')" [isOpen]="isOpen('Run')" placement="top">
+          <span>{{athleteProfile.rundot}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

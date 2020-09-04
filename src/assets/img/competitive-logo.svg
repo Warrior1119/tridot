@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
+  <defs>
+    <style>
+      .competitive-cls-1 {
+        fill: #8dd95d;
+      }
+
+      .competitive-cls-2 {
+        fill: #69aa41;
+      }
+
+      .competitive-cls-3 {
+        fill: #78c34a;
+      }
+    </style>
+  </defs>
+  <g id="Group_1457" data-name="Group 1457" transform="translate(-1418 -301)">
+    <path id="Path_394" data-name="Path 394" class="competitive-cls-1" d="M36,0A36,36,0,1,1,0,36,36,36,0,0,1,36,0Z" transform="translate(1418 301)"/>
+    <g id="Group_20" data-name="Group 20" transform="translate(1436.102 316.136)">
+      <path id="Path_42" data-name="Path 42" class="competitive-cls-2" d="M7.26,15.8a1.76,1.76,0,0,1-1.244-3l5.279-5.279A1.76,1.76,0,0,1,12.539,7h8.8a1.76,1.76,0,1,1,0,3.519H13.268L8.5,15.283A1.753,1.753,0,0,1,7.26,15.8Z" transform="translate(-1.901 3.558)"/>
+      <path id="Path_43" data-name="Path 43" class="competitive-cls-2" d="M20.577,23.557H8.26a1.76,1.76,0,0,1-1.408-2.816L12.131,13.7a1.76,1.76,0,0,1,1.283-.7,1.783,1.783,0,0,1,1.369.511l7.039,7.039a1.76,1.76,0,0,1-1.244,3Z" transform="translate(-1.141 8.117)"/>
+      <path id="Path_45" data-name="Path 45" class="competitive-cls-3" d="M5.279,0A5.279,5.279,0,1,1,0,5.279,5.279,5.279,0,0,1,5.279,0Z" transform="translate(21.196 0)"/>
+      <path id="Path_44" data-name="Path 44" class="competitive-cls-3" d="M38.213,7.516a1.759,1.759,0,0,0-2.488,0l-5,4.995S25.89,8.17,25.6,7.925a3.991,3.991,0,0,0-5.621.512L3.793,31.687a1.76,1.76,0,0,0,2.712,2.226l19.6-20.366c.057-.068.094-.145.146-.216l3.4,2.912a1.759,1.759,0,0,0,2.4-.08L38.213,10A1.759,1.759,0,0,0,38.213,7.516Z" transform="translate(-3.455 3.558)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,114 @@
+<div class="d-flex justify-content-between align-items-center my-0 mb-2 mb-sm-3 mx-0 flex-wrap">
+  <div class="w-100 text-nowrap flex-fill d-flex align-items-center">
+    <h4 class="page-title ml-2 mt-2 mb-3 text-center text-capitalize d-inline-block flex-fill">
+      {{sessionName}}
+      <div *ngIf="session?.isAthleteCreated == 'true'" class="p-1 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/athlete-created-icon.svg'" [autosize]="true" ></div>
+      <div *ngIf="session?.isCoachCreated == 'true'" class="p-1 mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/coach-created-icon.svg'" [autosize]="true" ></div>
+    </h4>
+  </div>
+  <div class="w-100 text-nowrap flex-fill d-flex aling-items-start justify-content-between">
+    <div class="d-flex align-items-start flex-wrap">
+      <button class="btn btn-lg btn-white shadow rounded px-3 pt-1 pb-2 mr-1 mr-sm-3 mb-2" [routerLink]="['../']">
+        <div  [inlineSVG]="'../assets/img/svg/icons/return-icon.svg'" class="mx-auto d-inline-block"></div>
+      </button>
+      <div class="btn-group shadow mb-2 mr-1 mr-sm-3">
+        <button class="btn btn-lg btn-white rounded px-3 pt-1 pb-2 rounded-left" (click)="prevDay.emit()">
+          <div  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 6px;" class="mx-auto d-inline-block"></div>
+        </button>
+        <button class="btn btn-lg btn-white m-0 px-3 py-0 border-right border-left rounded-0" [routerLink]="['../']">
+          <div class="btn-date-sm text-muted">{{day.date | amDateFormat: 'ddd'}}</div>
+          <div class="btn-date">{{day.date | amDateFormat: 'DD'}}</div>
+        </button> 
+        <button class="btn btn-lg btn-white m-0 px-3 pt-1 pb-2 rounded-right" (click)="nextDay.emit()">
+          <div  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 6px;" class="mx-auto d-inline-block"></div>
+        </button>   
+      </div>
+      <div class="btn-group btn-session-block rounded">
+        <ng-container *ngIf="day.sessions?.length <= 3; then sessionList"></ng-container>
+      </div>
+    </div>
+    <div class="btn-group ml-3 d-flex align-items-start">
+      <!-- <div class="btn-group shadow rounded-circle d-none d-sm-inline-flex mr-3">
+        <button class="btn btn-lg btn-white pl-2 pr-1 pt-1 pb-2 mr-1px btn-round-left text-nowrap" (click)="metricsEdit.emit()">
+          <div  [inlineSVG]="'../assets/img/svg/icons/metrics-alt-new.svg'" [autosize]="true" style="width: 25px;" class="mx-auto d-inline-block"></div><span class="text-sm mx-1">Metrics</span>
+        </button>
+        <button class="btn btn-lg btn-white m-0 px-1 pt-1 pb-2 rounded-right" (click)="metrics.emit()">
+          <div  [inlineSVG]="'../assets/img/svg/icons/ellipsis-menu-icon.svg'" [autosize]="true"  class="mx-auto d-inline-block"></div>
+        </button>
+      </div> -->
+      <div class="btn btn-lg btn-white shadow rounded pl-2 pr-0 pt-1 pb-2 m-0" style="height: 40px;">
+        <custom-menu menuClass="session-menu-wrap" buttonClass="btn-lg pl-2 pr-0 pt-1 pb-2 m-0 session-menu__button">
+          <li *ngIf="day.sessions?.length" (click)="moveOrCopy.emit(['move','day', day])"><span class="text-md">Move All Sessions</span></li>
+          <li *ngIf="day.sessions?.length" (click)="moveOrCopy.emit(['copy','day', day])"><span class="text-md">Copy All Sessions</span></li>
+          <li *ngIf="shouldAddBeEnabledDay(day.sessions)" (click)="add.emit(day)"><span class="text-md">Add a Session</span></li>
+          <li (click)="restore.emit([day,'day'])"><span class="text-md">Restore Sessions</span></li>
+          <li class="d-sm-none" (click)="metricsEdit.emit()"><span class="text-md">Update a Metric Record</span></li>
+          <li class="d-sm-none" (click)="metrics.emit()"><span class="text-md">Manage Metrics</span></li>
+        </custom-menu>
+      </div>
+    </div>
+  </div>
+  <div class="btn-group btn-session-block rounded mx-auto justify-content-center flex-wrap">
+    <ng-container *ngIf="day.sessions?.length > 3; then sessionList"></ng-container>
+  </div>
+</div>
+
+<div *ngIf="isCoachAccess" class="d-flex justify-content-center flex-wrap w-100 mb-3">
+  <div class="btn-group btn-session-block ml-3 mb-2 rounded">   
+    <button 
+      class="btn btn-lg btn-white rounded-left border-right px-2 pt-1 pb-2 mr-1px"
+      (click)="addNewSessionToggled = !addNewSessionToggled; newSelectedSessionType.emit({type:'SWIM',addToggled: addNewSessionToggled})"
+      [inlineSVG]="'../assets/img/svg/icons/profile-add-icon.svg'">
+    </button>
+    <button 
+      class="btn btn-lg btn-white text-sm  px-2 pt-1 pb-2 mr-1px"
+      (click)="addNewSessionToggled = !addNewSessionToggled; newSelectedSessionType.emit({type:'SWIM',addToggled: addNewSessionToggled})"
+    >Add Session
+    </button>   
+  </div>
+
+  <div class="btn-group btn-session-block ml-3 rounded" *ngIf="addNewSessionToggled">
+    <button 
+      class="btn btn-lg btn-white rounded-left border-right px-2 pt-1 pb-2 mr-1px"
+      [inlineSVG]="'../assets/img/svg/icons/profile-add-icon.svg'">
+    </button>
+    <button 
+      class="btn btn-lg btn-white border-right border-right px-2 pt-1 pb-2 mr-1px"
+      (click)="selectedSessionType = 'swim'; newSelectedSessionType.emit({type:'SWIM',addToggled:addNewSessionToggled})"
+      [inlineSVG]="getIcon('../assets/img/svg/icons/swim-icon','swim')">
+    </button>
+    <button 
+      class="btn btn-lg btn-white border-right px-2 pt-1 pb-2 mr-1px"
+      (click)="selectedSessionType = 'bike'; newSelectedSessionType.emit({type:'BIKE',addToggled:addNewSessionToggled})"
+      [inlineSVG]="getIcon('../assets/img/svg/icons/bike-icon','bike')">
+    </button>
+    <button 
+      class="btn btn-lg btn-white border-right px-2 pt-1 pb-2 mr-1px"
+      (click)="selectedSessionType = 'run'; newSelectedSessionType.emit({type:'RUN',addToggled:addNewSessionToggled})"
+      [inlineSVG]="getIcon('../assets/img/svg/icons/run-icon','run')">
+    </button>
+    <button 
+      class="btn btn-lg btn-white border-right px-2 pt-1 pb-2 mr-1px"
+      (click)="selectedSessionType = 'strength'; newSelectedSessionType.emit({type:'STRENGTH',addToggled:addNewSessionToggled})"
+      [inlineSVG]="getIcon('../assets/img/svg/icons/strength-icon','strength')">
+    </button>
+    <button 
+      class="btn btn-lg btn-white text-sm px-2 pt-1 pb-2 mr-1px"
+      (click)="selectedSessionType = 'other';newSelectedSessionType.emit({type:'OTHER',addToggled:addNewSessionToggled})"
+    >Other
+    </button>
+  </div>
+</div>
+
+<!-- displayed on a separate row when number of buttons > 3 -->
+<ng-template #sessionList>
+  <button *ngFor="let session of day.sessions"
+    class="btn btn-lg btn-white shadow px-2 pt-1 pb-2 mr-1px border-bottom border-4 {{day.unlinkedFiles?.length === 0 ? 'rounded-right' : ''}} {{session.sessionId === sessionId ? session.sessionType + '-box' : ''}}"
+    style="flex-grow: 0; max-width: 46px; max-height: 46px;"
+    (click)="sessionDetails(session)"
+    [inlineSVG]="'../assets/img/svg/icons/' + session.sessionType.toLowerCase() + '-icon.svg'">
+  </button>
+  <button *ngIf="day.unlinkedFiles?.length > 0" class="btn btn-lg btn-white shadow m-0 px-2 pt-1 pb-2 rounded-right border-bottom border-4 border-secondary" (click)="showUnlinkedModal()">
+    <div  [inlineSVG]="'../assets/img/svg/icons/data-file-sm.svg'" [autosize]="true"  class="mx-auto d-inline-block"></div>
+  </button>
+</ng-template>

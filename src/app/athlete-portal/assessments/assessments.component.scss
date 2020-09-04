@@ -1,0 +1,49 @@
+.assessments-input {
+  width: 50px;
+  border: none;
+  padding: 0;
+}
+
+.assessment-date {
+  font-size: 0.875rem;
+  background: transparent;
+  color: white !important;
+  border: none;
+  border-bottom: 1px solid #ff00007d;
+  padding: 0;
+  text-align: center;
+  display: none;
+}
+
+.assessments-input-lg {
+  width: 80px;
+  border: none;
+  padding: 0;
+  display: none;
+
+  &.force {
+    display: inline-block;
+  }
+}
+
+.assessments-label {
+  padding-left: 4px;
+}
+
+.edit-active {
+  color: #000000a6;
+  border-radius: 0;
+  border-bottom: 1px solid #ff00007d;
+  display: inline-block;
+}
+
+.profile-assess {
+  top: 10px;
+  left: 30px;
+}
+
+.assess-comments {}
+
+::ng-deep div.assessment-ico > svg {
+  display: flex;
+}

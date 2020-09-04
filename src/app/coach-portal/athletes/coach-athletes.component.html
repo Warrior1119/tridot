@@ -1,0 +1,145 @@
+<app-loading-overlay *ngIf="loading" style="margin-top: 40vh;"></app-loading-overlay>
+<div class="main" *ngIf="!loading">
+  <div class="container daily-workout-container">
+    <div class="row">
+      <div class="col-lg-12 d-flex justify-content-between mb-3">
+        <div class="header text-left">
+          <h5>Athletes</h5>
+        </div>
+        <div class="seats text-right mr-2">
+          <h5>
+            Seats Remaining
+            <span *ngIf = "availableSeatsInfo" class="available-seat-number">{{availableSeatsInfo}}</span>
+            <span *ngIf = "!availableSeatsInfo" class="available-seat-number">&#8734;</span>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12">
+        <div class="box rounded shadow mb-4">
+          <div class="box-content">
+            <div class="row">
+              <div class="col-12">
+                <input aria-label="Search" [(ngModel)]="textFilter" (ngModelChange)="fireSearch()" class="form-control athlete-search-field input-group-sm ng-untouched ng-pristine ng-valid"
+                placeholder="Search For Athletes" type="search">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-xl-12" *ngIf="paginatedFilteredAthletes">
+        <div class="box rounded shadow p-0 mb-4">
+          <div class="py-4 px-4">
+            <div class="filter-header d-flex justify-content-between">
+              <div class="btn-group align-items-center row flex-grow-1">
+                <h6 class="col-3 col-sm-2 font-weight-normal mr-2 mb-0">Filter by</h6>
+                <div class="mb-3 mx-3 mb-sm dropdown">
+                  <button type="button" class="btn dropdown-toggle shadow px-2 py-2" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="text-sm text-body mr-3 pull-left">{{subscriptionFilter}}</span>
+                    <span class="pull-right">
+                      <div  [inlineSVG]="'../../../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="filterBySubscription('All Levels')">All Levels</a>
+                    <a class="dropdown-item" (click)="filterBySubscription('Premium')">Premium</a>
+                    <a class="dropdown-item" (click)="filterBySubscription('Complete')">Complete</a>
+                    <a class="dropdown-item" (click)="filterBySubscription('Essentials')">Essentials</a>
+                    <a class="dropdown-item" (click)="filterBySubscription('Lifestyle')">Lifestyle</a>
+                  </div>
+                </div>
+                <div class="mb-3 mx-3 mb-sm dropdown">
+                  <button type="button" class="btn dropdown-toggle shadow px-2 py-2" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="text-sm text-body mr-3 pull-left">{{athleteStatusFilter}}</span>
+                    <span class="pull-right">
+                      <div [inlineSVG]="'../../../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="filterByAthleteStatus('All Status')">All Status</a>
+                    <a class="dropdown-item" (click)="filterByAthleteStatus('Active')">Active</a>
+                    <a class="dropdown-item" (click)="filterByAthleteStatus('Trial')">Trial</a>
+                    <a class="dropdown-item" (click)="filterByAthleteStatus('Trial Expired')">Trial Expired</a>
+                    <a class="dropdown-item" (click)="filterByAthleteStatus('Failed Payment')">Failed Payment</a>
+                    <a class="dropdown-item" (click)="filterByAthleteStatus('Cancelled')">Cancelled</a>
+                  </div>
+                </div>
+                <div class="mb-3 mx-3 mb-sm dropdown">
+                  <button type="button" class="btn dropdown-toggle shadow px-2 py-2" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="text-sm text-body mr-3 pull-left">{{raceFilter}}</span>
+                    <span class="pull-right">
+                      <div [inlineSVG]="'../../../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="filterByRace('All Races')">All Races</a>
+                    <a class="dropdown-item" *ngFor = "let race of raceList" (click)="filterByRace(race)">{{race}}</a>
+                  </div>
+                </div>
+                <div class="mb-3 mx-3 mb-sm dropdown">
+                  <button type="button" class="btn dropdown-toggle shadow px-2 py-2" data-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                    <span class="text-sm text-body mr-3 pull-left">{{assignmentStatusFilter}}</span>
+                    <span class="pull-right">
+                      <div [inlineSVG]="'../../../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="filterByAthleteAssignStatus('Assigned to Seat')">Assigned to Seat</a>
+                    <a class="dropdown-item" (click)="filterByAthleteAssignStatus('Linked')">Linked</a>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-group">
+                <ul class="ngx-pagination ng-star-inserted" role="navigation" aria-label="Pagination">
+                  <li [ngClass] = "{'current': selectedPage === 10}">
+                    <a tabindex="0" (click) = "paginate(10)" role="button">
+                      <span>10</span>
+                    </a>
+                  </li>
+                  <li [ngClass] = "{'current': selectedPage === 20}">
+                    <a tabindex="1" (click) = "paginate(20)"  role="button">
+                      <span>20</span>
+                    </a>
+                  </li>
+                  <li [ngClass] = "{'current': selectedPage === 30}">
+                      <a tabindex="2" (click) = "paginate(30)">
+                        <span>30</span>
+                      </a>
+                  </li>
+                  <li [ngClass] = "{'current': selectedPage === 'ALL'}">
+                    <a tabindex="3" (click) = "paginate('ALL')">
+                      <span>ALL</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="filter-table-header">
+            <div class="bg-light">
+              <div class="row text-center py-3">
+                <div class="col-2 font-weight-bold text-xs">User</div>
+                <div class="col-2 font-weight-bold text-xs">Actions</div>
+                <div class="col-1 font-weight-bold text-xs">SBR Ages</div>
+                <div class="col-2 font-weight-bold text-xs">TainX Scores</div>
+                <div class="col-3 font-weight-bold text-xs">Upcoming Races</div>
+                <div class="col 2 font-weight-bold text-xs">TriDot Scores</div>
+              </div>
+            </div>
+          </div>
+          <div class="athlete-row" *ngFor = "let athleteDetails of paginatedFilteredAthletes">
+            <app-coach-athlete-row [athleteDetails] = "athleteDetails"></app-coach-athlete-row>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,389 @@
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Session Notations and Terms</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <p class="mb-2">TriDot uses Simple Session Notations to describe what to do in your training sessions. It
+              makes reading your workouts everyday quick and easy.</p>
+
+            <p class="mb-2">Every session will be comprised of one or more 'efforts'. Each effort will have a specific
+              intensity level and duration (or distance). Multiple efforts may be prescribed as a 'set' or 'round'. When
+              there are multiple efforts (sets or rounds of efforts) in a session, TriDot will specify the number of
+              efforts and the rest period between them.</p>
+
+            <h6 class="font-weight-normal mb-1 text-md">Single Effort</h6>
+            <p>duration @ intensity</p>
+
+            <h6 class="font-weight-normal mb-1 text-md">Multiple Efforts (a set)</h6>
+            <p>number x duration @ intensity (rest)</p>
+
+            <h6 class="font-weight-normal mb-1 text-md">Multiple Sets</h6>
+            <p class="mb-1">number x duration @ intensity (rest)</p>
+            <p class="mb-1">number x duration @ intensity (rest)</p>
+            <p class="mb-0">number x duration @ intensity (rest)</p>
+          </div>
+          <div class="col-12 col-md-6">
+            <ul class="list-unstyled">
+              <li class="mb-1">' = minutes; " = seconds</li>
+              <li class="mb-1">~ = approximately</li>
+              <li class="mb-1">x = "times" and is preceded by number of efforts</li>
+              <li class="mb-1">@ = "at" and is followed by intensity level</li>
+              <li class="mb-1">(2') = parentheses signifies rest duration between efforts</li>
+              <li class="mb-1">Example Bike Session: 5 x 4' @ Z4 (90" @ Z2)</li>
+            </ul>
+            <p>
+              Five four-minute efforts at Z4 - Threshold intensity with ninety seconds rest at Z2 between each effort.
+            </p>
+            <p class="mb-0">
+              Discipline-specific drills and terms, are found in individual session notes, resources, or by searching
+              the <a href="/support">Knowledgebase.</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="block-1">
+  <div class="box p-0 rounded daily-workout-container {{session?.actualTotal ? 'mb-4' : ''}}">
+    <div class="row">
+
+      <ng-container *ngIf="day.noData">
+        <div class="col-lg-8 col-xl-8 m-auto">
+          <div class="row">
+            <div class="col-12">
+              <div style="margin-top: 160px; margin-bottom: 140px;">
+                <div class="ml-3 text-center">
+                  <ng-container *ngIf="day.phaseGenerationInProgress === true">
+                      <h6 class="font-weight-normal">Please Wait</h6>
+                      <p class="mx-1 text-center text-xs">Initial training generation in progress. This may take a few minutes.</p>
+                      <button class="btn px-3 btn-primary border-left border-1 flex-grow-1 text-xs p-2 text-nowrap" (click)="refresh.emit()">
+                        Refresh <i class="pl-1 fal fa-sync"></i>
+                    </button>
+                  </ng-container>
+                  <ng-container *ngIf="day.phaseGenerationInProgress !== true">
+                    <ng-container *ngIf="day.phaseFirstSessionDate">
+                      <h6 class="font-weight-normal">No sessions scheduled for today</h6>
+                      <p class="mx-1 mb-0 text-center text-xs">First session for the current season is available from</p>
+                      <p class="mx-1 text-center text-xs">{{ day.phaseFirstSessionDate | amDateFormat: phaseFirstSessionDateFormat }}</p>
+                    </ng-container>
+                    <ng-container *ngIf="!day.phaseFirstSessionDate">
+                        <h6 class="font-weight-normal">No sessions scheduled for today</h6>
+                        <p *ngIf="!profile.deviceConnected && !profile.athleteDoNotHaveDevice" class="mx-1 mb-0 text-center text-xs">Auto-sync your training data to have your completed workout data populate automatically.</p>
+                    </ng-container>
+                    <div class="mt-3 btn-group shadow data-controls d-flex justify-content-around">
+                      <button *ngIf="shouldAddBeEnabled()" class="btn btn-white flex-grow-1 text-xs p-2 mt-0 text-nowrap" (click)="addSession.emit(day)">
+                          Add a Session <i class="fal fa-plus ml-1"></i>
+                      </button>
+                      <button class="btn btn-white border-left border-1 flex-grow-1 text-xs p-2 mt-0 text-nowrap" (click)="sessionAction('upload')">
+                          Add a Data File
+                      </button>
+                      <button class="btn btn-primary border-left border-1 flex-grow-1 text-xs p-2 mt-0 text-nowrap" *ngIf="!profile.deviceConnected" routerLink="/user/devices">
+                          Auto-sync Your Data <i class="fal fa-plus"></i>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!day.noData">
+        <div *ngIf="session" class="{{ showAddFirstRace ? 'col-lg-8 col-xl-8 pr-3 pr-lg-0' : 'col-lg-12 col-xl-12 pr-3' }} daily-workout-details-column">
+          <div class="row pl-sm-4 py-sm-4 mr-md-3 mr-lg-0">
+            <div class="col mt-1 d-flex flex-column" [class.col-md-6]="resources?.length || !isSessionNotesEmpty(session?.sessionNotes)">
+              <div class="col-header d-flex align-items-center justify-content-between">
+                <div class="workout-title text-truncate">
+                  <h4 class="content-title text-truncate text-wrap mr-3">{{session.sessionZoneLabel}}</h4>
+                </div>
+                <div class="d-flex align-items-sm-end ml-auto mr-sm-4 push-workout-margin" *ngIf = "session.sessionType === 'bike'">
+                  <div class="export-menu-wrap position-relative mr-3" #exportdropdown="bs-dropdown" dropdown [autoClose]="true" placement="bottom right">
+                    <button id="button-custom-html" type="button" class="btn dropdown-toggle p-0" dropdownToggle
+                      aria-controls="dropdown-custom-html" (click)="downloadSessionWorkout()">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/download-data.svg'"
+                          max-width="300px" [autosize]="true" style="width: 20px;" [customTooltip]="workoutDownloadToolTip"
+                          class="icon-fix-md mx-auto d-inline-block">
+                      </div>
+                    </button>
+                    <div *ngIf="isWktDataAvailResp && isWktDataAvailResp.isWorkoutDownloadAllowed === 'true'">
+                      <ul id="dropdown-custom-html" *dropdownMenu
+                      class="dropdown-menu dropdown-menu-right p-2 m-0 shadow-lg border-0" role="menu" aria-labelledby="button-custom-html">
+                        <li role="menuitem" class="disabled d-flex flex-column" (click)="preventClose($event)">
+                          <div class="text-center mr-4 ml-4" style="white-space: nowrap;">
+                            <div class="mb-2">
+                              <small>Select Export Options</small> 
+                            </div>
+                            <small>File Types</small>
+                            <hr/>
+                            <div class="d-flex justify-content-between" btnRadioGroup [(ngModel)]="exportFileType" 
+                            (ngModelChange)="exportFileTypeChanged($event)">
+                              <label class="btn btn-default" btnRadio="ERG" tabindex="0" role="button" style="width: 23%;">
+                                .erg
+                              </label>
+                              <label class="btn btn-default" btnRadio="MRC" tabindex="0" role="button" style="width: 23%;">
+                                .mrc
+                              </label>
+                              <label class="btn btn-default" btnRadio="FIT" tabindex="0" role="button" style="width: 23%;">
+                                .fit
+                              </label>
+                              <label class="btn btn-default" btnRadio="ZWO" tabindex="0" role="button" style="width: 23%;">
+                                .zwo
+                              </label>
+                            </div>
+                            <small>Intensity Metric</small>
+                            <hr/>
+                            <div class="d-flex justify-content-between" btnRadioGroup [(ngModel)]="exportMetric">
+                              <label class="btn btn-default" btnRadio="POWER" tabindex="0" role="button" style="width: 49%;" >
+                                <i class="far fa-bolt"></i>&nbsp;Power
+                              </label>
+                              <button class="btn btn-default" btnRadio="HR" tabindex="0" role="button" style="width: 49%;" 
+                                    [attr.disabled]="exportFileType === 'FIT' ? null : ''" title="HR is supported for .fit files">
+                                <i class="far fa-heart"></i>&nbsp;HR
+                              </button>
+                            </div>
+                            <small>Additional Time</small>
+                            <hr/>
+                            <div class="time-input-group">
+                              <div><small>Prepend (before WU)&nbsp;&nbsp;</small></div>
+                              <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <button class="btn btn-default" type="button" (click)="decrementPrependTime()">-</button>
+                                </div>
+                                <input type="number" [(ngModel)]="prependWUTime" class="text-center" />
+                                <div class="input-group-append">
+                                  <button class="btn btn-default" type="button"
+                                    (click)="incrementPrependTime()">
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="time-input-group">
+                              <div><small>Insert (between WU & MS)&nbsp;&nbsp;</small></div>
+                              <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <button class="btn btn-default" type="button" (click)="decrementInsertTime()">-</button>
+                                </div>
+                                <input type="number" [(ngModel)]="WUMSInsertTime" class="text-center" />
+                                <div class="input-group-append">
+                                  <button class="btn btn-default" type="button"
+                                    (click)="incrementInsertTime()">
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="time-input-group">
+                              <div><small>Append (after MS)&nbsp;&nbsp;</small></div>
+                              <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <button class="btn btn-default" type="button" (click)="decrementAppendTime()">-</button>
+                                </div>
+                                <input type="number" [(ngModel)]="appendMSTime" class="text-center" />
+                                <div class="input-group-append">
+                                  <button class="btn btn-default" type="button"
+                                    (click)="incrementAppendTime()">
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="btn btn-outline export-btn shadow" (click)="exportSession(session, exportMetric, exportFileType, prependWUTime,appendMSTime, WUMSInsertTime); exportdropdown.hide();" [disabled]="!exportMetric || !exportFileType">
+                              Export Session
+                            </button>
+                            <a style="color: #5b5f62; cursor: pointer;" routerLink="/user/user-profile/preferences">
+                              <small>Change Bike Export Preferences</small>
+                            </a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="position-relative mr-3">
+                    <button id="push-button-custom-html" type="button" class="btn dropdown-toggle p-0" aria-controls="dropdown-custom-html"
+                    (click)="pushSessionWorkoutToGarmin(session)">
+                      <div [inlineSVG]="'../assets/img/svg/icons/push-to-garmin.svg'" max-width="300px"  style="width: 20px;top: -5px;"
+                      [customTooltip]="workoutPushToolTip" *ngIf="!pushWorkoutLoading" class="icon-fix-md  mx-auto d-inline-block">
+                      </div>
+                    </button>
+                    <i class="fal fa-spinner fa-spin" *ngIf="pushWorkoutLoading"></i>
+                  </div>
+
+                </div>
+                <custom-menu menuClass="details-menu-wrap daily-session-menu-wrap" [isMobileOrTablet]="isMobileOrTablet">
+                  <li *ngIf="shouldCoachEditBeEnabled(session)" (click)="isCoachEditMode = true">Edit</li>
+                  <li *ngIf="shouldMoveBeEnabled(session)" (click)="sessionAction('move')">Move Session</li>
+                  <li (click)="sessionAction('copy')">Copy Session</li>
+                  <li *ngIf="shouldRestoreBeEnabled(session)" (click)="sessionAction('restore')">Restore Session</li>
+                  <li *ngIf="shouldUploadBeEnabled(session)" (click)="sessionAction('upload')">Upload Data File</li>
+                  <li *ngIf="shouldUnlinkBeEnabled(session)" (click)="sessionAction('unlink')">Unlink Data File</li>
+                  <li *ngIf="shouldDeleteBeEnabled(session)" (click)="sessionAction('delete')">Delete Session</li>
+                </custom-menu>
+              </div>
+              <div class="col-content text-sm h-100">
+                <button data-toggle="modal" data-target="#infoModal"
+                  class="btn btn-sm bg-light cursor-pointer mb-3 mt-2 px-2"><span class="mr-1">Workout Legend</span> <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 15px;" class="icon-fix-md mx-auto d-inline-block"></div></button>
+                <ng-container *ngIf="!isCoachAccess || !isCoachEditMode">
+                  <div *ngIf="!isSessionDetailEmpty(session.sessionDetail.warmUp)" class="set mb-3">
+                    <div class="set-title">Warmup</div>
+                    <div class="set-details">
+                      <p [innerHTML]="changeNewLineToBrTag(session.sessionDetail.warmUp)"></p>
+                    </div>
+                  </div>
+                  <div *ngIf="!isSessionDetailEmpty(session.sessionDetail.mainSet)" class="set mb-3">
+                    <div class="set-title">Main Set</div>
+                    <div class="set-details">
+                      <p [innerHTML]="changeNewLineToBrTag(session.sessionDetail.mainSet)"></p>
+                    </div>
+                  </div>
+                  <div *ngIf="!isSessionDetailEmpty(session.sessionDetail.coolDown)" class="set">
+                    <div class="set-title">Cool Down</div>
+                    <div class="set-details">
+                      <p [innerHTML]="changeNewLineToBrTag(session.sessionDetail.coolDown)"></p>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="isCoachAccess && isCoachEditMode">
+                  <form #form="ngForm" (submit)="form.valid && coachScheduleUpdate(form.value)" autocomplete="off" novalidate>
+                    <div class="set mb-3">
+                      <div class="set-title">Warmup</div>
+                      <div class="set-details">
+                        <textarea class="w-100" rows="4"
+                          name="warmUp"
+                          [ngModel]="changeBrTagToNewLine(session.sessionDetail.warmUp)"
+                          (mouseleave)="coachEditDirty = true"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="set mb-3">
+                      <div class="set-title">Main Set</div>
+                      <div class="set-details">
+                        <textarea class="w-100" rows="4"
+                          name="mainSet"
+                          [ngModel]="changeBrTagToNewLine(session.sessionDetail.mainSet)"
+                          (mouseleave)="coachEditDirty = true"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="set">
+                      <div class="set-title">Cool Down</div>
+                      <div class="set-details">
+                        <textarea class="w-100" rows="4"
+                          name="coolDown"
+                          [ngModel]="changeBrTagToNewLine(session.sessionDetail.coolDown)"
+                          (mouseleave)="coachEditDirty = true"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="mt-2 text-right">
+                      <button type="button" class="btn btn-default px-5" [disabled]="loading" (click)="isCoachEditMode = false">
+                        Cancel
+                      </button>
+                      <button type="submit" class="btn btn-success px-5 ml-2" [disabled]="loading || !coachEditDirty">
+                        Save
+                        <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading"></i>
+                      </button>
+                    </div>
+                  </form>
+                </ng-container>
+              </div>
+              <div *ngIf="!isCoachAccess || !isCoachEditMode" class="daily-workout-btn-container pt-2" [ngClass]="{ 'border-top border-2': !profile.athleteDoNotHaveDevice && !profile.deviceConnected }">
+                <p *ngIf="!profile.deviceConnected && !profile.athleteDoNotHaveDevice" class="mx-1 mb-0 text-center text-xs">Auto-sync your training data to have your completed workout data populate automatically.</p>
+                <div class="mt-3 btn-group shadow data-controls d-flex justify-content-around">
+                  <ng-container *ngIf="canComplete(session)">
+                    <button class="btn btn-white flex-grow-1 text-xs p-2 mt-0 text-nowrap" *ngIf="shouldUploadBeEnabled(session)"
+                      (click)="sessionAction('upload')">Upload File</button>
+                    <button class="btn btn-white border-left border-1 flex-grow-1 text-xs p-2 mt-0 text-nowrap"
+                      (click)="openManualCompletionModal()">{{getManualButtonTitle()}}</button>
+                  </ng-container>
+                  <button *ngIf="!profile.deviceConnected" routerLink="/user/devices" class="btn btn-primary flex-grow-1 shadow text-xs p-2 mt-0 text-nowrap">Auto-sync Your Data <i class="fal fa-plus"></i></button>
+                </div>
+              </div>
+              <div class="daily-workout-btn-container pt-2 pb-2 mt-2 info-block bg-light" *ngIf = "session.autoCreated === true && session.autoCreationReviewed === false">
+                <p class="mx-1 mb-0 text-center text-xs">This session was automatically generated by a linked data file. Confirm this session, unlink the data file or link to another session below.</p>
+                <div class="mt-3 btn-group shadow data-controls d-flex justify-content-around">
+                  <button class="btn btn-white flex-grow-1 text-xs p-2 text-nowrap"
+                      (click)="sessionAction('unlink')">Unlink</button>
+                  <button class="btn btn-white border-left border-1 flex-grow-1 text-xs p-2 text-nowrap"
+                      (click)="sessionAction('unlinkAndlinkToOthersession')">Link to another session</button>
+                  <button class="btn btn btn-white flex-grow-1 shadow text-xs p-2 text-nowrap"
+                      (click)="confirmAutoCreationReview()">Confirm</button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="resources?.length || !isSessionNotesEmpty(session?.sessionNotes)" class="col-12 col-md-6 pl-4 mt-5 mt-sm-0">
+              <div *ngIf="resources?.length" class="col-header d-flex align-items-center justify-content-between">
+                <div class="tutorial-title">
+                  <h4 class="content-title text-capitalize">Resources</h4>
+                </div>
+                <div class="tutorial-select">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                      <span class="text-body mr-2">{{currentResource.title}}</span>
+                      <span>
+                        <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item" (click)="selectedResource = resource" *ngFor="let resource of resources"
+                        type="button">{{resource?.title}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-content">
+                <div class="tutorial-content">
+                  <ng-container *ngIf="resources?.length">
+                    <div *ngIf="currentResource.resultType === 'video'" class="mb-4 d-flex align-items-center justify-content-center">
+                      <video class="w-100"
+                        [src]="currentResource.url" type="video/mp4" controls playsinline>
+                      </video>
+                    </div>
+                    <div *ngIf="this.iframeVideoTag" class="mb-4 d-flex align-items-center justify-content-center" [innerHTML] = "this.iframeVideoTag">
+                      </div>
+                    <div *ngIf="currentResource.resultType !== 'video'" class="session-block px-3 px-sm-4 pt-3 border rounded border-2">
+                      <div class="session-header mb-3 d-flex align-items-center justify-content-between">
+                        <h5 class="mb-0">{{currentResource.title}}</h5>
+                      </div>
+                      <div class="session-content text-sm">
+                        <p class="article-wrapper mb-2" [innerHtml]="this.currentResourceBody"></p>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div *ngIf="!isSessionNotesEmpty(session?.sessionNotes)"
+                    class="session-block mt-3 border px-4 pt-3 rounded border-2">
+                    <div class="session-header mb-3 d-flex align-items-center justify-content-between">
+                      <h5 class="mb-0">Session Notes</h5>
+                      <i class="fal fa-times" *ngIf="notesOpen == true" (click)="notesOpen = false"></i>
+                      <i class="fal fa-angle-down" *ngIf="notesOpen == false" (click)="notesOpen = true"></i>
+                    </div>
+                    <div class="session-content text-sm"
+                      [ngClass]="{'d-none': notesOpen == false, 'show-animate': notesOpen == true }">
+                      <ng-container *ngFor="let note of session.sessionNotes">
+                        <p *ngIf="!isSessionDetailEmpty(note.content)" [innerHTML]="note.content"></p>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div *ngIf="showAddFirstRace" class="col-lg-4 col-xl-4 order-3 mb-3 mb-sm-0">
+        <app-add-first-race class="text-center"></app-add-first-race>
+      </div>
+
+    </div>
+  </div>

@@ -1,0 +1,10 @@
+<svg id="time-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+  <defs>
+    <style>
+      .pace-icon-cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path id="Path_488" data-name="Path 488" class="pace-icon-cls-1" d="M9,0a9,9,0,1,0,9,9A9.01,9.01,0,0,0,9,0Zm5.25,9.75h-6v-6h1.5v4.5h4.5Z"/>
+</svg>

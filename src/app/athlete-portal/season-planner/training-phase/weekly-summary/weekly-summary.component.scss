@@ -1,0 +1,56 @@
+.week-range {
+  margin: auto;
+  text-align: center;
+}
+
+.trainx-title {
+  line-height: 30px;
+  font-size: 14px;
+  padding: 6px;
+}
+
+.progress-score {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  float: right;
+  border: 3px solid white;
+  span {
+    font-size: 16px;
+    border-radius: 50%;
+  }
+}
+
+.calendar-container {
+  .calendar-nav {
+    i {
+      font-size: 20px;
+      background: #e0e2e2;
+      border-radius: 4px;
+      padding: 0px 15px;
+      height: 100%;
+      transition: all 0.1s ease-in-out;
+      &:hover {
+        background-color: #d6d6d6;
+      }
+    }
+  }
+  .calendar-dropdown {
+    width: 190px;
+    max-width: 100%;
+    margin: 0 15px;
+  }
+}
+
+.cal-icon {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 17px;
+  border-left: 1px solid #eeeeee;
+  padding: 10px 14px;
+}
+
+.workout-summary {
+  top: 60px;
+}

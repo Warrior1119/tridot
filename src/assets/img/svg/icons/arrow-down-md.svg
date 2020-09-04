@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10.621 6.252">
+  <defs>
+    <style>
+      .arrow-down-md-cls-1 {
+        fill: none;
+        stroke: #afb7be;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <path id="Path_234" data-name="Path 234" class="arrow-down-md-cls-1" d="M4.253,8.621,0,4.31,4.253,0" transform="translate(1 5.252) rotate(-90)"/>
+</svg>

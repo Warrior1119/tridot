@@ -1,0 +1,153 @@
+<div class="main">
+  <div class="container swimform-container">
+    <div class="row">
+      <div class="col-lg-12 col-xl-12" *ngIf="swimform">
+        <div class="card-box rounded shadow">
+          <div class="box-content">
+            <div class="row">
+              <div class="col align-items-center justify-content-between">
+                <h5 class="content-title">Swim Form</h5>
+                <!-- <div class="align-items-right">
+                  <h5 class="content-title mr-2 mt-2">Swim Drill Optimization</h5>
+                  <span class="selection-container">
+                    <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="this.swimDrillOptimization = !this.swimDrillOptimization"
+                      [ngClass]="{'selected-param': swimDrillOptimization === true }">
+                      On </h5>
+                    <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="this.swimDrillOptimization = !this.swimDrillOptimization"
+                      [ngClass]="{'selected-param': swimDrillOptimization === false }">
+                      Off </h5>
+                  </span>
+                </div> -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <p>
+                  Your Swim Form classification is based on your responses to the diagnostic questions, PhysiFactors
+                  and swim assessment. It identifies the most beneficial focus areas for your stroke development. Your
+                  Swim Form, SwimDot, race distance,and training phase durations are used to optimize your most
+                  beneficial swim drills, sequences, and
+                  development progressions.
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col text-center d-flex align-items-center justify-content-center">
+                <h5 class="m-0">Swim Form Progression</h5>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xl-12 text-center">
+                <div class="shadow rounded mt-3 mb-4 w-100 mx-auto d-inline-block"  [inlineSVG]="'../../../assets/img/svg/swimform_diag_chart.svg'" [autosize]="true" ></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col text-center d-flex align-items-center justify-content-center">
+                <h5 class="m-0 d-flex align-items-center">My Swim Form <button class="btn btn-tertiary btn-sm text-sm ml-2" (click)="openDiagnosticQuestionsModal()">Edit
+                  Diagnostic</button></h5>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-lg-8 col-xl-8 pt-4">
+                <div class="row">
+                  <div class="col-12 col-sm-4 pr-sm-1 mb-2 mb-sm-0">
+                    <div class="info-block swimform-myform-block bg-light rounded h-100 py-2 px-1">
+                      <div class="py-4 text-center">
+                        <h6 class="text-body-accent mb-2 text-center text-uppercase text-xs font-weight-bold">
+                          {{currentSwimForm && currentSwimForm.typeId ===
+                          swimform.swimFormResult.diagAndAssessmentResult ?
+                          "My Form" : "Form" }}
+                        </h6>
+
+                        <h6 class="text-body-accent text-center text-uppercase text-lg font-weight-bold d-flex align-items-center justify-content-between">
+                          <div class="ml-2 swimform-nav cursor-pointer d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 6px;"
+                            (click)="getPreviousFormType()"></div>
+                          <span class="mx-2">{{currentSwimForm ? currentSwimForm.typeId : "" | uppercase}}</span>
+                          <div class="mr-2 swimform-nav cursor-pointer d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 6px;"
+                            (click)="getNextFormType()"></div>
+                        </h6>
+                        <h6 class="mt-2 text-xs">Confidence: {{currentSwimForm ? ((currentSwimForm.typeId == 'lightweight' ? swimform.swimFormResult.lightWeightAssessment : swimform.swimFormResult[currentSwimForm.typeId + 'Assessment']) | number:'1.0-0') : ''}}%</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 px-sm-1 mb-2 mb-sm-0">
+                    <app-info-block title="SWIM AGE" value="{{swimform.profile.swimAge}}"></app-info-block>
+                  </div>
+                  <div class="col-12 col-sm-2 px-sm-1 mb-2 mb-sm-0">
+                    <app-info-block title="HEIGHT" value="{{swimform.profile.height | number:'1.1-1'}} in"></app-info-block>
+                  </div>
+                  <div class="col-12 col-sm-2 px-sm-1 mb-2 mb-sm-0">
+                    <app-info-block title="ARM SPAN" value="{{swimform.profile.armSpan | number:'1.1-1'}} in"></app-info-block>
+                  </div>
+                  <div class="col-12 col-sm-2 px-sm-1 mb-2 mb-sm-0">
+                    <app-info-block title="APE INDEX" value="{{swimform.profile.apeIndexName}}"></app-info-block>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-4 mt-3 mt-md-0">
+                <app-horizontal-progress-bars [progressItems]="formMatchProgressItems" progressTitle="Confidence Match"
+                  progressDefColor="swim-form-match-progress"></app-horizontal-progress-bars>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-8 col-xl-8">
+                <div class="row" *ngIf="currentSwimForm">
+                  <div class="col-lg-4 col-xl-4">
+                    <h6 class="text-body-accent text-md font-weight-bold mt-2 mb-3">Characteristics</h6>
+                    <ul class="list-unstyled">
+                      <li class="text-sm" *ngFor="let formCharacteristic of currentSwimForm.characteristics">{{formCharacteristic}}</li>
+                    </ul>
+                  </div>
+                  <div class="col-lg-8 col-xl-8">
+                    <h6 class="text-body-accent text-md font-weight-bold mt-2 mb-3">Improvement Insights</h6>
+                    <p class="text-sm">{{currentSwimForm.insights}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-xl-4" *ngIf="swimform.assessment">
+                <div class="swim-assessment">
+                  <div class="title-row d-flex pb-2 align-items-center justify-content-between">
+                    <div class="col-8 title text-sm">
+                      <h6 class="text-body-accent text-md font-weight-bold">Current Swim Assessment</h6>
+                      Date: {{swimform.assessment.assessmentDate | amLocal | amDateFormat: prefDateFormat }}
+                    </div>
+                    <div class="col-4 pr-0">
+                      <span class="tridot-score score-sm swim mr-0" placement="top">{{swimform.profile.swimdot}}</span>
+                    </div>
+                  </div>
+                  <div class="table">
+                    <div class="header-row py-1">
+                      <span class="d-inline-block align-items-center" style="width:45%;">Distance</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">Time</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">Pace/100</span>
+                    </div>
+                    <div class="normal-row py-1">
+                      <span class="d-inline-block align-items-center" style="width:45%;">400{{yardsOrMeters}}</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">{{swimform.assessment.css400 | timeFormat}}</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">{{swimform.assessment.css400Pace | timeFormat}}</span>
+                    </div>
+                    <div class="normal-row py-1">
+                      <span class="d-inline-block align-items-center" style="width:45%;">200{{yardsOrMeters}}</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">{{swimform.assessment.css200 | timeFormat}}</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">{{swimform.assessment.css200Pace | timeFormat}}</span>
+                    </div>
+                    <div class="py-1">
+                      <span class="d-inline-block align-items-center" style="width:45%;">Threshold</span>
+                      <span class="d-inline-block align-items-center" style="width:25%;"></span>
+                      <span class="d-inline-block align-items-center" style="width:25%;">{{swimform.assessment.css | timeFormat}}</span>
+                    </div>
+                  </div>
+
+                  <div class="footer-row">
+                    <span class="bg-light text-center d-block py-2 rounded">400 pace/200 pace: {{swimform.assessment.css400Over200 | number}}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

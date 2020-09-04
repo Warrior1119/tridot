@@ -1,0 +1,86 @@
+<div class="athlete-container" (click)="openModal()">
+    <div class="row py-4 border-bottom">
+      <div class="col-2 border-right text-center align-items-center justify-content-center">
+          <div class="mb-3 profile-picture rounded-circle shadow-sm ng-tns-c2-1 ng-star-inserted">
+              <img alt="" width="55" class="ng-tns-c2-1 ng-star-inserted" [src]="athletePhotoThumbnail">
+              <div class="status-btn" [ngClass]="assignmentStatusStyle"></div>
+          </div>
+          <div class="athlete-name font-weight-bold text-md">
+              {{athleteDetails.firstName}} {{athleteDetails.lastName}}
+          </div>
+          <div class="athlete-sub text-sm">
+              {{athleteDetails.subscriptionName}}
+          </div>
+          <!-- <div class="athlete-menu" >
+              <button _ngcontent-c23="" dropdowntoggle="" class="btn d-inline-flex btn-md custom-menu__button" aria-haspopup="true">
+                  <div _ngcontent-c23=""><svg version="1.1" viewBox="0 0 32 32" xml:space="preserve" width="32" height="32"><g class="nc-icon-wrapper" fill="#CACFD4"><g class="nc-interact_dots-close-o-32"> <g class="nc-dot_left" transform="translate(0)"> <circle cx="6" cy="16" r="1" fill="#CACFD4" data-cap="butt" data-stroke="none" stroke-linecap="butt" stroke-linejoin="miter"></circle> <circle cx="6" cy="16" r="1" fill="none" stroke="#CACFD4" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"></circle> </g> <g class="nc-dot_right" transform="translate(-0)"> <circle cx="26" cy="16" r="1" fill="#CACFD4" data-cap="butt" data-stroke="none" stroke-linecap="butt" stroke-linejoin="miter"></circle> <circle cx="26" cy="16" r="1" fill="none" stroke="#CACFD4" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"></circle> </g> <g class="nc-dot_center"> <circle cx="16" cy="16" r="1" fill="#CACFD4" data-cap="butt" data-stroke="none" stroke-linecap="butt" stroke-linejoin="miter"></circle> <circle cx="16" cy="16" r="1" fill="none" stroke="#CACFD4" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2"></circle> </g> <path class="nc-line_top-right" data-cap="none" fill="none" stroke="#CACFD4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 16L27 5" stroke-dasharray="15.56 15.56" stroke-dashoffset="15.56" opacity="0"></path> <path class="nc-line_bottom-left" data-cap="none" fill="none" stroke="#CACFD4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 27l11-11" stroke-dasharray="15.56 15.56" stroke-dashoffset="-15.56" opacity="0"></path> <path class="nc-line_bottom-right" data-cap="none" fill="none" stroke="#CACFD4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 16l11 11" stroke-dasharray="15.56 15.56" stroke-dashoffset="15.56" opacity="0"></path> <path class="nc-line_top-left" data-cap="none" fill="none" stroke="#CACFD4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5l11 11" stroke-dasharray="15.56 15.56" stroke-dashoffset="-15.56" opacity="0"></path> </g> </g></svg></div>
+              </button>
+          </div> -->
+      </div>
+      <div class="col-2 d-flex flex-column justify-content-between border-right px-4">
+          <div class="action-btn-1">
+              <button class="my-2 btn btn-block btn-xs bg-light btn-rounded text-xs" [class.custom-tooltip]="!isMobile">
+                  View User Details
+                <div *ngIf="!isMobile" class="custom-tooltiptext tooltip-panel"><app-coach-athlete-preview-panel [athleteDetails]="athleteDetails" (userDashboard) = "navigateToAtheleteDashboard()"></app-coach-athlete-preview-panel></div>
+              </button>
+          </div>
+          <div class="action-btn-1">
+            <div class="my-2 btn btn-block btn-xs bg-light btn-rounded text-xs">
+                <span>Post-workout Notifications</span>
+                <button type="button" *ngIf="!toggleNotificationsLoading" class="btn btn-xs btn-toggle ml-2" [ngClass]="{'active': athleteDetails.activityEmails === true}"
+                        data-toggle="button" aria-pressed="true" autocomplete="off" (click) = "toggleNotifications()">
+                    <div class="handle"></div>
+                </button>
+                <i class="fal fa-spinner fa-spin" *ngIf="toggleNotificationsLoading"></i>
+            </div>
+          </div>
+          <div class="action-btn-1">
+            <button class="my-2 btn btn-block btn-xs bg-light btn-rounded text-xs btn-highlighted"
+                    (click)="navigateToAtheleteDashboard()">User Dashboard
+                    <i class="fal fa-spinner fa-spin" *ngIf="userDashboardLoading"></i>
+                </button>
+          </div>
+      </div>
+      <div class="col-1 d-flex align-items-center justify-content-center border-right">
+          <ul class="metric-list list-unstyled mb-0">
+          <li class="font-weight-bold my-2 text-sm">Swim: <span class="font-weight-normal">{{athleteDetails.swimAge}}</span></li>
+          <li class="font-weight-bold my-2 text-sm">Bike: <span class="font-weight-normal">{{athleteDetails.bikeAge}}</span></li>
+          <li class="font-weight-bold my-2 text-sm">Run: <span class="font-weight-normal">{{athleteDetails.runAge}}</span></li>
+          </ul>
+      </div>
+      <div class="col-2 d-flex align-items-center justify-content-center border-right">
+        <ul class="metric-list list-unstyled mb-0">
+          <li class="font-weight-bold my-2 text-sm">TrainX (1W, 4W, 8W):
+            <span class="font-weight-normal">{{athleteDetails.trainx7d | number:'1.0-0' }}</span>,
+            <span class="font-weight-normal">{{athleteDetails.trainx4w | number:'1.0-0' }}</span>,
+            <span class="font-weight-normal">{{athleteDetails.trainx8w | number:'1.0-0' }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-3 d-flex align-items-center justify-content-center border-right" >
+          <ul class="metric-list list-unstyled mb-0">
+              <li class="font-weight-bold my-2 text-sm" *ngFor = "let race of athleteDetails.upcomingRaces" >
+                  {{race.raceEventDetails.raceName}} {{race.raceEventDetails.city || ''}} : <span class="font-weight-normal">{{race.raceEventDetails.raceDate}}</span>
+              </li>
+          </ul>
+      </div>
+      <div class="col-2 d-flex justify-content-center align-items-center">
+          <div class="sidebar-profile ng-tns-c2-1 ng-trigger ng-trigger-ngIfExpandHeight ng-star-inserted">
+          <div class="d-flex justify-content-center">
+
+              <div class="tridot-score swim mx-1" placement="top">
+                  <span class="ng-tns-c2-1 text-md">{{athleteDetails.current?.swimDot}}</span>
+              </div>
+
+              <div class="tridot-score bike mx-1" placement="top">
+                  <span class="ng-tns-c2-1 text-md">{{athleteDetails.current?.bikeDot}}</span>
+              </div>
+
+              <div class="tridot-score run mx-1" placement="top">
+                  <span class="ng-tns-c2-1 text-md">{{athleteDetails.current?.runDot}}</span>
+              </div>
+          </div>
+          </div>
+      </div>
+    </div>
+</div>

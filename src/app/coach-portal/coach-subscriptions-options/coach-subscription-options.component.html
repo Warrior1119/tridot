@@ -1,0 +1,47 @@
+<div class="main">
+  <div class="container">
+    <div class="text-center">
+      <div  [inlineSVG]="'../../assets/img/tridot-logo.svg'" [autosize]="true"  style="width: 200px;" class="mt-4 mb-5 mx-auto d-inline-block"></div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">       
+        <h4 class="page-title text-center mb-5">
+          Coach Subscription Options
+        </h4>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-center" *ngIf="subscriptionLevels">
+      <div *ngFor="let subscriptionLevel of subscriptionLevels" class="col-12 col-lg-3 mt-3 mt-lg-0">
+        <div class="h-100 card card-box text-center shadow mb-4 rounded-lg text-center sub-block" [ngClass]="{'sub-active': isCurrentSubscription(subscriptionLevel.levelId) }">
+          <div class="card-body">
+            <h4 class="h4 text-drk card-title mt-4 mb-0">{{subscriptionLevel.levelName}}</h4>
+            <p class="card-text p-3 mb-0" [innerHTML]="subscriptionLevel.description"></p>
+            <span class="pricing text-xxl mb-3">
+              {{getPricePart(subscriptionLevel.subscriptionCost, 'int') |currency: subscriptionLevel.currencyCode||'USD':'symbol':'1.0-0'}}<sup>{{getPricePart(subscriptionLevel.subsctiptionCost, 'dec')}}</sup><sup class="per-month ml-1">/mo</sup>
+            </span>
+            <div class="hor-divider mb-5 mt-4"></div>
+          </div>
+          <div class="card-footer">
+            <button type="button" *ngIf="!isCurrentSubscription(subscriptionLevel.levelId)" class="btn btn-lg btn-light btn-block text-md text-uppercase" (click)="goToCoachCheckout(subscriptionLevel.levelId)">
+              <span [innerHTML]="getSubDescriptionHtml(subscriptionLevel)"></span>
+            </button>
+            <button type="button" *ngIf="isCurrentSubscription(subscriptionLevel.levelId)" class="btn btn-lg btn-success btn-block text-md text-uppercase">
+              <strong>Current</strong>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!subscriptionLevels">
+      <div class="col text-center">
+        <p>No Coach Subscription Levels available to subscribe. Please contact suppport team for further assistance.</p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col text-center">
+        <p><i>*All athletes must be personally coached by the coach and paying the coach at least $175/month for individual coaching services.</i></p>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

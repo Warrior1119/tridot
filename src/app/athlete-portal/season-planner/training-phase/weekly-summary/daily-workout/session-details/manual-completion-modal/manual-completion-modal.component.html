@@ -1,0 +1,127 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">{{getTitle()}}</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #form="ngForm" (submit)="save(form.value, form.valid)" autocomplete="off" novalidate (keydown.enter)="onEnter($event)">
+    <div class="mb-4">
+      <p>Manually enter completion details only if you cannot link actual data from device.</p>
+      <hr>
+      <div class="row mb-3">
+        <div class="col-12 col-md-4">
+          <label for="manualcompletion_sessionTimeInput">Start time</label>
+          <timepicker class="btn btn-block p-0 m-0" id="manualcompletion_sessionTimeInput"
+            [showSpinners]="false" [ngModel]="sessionTime" name="sessionTime" (change)="isDirty=true"
+            required #sessionTimeModel="ngModel"
+            [customTooltip]="form.submitted && sessionTimeModel.invalid ? 'This field is required' : null" [tooltip-type]="form.submitted && sessionTimeModel.invalid ? 'error' : 'normal'"
+            [disabled]="isCompleteWithFile"
+          ></timepicker>
+        </div>
+        <div *ngIf="!isCompleteWithFile" class="col-12 col-md-4"> <label for="">Warm Up</label>
+          <select class="btn text-secondary btn-block dropdown-toggle shadow border-bottom bg-white px-3 py-2 {{form.submitted && wuCompletionModel.invalid ? 'border border-1 border-danger':''}}"
+            name="wuCompletion"
+            [ngModel]="session.wuCompletion" (change)="isDirty=true"
+            required #wuCompletionModel="ngModel"
+            [customTooltip]="form.submitted && wuCompletionModel.invalid ? 'This field is required' : null" [tooltip-type]="form.submitted && wuCompletionModel.invalid ? 'error' : 'normal'">
+            <option [ngValue]="null">Select</option>
+            <option *ngFor="let wu of wuCompletion" [value]="wu.value" type="button">{{wu.text}}</option>
+          </select>
+        </div>
+        <div *ngIf="!isCompleteWithFile" class="col-12 col-md-4"> <label for="">Main Set</label>
+          <select class="btn text-secondary btn-block dropdown-toggle shadow border-bottom bg-white px-3 py-2 {{form.submitted && msCompletionControl?.invalid ? 'border border-1 border-danger':''}}"
+            name="msCompletion"
+            [ngModel]="session.msCompletion"
+            (change)="isDirty=true"
+            #msCompletionControl="ngModel"
+            required
+            [customTooltip]="form.submitted && msCompletionControl?.invalid ? 'This field is required' : null" [tooltip-type]="form.submitted && msCompletionControl?.invalid ? 'error' : 'normal'">
+            <option [ngValue]="null">Select</option>
+            <option *ngFor="let ms of msCompletion" [value]="ms.value" type="button">{{ms.text}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-md-4">
+          <label for="actualTotalInput">Duration</label>
+          <timepicker class="btn btn-block p-0 m-0" id="actualTotalInput"
+              [showSpinners]="false" [showMeridian]="false" [showSeconds]="true" [ngModel]="actualTotal || plannedTotal" name="actualTotal" (change)="isDirty=true" #actualTotalControl="ngModel"
+              required
+              [customTooltip]="form.submitted && actualTotalControl?.invalid ? 'This field is required' : null" [tooltip-type]="form.submitted && actualTotalControl?.invalid ? 'error' : 'normal'"
+              [disabled]="isCompleteWithFile"
+          ></timepicker>
+        </div>
+        <div class="col-12 col-md-4">
+          <label for="" class="d-flex justify-content-between align-items-center mb-2">Location</label>
+          <ngxgeo-autocomplete [userSettings]="locationSettings"
+            (componentCallback)="onLocationChange($event)"></ngxgeo-autocomplete>
+        </div>
+        <ng-container *ngIf="session.sessionType === 'bike' && user_bikes?.length">
+          <div class="col-12 col-md-4" [customTooltip]="(!form.value?.actualTotal || (!isCompleteWithFile && !form.value?.msCompletion)) ? 'Please fill Duration & Main Set' : null" tooltip-class="tooltip-danger">
+            <div class="custom-control custom-checkbox my-1">
+              <input type="checkbox" class="custom-control-input" name="indoor" id="manualcompletion_indoorcheck"
+                [ngModel]="session.indoor == 'true'" (change)="isDirty=true">
+              <label class="custom-control-label" for="manualcompletion_indoorcheck">Indoor Session</label>
+            </div>
+            <button type="button" class="btn btn-block dropdown-toggle shadow px-2 py-2 d-flex justify-space-between" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false"
+              >
+              <span class="text-sm text-body text-left ml-1 w-100 text-truncate">
+                {{ currentBike?.nickName }}
+              </span>
+              <span class="">
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div *ngIf="user_bikes" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" *ngFor="let bike of user_bikes" (click)="currentBike = bike">
+                {{bike.nickName}}
+              </a>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="session.sessionType !== 'bike' || !user_bikes?.length">
+          <div class="col-12 col-md-4">
+            <label for="">&nbsp;</label>
+            <div class="custom-control custom-checkbox my-2">
+              <input type="checkbox" class="custom-control-input" name="indoor" id="manualcompletion_indoorcheck"
+                [ngModel]="session.indoor == 'true'" (change)="isDirty=true">
+              <label class="custom-control-label" for="manualcompletion_indoorcheck">Indoor Session</label>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div>
+      <h6 class="font-weight-normal my-4">Interference</h6>
+      <div class="row justify-content-center mb-3">
+        <div class="col-12">
+          <button type="button" *ngFor="let inter of interferenceOptions" [ngClass]="{'btn-default interference-active': interference.includes(inter.value)}"
+            (click)="updateInterference(inter.value)" class="btn btn-outline-secondary btn-sm pill mr-2 mb-2">
+            <span> {{inter.interferenceValue}} </span>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="isDirty || session.actualTotal" [@ngIfExpandHeight] class="d-flex justify-content-between align-items-center">
+        <div>
+          <button *ngIf="session.actualTotal && !isCompleteWithFile" [@ngIfFadeIn] type="button" class="btn btn-danger" [disabled]="loading" (click)="remove()">
+            Remove Completion Data
+            <i class="fal fa-spinner fa-spin pl-1" *ngIf="removing"></i>
+          </button>
+        </div>
+        <div *ngIf="isDirty" [@ngIfFadeIn]>
+          <button type="button" class="btn btn-default px-5 ml-2" [disabled]="loading" (click)="closeModal()">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-success px-5 ml-2" [disabled]="loading">
+            Save
+            <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+

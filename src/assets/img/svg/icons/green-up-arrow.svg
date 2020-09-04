@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10.863 12.692">
+  <defs>
+    <style>
+      .green-up-cls-1 {
+        opacity: 0.799;
+      }
+
+      .green-up-cls-2 {
+        fill: #76e187;
+      }
+    </style>
+  </defs>
+  <g id="strong-up" class="green-up-cls-1" transform="translate(-1.9 -0.4)">
+    <path id="Path_322" data-name="Path 322" class="green-up-cls-2" d="M11.765,22H8.538a.538.538,0,0,0,0,1.076h3.227a.538.538,0,0,0,0-1.076Z" transform="translate(-2.819 -9.984)"/>
+    <path id="Path_323" data-name="Path 323" class="green-up-cls-2" d="M7.332.4,1.9,7.176H5.181V10.4a.508.508,0,0,0,.538.538H8.945a.508.508,0,0,0,.538-.538V7.176h3.281Z"/>
+  </g>
+</svg>

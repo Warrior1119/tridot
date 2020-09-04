@@ -1,0 +1,390 @@
+<div class="session-stats card-box rounded shadow mt-4">
+  <div class="box-content">
+    <div class="stats-switch-block mb-4">
+      <button class="btn btn-sm btn-rounded text-uppercase mr-2 {{mode === 'stats' ? 'btn-light' : 'btn-default'}}" (click)="mode = 'stats'">Stats</button>
+      <button *ngFor="let dataset of session?.linkedData; let i = index"
+        class="btn btn-sm btn-rounded text-uppercase mr-2 {{mode === 'splits' && selectedDataFile === i ? 'btn-light' : 'btn-default'}}"
+        (click)="mode = 'splits'; selectLinkedFile.emit(i)"
+      >{{session.linkedData.length > 1 ? 'Split ' + (i + 1) : 'Splits'}}
+      </button>
+    </div>
+    <div class="info-block bg-light h-100 rounded p-4">
+      <div class="row p-3">
+        <ng-container *ngIf="mode === 'stats'">
+          <div class="col-sm pr-2 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold">Distance</span>
+                <span class="text-md text-left text-muted mt-3">Distance</span>
+                <ng-container *ngIf="getStats('distance'); else noData">
+                  <span class="number-sm-sub font-weight-bold text-left">{{getStats('distance')}}
+                    <span *ngIf="session.sessionType !== 'swim'" class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                    <span *ngIf="session.sessionType === 'swim'" class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="session.sessionType === 'swim'">
+                  <span class="text-md text-left text-muted mt-3">Pool Length</span>
+                  <span *ngIf="getStats('pool-length'); else ows" class="number-sm-sub font-weight-bold text-left">{{getStats('pool-length')}}
+                    <span class="unit-sm text-lowercase d-inline">{{poolUnits}}</span>
+                  </span>
+                  <ng-template #ows>
+                    <span *ngIf="!session.indoor; else noData" class="number-sm-sub font-weight-bold text-left text-lowercase">Open Water</span>
+                  </ng-template>
+                </ng-container>
+                <span class="text-md text-left text-muted mt-3">Calories</span>
+                <span *ngIf="getStats('calories'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('calories')}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm border-left pr-0 mr-0 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold">Timing</span>
+                <span class="text-md text-left text-muted mt-3">Time</span>
+                <span *ngIf="getStats('time'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('time') | timeFormat}}</span>
+                <span class="text-md text-left text-muted mt-3">Moving Time</span>
+                <span *ngIf="getStats('moving-time'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('moving-time') | timeFormat}}</span>
+                <span class="text-md text-left text-muted mt-3">Elapsed Time</span>
+                <span *ngIf="getStats('elapsed-time'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('elapsed-time') | timeFormat}}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="session.sessionType !== 'bike'" class="col-sm border-right pr-0 mr-0 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold invisible">Timing</span>
+                <span class="text-md text-left text-muted mt-3">Avg Pace</span>
+                <span *ngIf="getStats('avg-pace'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-pace') | timeFormat}}
+                  <span *ngIf="session.sessionType !== 'swim'" class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                  <span *ngIf="session.sessionType === 'swim'" class="unit-sm text-lowercase d-inline">Per 100{{measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+                </span>
+                <span class="text-md text-left text-muted mt-3">Avg Moving Pace</span>
+                <span *ngIf="getStats('avg-moving-pace'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-moving-pace') | timeFormat}}
+                  <span *ngIf="session.sessionType !== 'swim'" class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                  <span *ngIf="session.sessionType === 'swim'" class="unit-sm text-lowercase d-inline">Per 100{{measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+                </span>
+                <span class="text-md text-left text-muted mt-3">Best Pace</span>
+                <span *ngIf="getStats('best-pace'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('best-pace') | timeFormat}}
+                  <span *ngIf="session.sessionType !== 'swim'" class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                  <span *ngIf="session.sessionType === 'swim'" class="unit-sm text-lowercase d-inline">Per 100{{measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="session.sessionType === 'bike'" class="col-sm border-right pl-0 ml-0 pr-2 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner text-left">
+                <span class="text-md font-weight-bold invisible">Timing</span>
+                <span class="text-md text-muted mt-3">Avg Speed</span>
+                <ng-container *ngIf="getStats('avg-speed'); else noData">
+                  <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('avg-speed')}}</span>
+                  <span class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                </ng-container>
+                <span class="text-md text-muted mt-3">Avg Moving Speed</span>
+                <ng-container *ngIf="getStats('moving-speed'); else noData">
+                  <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('moving-speed')}}</span>
+                  <span class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                </ng-container>
+                <span class="text-md text-muted mt-3">Max Speed</span>
+                <ng-container *ngIf="getStats('max-speed'); else noData">
+                  <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('max-speed')}}</span>
+                  <span *ngIf="getStats('max-speed')" class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="session.sessionType === 'bike'" class="col-sm border-right pr-2 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold">Power</span>
+                <span class="text-md text-left text-muted mt-3">Avg Power</span>
+                <span *ngIf="getStats('avg-power'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-power')}}</span>
+                <span class="text-md text-left text-muted mt-3">Max Power</span>
+                <span *ngIf="getStats('max-power'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('max-power')}}</span>
+                <span class="text-md text-left text-muted mt-3 d-none">Max Avg Power</span>
+                <span *ngIf="getStats('max-avg-power'); else noData" class="number-sm-sub font-weight-bold text-left d-none">{{getStats('max-avg-power')}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm border-right pr-2 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold">Heart Rate</span>
+                <span class="text-md text-left text-muted mt-3">Avg HR</span>
+                <span *ngIf="getStats('avg-heartrate'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-heartrate')}}</span>
+                <span class="text-md text-left text-muted mt-3">Max HR</span>
+                <span *ngIf="getStats('max-heartrate'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('max-heartrate')}}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="session.sessionType === 'swim'" class="col-sm border-left pr-0 mr-0 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold">Stroke</span>
+                <span class="text-md text-left text-muted mt-3">Avg Stroke Rate</span>
+                <span *ngIf="getStats('avg-stroke-rate'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-stroke-rate')}}</span>
+                <span class="text-md text-left text-muted mt-3">Max Stroke Rate</span>
+                <span *ngIf="getStats('max-stroke-rate'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('max-stroke-rate')}}</span>
+                <ng-container *ngIf="getStats('pool-length')">
+                  <span class="text-md text-left text-muted mt-3">Avg Strokes</span>
+                  <span *ngIf="getStats('avg-strokes'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-strokes')}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="session.sessionType !== 'swim'" class="col-sm border-right pr-2 mb-auto">
+            <div class="stacked-number-container">
+              <div class="stacked-number-inner">
+                <span class="text-md text-left font-weight-bold">Cadence</span>
+                <span class="text-md text-left text-muted mt-3">Avg Cadence</span>
+                <span *ngIf="getStats('avg-cadence'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('avg-cadence')}}</span>
+                <span class="text-md text-left text-muted mt-3">Max Cadence</span>
+                <span *ngIf="getStats('max-cadence'); else noData" class="number-sm-sub font-weight-bold text-left">{{getStats('max-cadence')}}</span>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="session.sessionType !== 'swim'">
+            <div class="col-sm border-left pr-0 mr-0 mb-auto">
+              <div class="stacked-number-container">
+                <div class="stacked-number-inner text-left">
+                  <span class="text-md font-weight-bold">Elevation</span>
+                  <span class="text-md text-muted mt-3">Elev Gain</span>
+                  <ng-container *ngIf="getStats('elev-gain'); else noData">
+                    <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('elev-gain')}}</span>
+                    <span class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                  </ng-container>
+                  <span class="text-md text-muted mt-3">Elev Loss</span>
+                  <ng-container *ngIf="getStats('elev-loss'); else noData">
+                    <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('elev-loss')}}</span>
+                    <span class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm border-right pl-0 ml-0 pr-2 mb-auto">
+              <div class="stacked-number-container">
+                <div class="stacked-number-inner text-left">
+                  <span class="text-md font-weight-bold invisible">Elevation</span>
+                  <span class="text-md text-muted mt-3">Min Elev</span>
+                  <ng-container *ngIf="getStats('min-elev'); else noData">
+                    <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('min-elev')}}</span>
+                    <span class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                  </ng-container>
+                  <span class="text-md text-muted mt-3">Max Elev</span>
+                  <ng-container *ngIf="getStats('max-elev'); else noData">
+                    <span class="number-sm-sub font-weight-bold d-inline-block">{{getStats('max-elev')}}</span>
+                    <span class="unit-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm pr-2 mb-auto">
+              <div class="stacked-number-container">
+                <div class="stacked-number-inner">
+                  <span class="text-md text-left font-weight-bold">Temp</span>
+                  <span class="text-md text-left text-muted mt-3">Min Temp</span>
+                  <ng-container *ngIf="getStats('min-temp'); else noData">
+                    <span class="number-sm-sub font-weight-bold text-left">{{getStats('min-temp')}}
+                      <span class="unit-sm unit-deg d-inline">&deg;</span>
+                    </span>
+                  </ng-container>
+                  <span class="text-md text-left text-muted mt-3">Max Temp</span>
+                  <ng-container *ngIf="getStats('max-temp'); else noData">
+                    <span class="number-sm-sub font-weight-bold text-left">{{getStats('max-temp')}}
+                      <span class="unit-sm unit-deg d-inline">&deg;</span>
+                    </span>
+                  </ng-container>
+                  <span class="text-md text-left text-muted mt-3">Avg Temp</span>
+                  <ng-container *ngIf="getStats('avg-temp'); else noData">
+                    <span class="number-sm-sub font-weight-bold text-left">{{getStats('avg-temp')}}
+                      <span class="unit-sm unit-deg d-inline">&deg;</span>
+                    </span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="mode === 'splits'">
+          <div class="table-responsive" (pan)="onPan($event)" (panend)="onPanEnd($event)">
+            <table class="table">
+              <thead>
+                <ng-container *ngIf="session.sessionType !== 'swim'">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Cumulative Time</th>
+                    <th scope="col">Moving Time</th>
+                    <th scope="col">Distance</th>
+                    <th scope="col">Elev Gain</th>
+                    <th scope="col">Elev Loss</th>
+                    <ng-container *ngIf="session.sessionType === 'bike'">
+                      <th scope="col">Avg Speed</th>
+                      <th *ngIf="getStats('moving-time')" scope="col">Avg Moving Speed</th>
+                      <th scope="col">Max Speed</th>
+                    </ng-container>
+                    <ng-container *ngIf="session.sessionType !== 'bike'">
+                      <th scope="col">Avg Pace</th>
+                      <th scope="col">Avg Moving Pace</th>
+                      <th scope="col">Best Pace</th>
+                    </ng-container>
+                    <th scope="col">Avg HR</th>
+                    <th scope="col">Max HR</th>
+                    <th scope="col">Avg Cadence</th>
+                    <th scope="col">Max Cadence</th>
+                    <th scope="col">Avg Temp</th>
+                    <th scope="col">Calories</th>
+                  </tr>
+                </ng-container>
+                <!-- Swim - Intervals -->
+                <ng-container *ngIf="session.sessionType === 'swim' && getStats('pool-length')">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Swim Stroke</th>
+                    <th scope="col">Lengths</th>
+                    <th scope="col">Distance</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Cumulative Time</th>
+                    <th scope="col">Avg Pace</th>
+                    <th scope="col">Best Pace</th>
+                    <th scope="col">Avg Swolf</th>
+                    <th scope="col">Avg HR</th>
+                    <th scope="col">Max HR</th>
+                    <th scope="col">Total Strokes</th>
+                    <th scope="col">Avg Strokes</th>
+                    <th scope="col">Calories</th>
+                  </tr>
+                </ng-container>
+                <!-- Swim - OWS -->
+                <ng-container *ngIf="session.sessionType === 'swim' && !getStats('pool-length')">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Cumulative Time</th>
+                    <th scope="col">Moving Time</th>
+                    <th scope="col">Distance</th>
+                    <th scope="col">Avg Distance per Stroke</th>
+                    <th scope="col">Avg Pace</th>
+                    <th scope="col">Avg Moving Pace</th>
+                    <th scope="col">Avg Cadence</th>
+                    <th scope="col">Avg HR</th>
+                    <th scope="col">Max HR</th>
+                    <th scope="col">Calories</th>
+                  </tr>
+                </ng-container>
+              </thead>
+              <tbody>
+                <tr *ngFor="let split of session.activitySplits; let i = index">
+                  <th scope="row">{{i + 1}}</th>
+                  <ng-container *ngIf="session.sessionType !== 'swim'">
+                    <td *ngIf="getSplits(split, 'time'); else noDataSplit">{{getSplits(split, 'time') | timeFormat}}</td>
+                    <td *ngIf="getCumulativeTime(i); else noDataSplit">{{getCumulativeTime(i) | timeFormat}}</td>
+                    <td *ngIf="getSplits(split, 'moving-time'); else noDataSplit">{{getSplits(split, 'moving-time') | timeFormat}}</td>
+                    <td *ngIf="getSplits(split, 'distance'); else noDataSplit">{{getSplits(split, 'distance')}}
+                      <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'elev-gain'); else noDataSplit">{{getSplits(split, 'elev-gain')}}
+                      <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'elev-loss'); else noDataSplit">{{getSplits(split, 'elev-loss')}}
+                      <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                    </td>
+                    <ng-container *ngIf="session.sessionType === 'bike'">
+                      <td *ngIf="getSplits(split, 'avg-speed'); else noDataSplit">{{getSplits(split, 'avg-speed')}}
+                        <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                      </td> 
+                      <ng-container *ngIf="getStats('moving-time')">
+                        <td *ngIf="getSplits(split, 'avg-moving-speed'); else noDataSplit">{{getSplits(split, 'avg-moving-speed')}}
+                          <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                        </td> 
+                      </ng-container>
+                      <td *ngIf="getSplits(split, 'max-speed'); else noDataSplit">{{getSplits(split, 'max-speed')}}
+                        <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                      </td>
+                    </ng-container>
+                    <ng-container *ngIf="session.sessionType !== 'bike'">
+                      <td *ngIf="getSplits(split, 'avg-pace'); else noDataSplit">{{getSplits(split, 'avg-pace') | timeFormat}}
+                        <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                        <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per 100yds' : 'Per 100m'}}</span>
+                      </td>
+                      <td *ngIf="getSplits(split, 'avg-moving-pace'); else noDataSplit">{{getSplits(split, 'avg-moving-pace') | timeFormat}}
+                        <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                        <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per 100yds' : 'Per 100m'}}</span>
+                      </td>
+                      <td *ngIf="getSplits(split, 'best-pace'); else noDataSplit">{{getSplits(split, 'best-pace') | timeFormat}}
+                        <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                        <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per 100yds' : 'Per 100m'}}</span>
+                      </td>
+                    </ng-container>
+                    <td *ngIf="getSplits(split, 'avg-heartrate'); else noDataSplit">{{getSplits(split, 'avg-heartrate')}}</td>
+                    <td *ngIf="getSplits(split, 'max-heartrate'); else noDataSplit">{{getSplits(split, 'max-heartrate')}}</td>
+                    <td *ngIf="getSplits(split, 'avg-cadence'); else noDataSplit">{{getSplits(split, 'avg-cadence')}}</td>
+                    <td *ngIf="getSplits(split, 'max-cadence'); else noDataSplit">{{getSplits(split, 'max-cadence')}}</td>
+                    <td *ngIf="getSplits(split, 'avg-temp'); else noDataSplit">{{getSplits(split, 'avg-temp')}}
+                      <span class="text-sm unit-deg d-inline">&deg;</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'calories'); else noDataSplit">{{getSplits(split, 'calories')}}</td>
+                  </ng-container>
+                  <ng-container *ngIf="session.sessionType === 'swim' && getStats('pool-length')">
+                    <td *ngIf="getSplits(split, 'swim-stroke'); else noDataSplit" class="text-lowercase">{{getSplits(split, 'swim-stroke')}}</td>
+                    <td *ngIf="getSplits(split, 'lengths'); else noDataSplit">{{getSplits(split, 'lengths')}}</td>
+                    <td *ngIf="getSplits(split, 'distance'); else noDataSplit">{{getSplits(split, 'distance')}}
+                      <span class="text-sm text-lowercase d-inline">{{poolUnits}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'time'); else noDataSplit">{{getSplits(split, 'time') | timeFormat}}</td>
+                    <td *ngIf="getCumulativeTime(i); else noDataSplit">{{getCumulativeTime(i) | timeFormat}}</td>
+                    <td *ngIf="getSplits(split, 'avg-pace'); else noDataSplit">{{getSplits(split, 'avg-pace') | timeFormat}}
+                      <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per Mi' : 'Per Km'}}</span>
+                      <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">Per 100{{poolUnits}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'best-pace'); else noDataSplit">{{getSplits(split, 'best-pace') | timeFormat}}
+                      <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per Mi' : 'Per Km'}}</span>
+                      <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">Per 100{{poolUnits}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'avg-swolf'); else noDataSplit">{{getSplits(split, 'avg-swolf')}}</td>
+                    <td *ngIf="getSplits(split, 'avg-heartrate'); else noDataSplit">{{getSplits(split, 'avg-heartrate')}}</td>
+                    <td *ngIf="getSplits(split, 'max-heartrate'); else noDataSplit">{{getSplits(split, 'max-heartrate')}}</td>
+                    <td *ngIf="getSplits(split, 'total-strokes'); else noDataSplit">{{getSplits(split, 'total-strokes')}}</td>
+                    <td *ngIf="getSplits(split, 'avg-strokes'); else noDataSplit">{{getSplits(split, 'avg-strokes')}}</td>
+                    <td *ngIf="getSplits(split, 'calories'); else noDataSplit">{{getSplits(split, 'calories')}}</td>
+                  </ng-container>
+                  <ng-container *ngIf="session.sessionType === 'swim' && !getStats('pool-length')">
+                    <td *ngIf="getSplits(split, 'time'); else noDataSplit">{{getSplits(split, 'time') | timeFormat}}</td>
+                    <td *ngIf="getCumulativeTime(i); else noDataSplit">{{getCumulativeTime(i) | timeFormat}}</td>
+                    <td *ngIf="getSplits(split, 'moving-time'); else noDataSplit">{{getSplits(split, 'moving-time') | timeFormat}}</td>
+                    <td *ngIf="getSplits(split, 'distance'); else noDataSplit">{{getSplits(split, 'distance')}}
+                      <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'per-stroke'); else noDataSplit">{{getSplits(split, 'per-stroke')}}
+                      <span class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'avg-pace'); else noDataSplit">{{getSplits(split, 'avg-pace') | timeFormat}}
+                      <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per Mi' : 'Per Km'}}</span>
+                      <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per 100yds' : 'Per 100m'}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'avg-moving-pace'); else noDataSplit">{{getSplits(split, 'avg-moving-pace') | timeFormat}}
+                      <span *ngIf="session.sessionType !== 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per Mi' : 'Per Km'}}</span>
+                      <span *ngIf="session.sessionType === 'swim'" class="text-sm text-lowercase d-inline">{{measurementSystem == 'standard' ? 'Per 100yds' : 'Per 100m'}}</span>
+                    </td>
+                    <td *ngIf="getSplits(split, 'avg-cadence'); else noDataSplit">{{getSplits(split, 'avg-cadence')}}</td>
+                    <td *ngIf="getSplits(split, 'avg-heartrate'); else noDataSplit">{{getSplits(split, 'avg-heartrate')}}</td>
+                    <td *ngIf="getSplits(split, 'max-heartrate'); else noDataSplit">{{getSplits(split, 'max-heartrate')}}</td>
+                    <td *ngIf="getSplits(split, 'calories'); else noDataSplit">{{getSplits(split, 'calories')}}</td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <span class="text-sm text-left">No Data</span>
+</ng-template>
+
+<ng-template #noDataSplit>
+  <td class="text-sm text-left">No Data</td>
+</ng-template>

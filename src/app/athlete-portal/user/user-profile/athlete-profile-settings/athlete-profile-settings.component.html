@@ -1,0 +1,29 @@
+<div class="main">
+  <div class="container" *ngIf="athleteProfile">
+    <div class="row">
+      <div class="col-3" *ngIf="!isMobileOrTablet">
+        <app-menus></app-menus>
+      </div>
+      <div [ngClass]="{'col-9' : !isMobileOrTablet, 'col-12' : isMobileOrTablet }">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <div class="mb-4 mt-lg-0">
+              <app-physifactors [profile]="athleteProfile" (save)="save($event)" [isMobileOrTablet]="isMobileOrTablet" [isMobile]="isMobile"></app-physifactors>
+            </div>
+            <div class="mb-4 mt-lg-0">
+              <app-training-history [profile]="athleteProfile" (save)="save($event)" [isMobileOrTablet]="isMobileOrTablet" [isMobile]="isMobile"></app-training-history>
+            </div>
+            <!-- <div class="mb-4 mt-lg-0">
+              <app-performance-level [profile]="athleteProfile" (save)="save($event)"></app-performance-level>
+            </div> -->
+            <div class="mb04 mt-lg-0">
+              <app-athlete-bio [profile]="athleteProfile" (save)="save($event)"> </app-athlete-bio>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

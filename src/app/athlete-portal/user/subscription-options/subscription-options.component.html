@@ -1,0 +1,485 @@
+<div class="main">
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col">       
+        <h4 class="page-title text-center mb-5">
+          Subscription Options
+        </h4>
+        <div *ngIf="subscriptionStatus === 'Trial Expired'" class="alert alert-danger text-center text-lg">Your trial has expired</div>
+      </div>
+    </div>
+    <ng-container *ngIf="subscription && subOptions">
+      <div class="row">
+        <div *ngFor="let sub of subOptions" class="col-12 col-lg-3 mt-3 mt-lg-0">
+          <div class="h-100 card card-box text-center shadow mb-4 rounded-lg text-center sub-block" [ngClass]="{'sub-active': isCurrentSubscription(sub.subLevel) }">
+            <div class="card-body">
+              <h4 class="h4 text-drk card-title mt-4 mb-0">{{sub.subscriptionName}}</h4>
+              <p class="card-text p-3 mb-0" [innerHTML]="sub.desc"></p>
+              <span class="pricing text-xxl mb-3" *ngIf = "!sub.associatedWithCoach">
+                {{getPricePart(sub.subscriptionCost, 'int') |currency: sub.currencyCode||'USD':'symbol':'1.0-0'}}<sup>{{getPricePart(sub.subsctiptionCost, 'dec')}}</sup><sup class="per-month ml-1">/mo</sup>
+              </span>
+              <div class="bg-light rounded text-l mb-3" *ngIf = "sub.associatedWithCoach">
+                <div class="my-2 my-lg-3 mx-auto d-inline-block coach-check-active" *ngIf = "(isCurrentSubscription(sub.subLevel) || isActivationInProgress(sub)) && !sub.assignedCoachProfilePhoto" [inlineSVG]="'../assets/img/svg/icons/coach-check.svg'"></div>
+                <div class="my-2 my-lg-3 mx-auto d-inline-block coach-check-profile-active" *ngIf = "(isCurrentSubscription(sub.subLevel) || isActivationInProgress(sub)) && sub.assignedCoachProfilePhoto">
+                  <img [src]="appendAPIEndpointPrefix(sub.assignedCoachProfilePhoto)" alt="Coach">
+                </div>
+                <span class="pricing text-xxl mb-3" *ngIf = "!isCurrentSubscription(sub.subLevel) && !isActivationInProgress(sub)">
+                  {{getPricePart(sub.subscriptionCost, 'int') |currency: sub.currencyCode||'USD':'symbol':'1.0-0'}}<sup>{{getPricePart(sub.subsctiptionCost, 'dec')}}</sup><sup class="per-month ml-1">/mo</sup>
+                </span>
+                <div class="pb-5">
+                  <strong>Assigned To Coach</strong><br/>
+                  {{sub.assignedCoachName | titlecase}}
+                </div>
+              </div>
+              <div class="hor-divider mb-5 mt-4"></div>
+              <div class="features mb-3 text-left">
+                <span>{{sub.featuresHeading}}</span>
+                <ul class="pl-4">
+                  <li *ngFor="let f of sub.features" [innerHTML]="f"></li>
+                </ul>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" *ngIf="!isCurrentSubscription(sub.subLevel) && !isActivationInProgress(sub)" class="btn btn-lg btn-light btn-block text-md text-uppercase"
+                (click)="goToCheckout(sub.subLevel)">
+                <span [innerHTML]="getSubDescriptionHtml(sub)"></span>          
+              </button>
+              <button type="button" *ngIf="isCurrentSubscription(sub.subLevel)" class="btn btn-lg btn-success btn-block text-md text-uppercase"
+                [ngSwitch]="cancelSub">
+                <ng-container *ngSwitchDefault><strong>Current</strong></ng-container>
+                <ng-container *ngSwitchCase="true">Cancel <strong>Subscription</strong></ng-container>
+              </button>
+              <button type="button" *ngIf="isActivationInProgress(sub) && subscriptionStatus === 'Trial'" 
+                        class="btn btn-lg btn-success btn-block text-md text-uppercase" (click)="onClickActivationInProcess(false)">
+                <span><strong>Activation In Process</strong></span>
+              </button>
+              <button type="button" *ngIf="isActivationInProgress(sub) && subscriptionStatus === 'Trial Expired'" 
+                        class="btn btn-lg btn-light btn-block text-md text-uppercase" (click)="onClickActivationInProcess(true)">
+                <span><strong>Activation</strong></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col text-center">
+          <p><i>Prices displayed include pricing for a subscription and taxes</i></p>
+        </div>
+      </div>
+      <div class="row mt-3">         
+        <div class="col">           
+          <div class="card card-box rounded-lg">
+            <div class="card-body pb-0">
+              <div class="row">
+                <div class="col">
+                  <div class="table-responsive" (pan)="onPan($event)" (panend)="onPanEnd($event)">
+                    <table class="table table-condensed feature-comparison mb-0">
+                      <thead>
+                        <tr>
+                          <th style="width:30%;border-width:1px;border-top:0" class="text-center py-4"></th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="text-center py-4 text-lg font-weight-normal">Lifestyle</th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="text-center py-4 text-lg font-weight-normal">Essentials</th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="text-center py-4 text-lg font-weight-normal">Complete</th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="text-center py-4 text-lg font-weight-normal">Premium</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Scheduled races
+                            <!-- <img
+                              class="icon-fix"
+                              alt=""
+                              src="../assets/img/svg/icons/helper-light.svg"
+                              width="18"
+                              customTooltip="Training optimization for the race or multiple races"
+                              data-toggle="tooltip"
+                              data-placement="right"
+                              title="Tooltip on right"
+                            > -->
+                            <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="number of 'A' and 'B' races that can be on your future schedule" placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center">
+                            <div class="race-number text-sm lifestyle text-nowrap">
+                              <span class="ml-2 mr-1">1</span> <span class="race-count">A</span> Race
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="race-number text-sm essentials text-nowrap">
+                              <span class="ml-2 mr-1">2</span> <span class="race-count">A</span> Races
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="race-number text-sm complete pr-1">
+                              <span class="race-count">Unlimited</span>
+                            </div>
+                          </td>
+                          <td class="text-center">
+                            <div class="race-number text-sm premium pr-1">
+                              <span class="race-count">Unlimited</span>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Individually
+                            optimized training 
+                                <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Swim, bike, and run training is uniquely and continually optimized based on you and your data." placement="right" class="mx-auto d-inline-block"></div>
+                            
+                                </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Detailed
+                            daily workouts
+                            <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Specific instructions, notes, and tips for conducting each of tens of millions of dynamically created sessions." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>                   
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Training
+                            zone optimization
+                            <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Intensity zones are optimized specifically for you and automatically adjusted based on environmental factors." placement="right" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Performance benchmarking
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Assessments and races are benchmarked and scored to quantify improvement." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Drill and exercise videos
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="How-to videos conveniently displayed alongside session descriptions." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Training stress profile
+                              <img src="../assets/img/svg/icons/helper-light.svg" alt="" width="20" tooltip="Analysis and quanfitication of your ability to absorb training stress by type, frequency, and duration/volume." placement="right">
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Environment normalization
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Prescribes your training and race intensities as appropriate for the temperature, humidity, and elevation." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>TrainX scoring
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Daily and weekly scoring of your training execution relative to what was prescribed." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Device integration (Garmin, Polar, Strava, and more)
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Connect to Garmin, Strava, Polar, and more!" placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Season planner
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Optimizes your training phase types, durations, and sequencing." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        
+                        <tr>
+                          <td>Swim form analysis
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Diagnose your swim form relative to fitness to optimize form improvement." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Swim drill optimization
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Optimizes your swim drills, progressions, and degree of emphasis on form relative to you ability and race schedule." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Download workouts
+                            <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Download your bike training workouts in .mrc, .erg, .zwo, .fit formats." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Push workouts
+                            <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="On demand push your bike training workouts to Garmin." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Training volume preference
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Adjust the weekly volume of your swim, bike, and run training." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Add "B" priority races
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Optimizes your training to include 'B' races." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>RaceX&reg; (Projections, Pacing, Planning)
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Predicts your race outcomes based on the races unique environment, provides optimal pacing guidance." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>B2R Factor optimization
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Optimizes your relative bike and run volume, duration, frequency, and intensity to maximize overall improvement." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>PhysiogenomiX Training Optmization
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Provides enhanced training optimization based on your DNA." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center" *ngFor="let sub of subOptions"><div *ngIf="sub.gennetics"  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Strength sessions
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Add strength sessions to your training appropriate for your age and body composition." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Daily workout emails
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Receive your daily training sessions right in your inbox." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Calendar sync (iCal)
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Sync your training with your iPhone, Google Calendar, Outlook and more." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Set preferred day off
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Optimize your weekly training with a specific day off." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Set preferred long days
+                              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" tooltip="Specify on which day of the week you'd prefer your longest weekly sessions." placement="right" class="mx-auto d-inline-block"></div>
+                          </td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        
+                        <tr>
+                          <th style="width:30%;border-width:1px;border-top:0" class="bg-light text-left py-4"><h5 class="mb-0 font-weight-normal">Support</h5></th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="bg-light text-center py-4 text-lg font-weight-normal"></th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="bg-light text-center py-4 text-lg font-weight-normal"></th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="bg-light text-center py-4 text-lg font-weight-normal"></th>
+                          <th style="width:17.5%;border-width:1px;border-top:0" class="bg-light text-center py-4 text-lg font-weight-normal"></th>
+                        </tr>
+                        <tr>
+                          <td>Knowledge Base</td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td>Training advisor</td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                          <td class="text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                        <tr>
+                          <td class="border-bottom-0">Unlimited coaching</td>    
+                          <td class="border-bottom-0 text-center"></td>
+                          <td class="border-bottom-0 text-center"></td>
+                          <td class="border-bottom-0 text-center"></td>
+                          <td class="border-bottom-0 text-center"><div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true" 
+                              style="width: 20px;" class="mx-auto d-inline-block"></div></td>
+                        </tr>
+                      
+                        <tr class="bg-light">
+                          <td style="width:30%" class="border-top-0"></td>
+                          <td style="width:17.5%" *ngFor="let sub of subOptions" class="text-center border-top-0"
+                            [ngClass]="{'sub-active': isCurrentSubscription(sub.subLevel) }">
+                            <button type="button" *ngIf="!isCurrentSubscription(sub.subLevel)" class="btn btn-lg btn-light btn-block text-md text-uppercase"
+                              (click)="goToCheckout(sub.subLevel)">
+                              <span [innerHTML]="getSubDescriptionHtml(sub)"></span>
+                            </button>
+                            <button type="button" *ngIf="isCurrentSubscription(sub.subLevel)" class="btn btn-lg btn-success btn-block text-md text-uppercase"
+                              [ngSwitch]="cancelSub">
+                              <ng-container *ngSwitchDefault><strong>Current</strong></ng-container>
+                              <ng-container *ngSwitchCase="true">Cancel <strong>Subscription</strong></ng-container>
+                            </button>
+                          </td>
+                        </tr>
+                        
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col text-center">
+              <p>To cancel your subscription, please click the button below.</p>
+              <button  type="button" type="button" class="btn btn-md btn-default text-sm px-3" (click)="openCancelModal()">Cancel Subscription</button>
+            </div>
+          </div>
+          <!-- <div class="card card-box shadow py-3 px-5 rounded-lg">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h4 class="h4 text-drk card-title font-weight-normal mt-0 mb-4 text-center">All Subscription Levels
+                    Include</h4>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <ul class="list-unstyled">
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Individually
+                        optimized training</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Detailed
+                        daily workouts</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Training
+                        zone optimization</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Performance
+                        benchmarking</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col">
+                  <ul class="list-unstyled">
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Drill
+                        and exercise videos</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Training
+                        Stress Profile</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Environment
+                        normalization</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col">
+                  <ul class="list-unstyled">
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Season
+                        Planner</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Training
+                        volume preference</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Swim
+                        form analysis</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col">
+                  <ul class="list-unstyled">
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">TrainX
+                        Scoring
+                      </span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Mobile
+                        App</span>
+                    </li>
+                    <li class="my-2 text-md">
+                      <div  [inlineSVG]="'../assets/img/svg/green-checkmark.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div><span class="text-body ml-3">Device
+                        Integration</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<app-footer></app-footer>

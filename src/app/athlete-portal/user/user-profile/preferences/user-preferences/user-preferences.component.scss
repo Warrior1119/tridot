@@ -1,0 +1,101 @@
+.dob-selector {
+  .btn.bg-transparent {
+    border-style: solid;
+  }
+}
+
+.setting-item {
+  min-width: 65px;
+  margin: 4px;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #f4f5f7;
+
+  input {
+    max-width: 120px;
+
+    &.input-error {
+      border-color: #DC3545;
+    }
+  }
+}
+
+.form-control {
+  width: initial;
+  padding: 0.3rem 0.3rem !important;
+}
+
+.indoor-input {
+  width: 3rem;
+}
+@media screen and (max-width:576px) {
+  /deep/ .title {
+    font-size: 13px;
+  }
+}
+
+.dob-selector {
+  .btn.bg-transparent {
+    border-style: solid;
+  }
+}
+
+.setting-item {
+  min-width: 65px;
+  margin: 4px;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #f4f5f7;
+
+  input {
+    max-width: 120px;
+
+    &.input-error {
+      border-color: #DC3545;
+    }
+  }
+}
+
+.form-control {
+  width: initial;
+  padding: 0.3rem 0.3rem !important;
+}
+
+.indoor-input {
+  width: 3rem;
+}
+
+.text-mobile {
+  font-size: 13px !important;
+  padding-top: 0px !important;
+  .indoor-input {
+    width: 2.5rem !important;
+  }
+}
+@media screen and (max-width: 575.98px) {
+  .param-size {
+    padding: 5px 10px !important;
+  }
+}
+
+@media screen and (max-width:420px) {
+  .param-size {
+    padding: 6px 5px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media screen and (max-width:387px) {
+  .param-size {
+    width: 100%;
+  }
+}
+
+.export-indoor-item {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  font-size: 13px !important;
+  .flex-item {
+      flex: 0 0 auto;
+  }
+}

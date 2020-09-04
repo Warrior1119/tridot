@@ -1,0 +1,34 @@
+.athlete-panel {
+  width: 310px;
+  color: #acb3b9;
+
+  & > * {
+    padding: 12px 8px;
+  }
+
+  .info {
+    padding: 16px 3rem;
+
+    dd {
+      text-transform: capitalize;
+    }
+
+    & > .row {
+      margin-bottom: 0;
+    }
+  }
+}
+.profile-picture {
+ margin: 0 0.5rem 0 0 !important;
+}
+.badge-default {
+  background-color: #e4ebf0;
+  padding: 4px 8px;
+}
+.contact {
+  background-color: #f4f6f7;
+}
+
+::ng-deep .athlete-preview {
+  width: 310px;
+}

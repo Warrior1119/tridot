@@ -1,0 +1,16 @@
+<svg id="archive-3d-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.648 27.648">
+  <defs>
+    <style>
+      .assessment-icon-cls-1 {
+        fill: none;
+        stroke: #808e98;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <path id="Path_599" data-name="Path 599" class="assessment-icon-cls-1" d="M5,14.679V1H23.809V14.679" transform="translate(-0.58)"/>
+  <path id="Path_600" data-name="Path 600" class="assessment-icon-cls-1" d="M26.648,21H18.1v2.565H9.549V21H1v8.549H26.648Z" transform="translate(0 -2.901)"/>
+  <path id="Path_601" data-name="Path 601" class="assessment-icon-cls-1" d="M11,10.42l2.565,2.565L19.549,7" transform="translate(-1.451 -0.87)"/>
+</svg>

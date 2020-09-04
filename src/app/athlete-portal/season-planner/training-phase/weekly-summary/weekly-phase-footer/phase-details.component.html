@@ -1,0 +1,13 @@
+<div class="text-nowrap">
+    <ng-container *ngIf="prefix">{{prefix}}</ng-container>
+    <ng-container *ngIf="duration">{{duration}}-Week</ng-container>
+    <ng-container [ngSwitch]="phaseType?.toLowerCase()">
+        <ng-container *ngSwitchCase="'custom'">Race Prep Phase</ng-container>
+        <ng-container *ngSwitchCase="'racex'">Race Prep Phase</ng-container>
+        <ng-container *ngSwitchCase="'devel'">Development Phase </ng-container>
+        <ng-container *ngSwitchDefault>{{ phaseType | ucwords }} Phase</ng-container>
+    </ng-container>
+    <ng-container *ngIf="phaseStart && phaseEnd">
+        from {{phaseStart | amDateFormat: 'LL'}} to {{phaseEnd | amDateFormat: 'LL'}}
+    </ng-container>
+</div>

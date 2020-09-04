@@ -1,0 +1,26 @@
+.swim-assessment {
+    .title {
+        margin-top: 5px;
+        padding: 0;
+    }
+    .title-row {
+        border-bottom: 4px solid #e9ecef;
+    }
+    .header-row {
+        border-bottom: 2px solid #e9ecef;
+    }
+    .normal-row {
+        border-bottom: 2px solid #e9ecef;
+    }
+}
+
+.swimform-myform-block {
+  &:hover {
+    .swimform-nav {
+      // display:inline-block;
+    }
+  }
+  .swimform-nav {
+  //  display:none;
+  }
+}

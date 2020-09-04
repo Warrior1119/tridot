@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Add Testimonial </h4>
+</div>
+<div class="modal-body">
+  <textarea placeholder="Say something..." class="form-control" [(ngModel)]="message"></textarea>
+</div>
+
+<div class="modal-footer">
+  <button type="button" [disabled]="!message" (click)="save(message)" class="btn btn-lg btn-primary btn-block text-md mt-0">Add</button>
+  <button type="button" (click)="closeModal()" class="btn btn-lg btn-secondary btn-block text-md mt-0">Cancel</button>
+</div>

@@ -1,0 +1,52 @@
+<div class="main">
+  <div class="container">
+    <app-email-verification *ngIf="athleteProfile.isEmailConfirmed == 0"></app-email-verification>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-8">
+        <div class="row">
+          <div class="col mb-3 position-relative">
+            <input type="search" class="form-control" [(ngModel)]="query" #debounceSearch (keyup.enter)="search(query)" id="exampleInputname1"
+              placeholder="Search">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="text-right">
+            <pagination-controls (pageChange)="page = $event"></pagination-controls>
+          </div>
+
+          <div class="card card-box text-center shadow mb-4 rounded-lg text-center">
+            <div class="card-title m-2">
+              <span *ngIf="loading == false && searchResults.length > 0"> Results For:
+                <strong class="text-danger"> {{title | ucwords}} </strong>
+              </span>
+              <span *ngIf="loading == true">
+                <i class="fal fa-spinner fa-spin"></i>
+              </span>
+              <span *ngIf="searchResults.length == 0 && loading == false">No results available</span>
+            </div>
+          </div>
+
+          <div (click)="openSearchDetails(item)" *ngFor="let item of searchResults | paginate: { itemsPerPage: 6, currentPage: page }" class="card cursor-pointer card-box text-center shadow mb-4 rounded-lg text-center mt-2">
+            <div class="card-title text-left m-2 ml-4">
+              <span>
+                  <strong> <i class="fal fa-file-alt" *ngIf="item.result_type == 'article'"></i>
+                    <i class="fab fa-youtube" *ngIf="item.result_type == 'video'"></i> &nbsp; {{item.title}} </strong>
+              </span>
+            </div>
+            <div class="card-body text-left m-2">
+              <span> {{formatDescription(item.body)}} </span>
+            </div>
+          </div>
+          <div class="text-right">
+            <pagination-controls
+              class="my-pager"
+              previousLabel=""
+              nextLabel=""
+              (pageChange)="page = $event">
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

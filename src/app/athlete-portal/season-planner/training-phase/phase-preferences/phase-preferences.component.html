@@ -1,0 +1,148 @@
+<ng-template #unlock><app-unlock-overlay></app-unlock-overlay></ng-template>
+
+<div class="modal-header">
+  <h4 class="modal-title mr-2 mr-sm-0">Phase Training Preferences
+  </h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+      <ng-container *isFeatureSubscribed="['dayOffPref', 'longBikePref', 'longRunPref']; overlay unlock">
+        <div>
+          <label for="swim">
+            Off Days
+          </label>
+          <select class="custom-select custom-select-lg text-md" [(ngModel)]="data.dayOff">
+            <option *ngFor="let day of days" [value]="day.code">{{day.display}}</option>
+          </select>
+        </div>
+
+        <div class="mt-4">
+          <label for="swim">
+            Long Bike Session
+          </label>
+          <select class="custom-select custom-select-lg text-md" [(ngModel)]="data.bikeLongSessionDay">
+            <option *ngFor="let day of daysBike" [value]="day.code">{{day.display}}</option>
+          </select>
+        </div>
+
+        <div class="mt-4">
+          <label for="swim">
+            Long Run Session
+          </label>
+          <select class="custom-select custom-select-lg text-md" [(ngModel)]="data.runLongSessionDay">
+            <option *ngFor="let day of daysRun" [value]="day.code">{{day.display}}</option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+      <ng-container *isFeatureSubscribed="['b2rFactor', 'strengthSessions', 'phaseTrainingPref']; overlay unlock">
+        <div class="">
+          <label>B2R Factor</label>
+          <div class="">
+            <span class="selection-container">
+              <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0 text-sm px-3" (click)="data.b2rFactor = 'true'"
+                [class.selected-param]="data.b2rFactor === 'true'">
+                <span class="d-none d-sm-inline">B2R</span> On </h5>
+              <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0 text-sm px-3" (click)="data.b2rFactor = 'false'"
+                [class.selected-param]="data.b2rFactor === 'false'">
+                <span class="d-none d-sm-inline">B2R</span> Off </h5>
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label for="swim">
+            Strength Training
+          </label>
+          <div class="mt-2 ml-3 custom-control custom-radio">
+            <input class="custom-control-input" type="radio" name="trainingDaysPerWeek" id="trainingDaysPerWeek1" value="option1"
+              [checked]="data.trainingDaysPerWeek == 0"
+              (change)="data.trainingDaysPerWeek = 0">
+            <label class="custom-control-label" for="trainingDaysPerWeek1">
+              No
+            </label>
+          </div>
+          <div class="mt-3 ml-3 custom-control custom-radio">
+            <input class="custom-control-input" type="radio" name="trainingDaysPerWeek" id="trainingDaysPerWeek2" value="option2"
+              [checked]="data.trainingDaysPerWeek == 2"
+              (change)="data.trainingDaysPerWeek = 2">
+            <label class="custom-control-label" for="trainingDaysPerWeek2">
+              Yes
+            </label>
+          </div>
+        </div>
+
+        <h6 class="mt-4 font-weight-light text-sm"> Non-Required Sessions to Include </h6>
+        <div class="mt-3 ml-3 custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="exampleRadios" [checked]="data.phaseTrainingPreferences == 'sbr'"
+          (change)="changePref('sbr')" id="exampleRadios1" value="option1" checked>
+          <label class="custom-control-label" for="exampleRadios1">
+            Swim, Bike & Run
+          </label>
+        </div>
+        <div class="mt-3 ml-3 custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="exampleRadios" [checked]="data.phaseTrainingPreferences == 'br'"
+          (change)="changePref('br')" id="exampleRadios2" value="option2" [disabled] = "isOnlySwimBikeRunAllowed()">
+          <label class="custom-control-label" for="exampleRadios2">
+            Bike & Run
+          </label>
+        </div>
+        <div class="mt-3 ml-3 custom-control custom-radio" >
+          <input class="custom-control-input" type="radio" name="exampleRadios" [checked]="data.phaseTrainingPreferences == 'r'"
+          (change)="changePref('r')" id="exampleRadios3" value="option3" [disabled] = "isOnlySwimBikeRunAllowed()">
+          <label class="custom-control-label" for="exampleRadios3">
+            Run Only
+          </label>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+      <ng-container *isFeatureSubscribed="['swimVolPref', 'bikeVolPref', 'runVolPref']; overlay unlock">
+        <div class="">
+          <label for="swim">
+            Swim Training Volume
+          </label>
+          <select class="custom-select custom-select-lg text-md" [disabled]="data.phaseTrainingPreferences == 'br' || data.phaseTrainingPreferences == 'r'"
+            [(ngModel)]="data.swimVolumePreference">
+            <option disabled>Select Swim Training Volume</option>
+            <option *ngFor="let volume of volumePreferences" [value]="volume.value">{{volume.name}}</option>
+          </select>
+        </div>
+
+        <div class="mt-4">
+          <label for="swim">
+            Bike Training Volume
+          </label>
+          <select class="custom-select custom-select-lg text-md" [disabled]="data.phaseTrainingPreferences == 'r'" [(ngModel)]="data.bikeVolumnPreferece">
+            <option disabled>Bike Swim Training Volume</option>
+            <option *ngFor="let volume of volumePreferences" [value]="volume.value">{{volume.name}}</option>
+          </select>
+        </div>
+
+        <div class="mt-4">
+          <label for="swim">
+            Run Training Volume
+          </label>
+          <select class="custom-select custom-select-lg text-md" [(ngModel)]="data.runVolumePreference">
+            <option disabled>Select Run Training Volume</option>
+            <option *ngFor="let volume of volumePreferences" [value]="volume.value">{{volume.name}}</option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="mt-4 row" *ngIf="validate()">
+    <div class="col text-danger">
+      <small> {{validate()}} </small>
+    </div>
+  </div>
+</div>
+<div class="modal-footer border-top pt-4">
+  <button type="button" class="btn btn-lg btn-block btn-info text-md mt-0" (click)="closeModal()">Cancel</button>
+  <button type="button" class="btn btn-lg btn-block btn-success text-md mt-0" [disabled]="validate()" (click)="save(data)">Save Changes</button>
+</div>

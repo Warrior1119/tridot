@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.93 28.824">
+  <defs>
+    <style>
+      .planner-icon-cls-1, .planner-icon-cls-2 {
+        fill: none;
+        stroke: #808e98;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+
+      .planner-icon-cls-1 {
+        stroke-linecap: square;
+      }
+    </style>
+  </defs>
+  <g id="workout-plan" transform="translate(-1)">
+    <line id="Line_732" data-name="Line 732" class="planner-icon-cls-1" x2="7.153" transform="translate(15.412 22.459)"/>
+    <line id="Line_733" data-name="Line 733" class="planner-icon-cls-1" x1="1.788" transform="translate(10.047 22.459)"/>
+    <line id="Line_734" data-name="Line 734" class="planner-icon-cls-1" x1="1.788" transform="translate(26.142 22.459)"/>
+    <path id="Path_602" data-name="Path 602" class="planner-icon-cls-1" d="M14.788,19h0a1.788,1.788,0,0,1,1.788,1.788v7.153a1.788,1.788,0,0,1-1.788,1.788h0A1.788,1.788,0,0,1,13,27.941V20.788A1.788,1.788,0,0,1,14.788,19Z" transform="translate(-1.164 -1.905)"/>
+    <path id="Path_603" data-name="Path 603" class="planner-icon-cls-1" d="M26.788,29.73h0A1.788,1.788,0,0,1,25,27.941V20.788A1.788,1.788,0,0,1,26.788,19h0a1.788,1.788,0,0,1,1.788,1.788v7.153A1.788,1.788,0,0,1,26.788,29.73Z" transform="translate(-2.435 -1.905)"/>
+    <line id="Line_735" data-name="Line 735" class="planner-icon-cls-2" x1="25.036" transform="translate(2 9.941)"/>
+    <path id="Path_604" data-name="Path 604" class="planner-icon-cls-1" d="M8.259,26.354H2V4H27.036V14.73" transform="translate(0 -0.318)"/>
+    <line id="Line_736" data-name="Line 736" class="planner-icon-cls-1" y2="5.365" transform="translate(8.259 1)"/>
+    <line id="Line_737" data-name="Line 737" class="planner-icon-cls-1" y2="5.365" transform="translate(20.777 1)"/>
+  </g>
+</svg>

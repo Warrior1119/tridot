@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
+  <defs>
+    <style>
+      .highly-competitive-cls-1 {
+        fill: #2fb7ff;
+      }
+
+      .highly-competitive-cls-2 {
+        fill: #559abf;
+      }
+
+      .highly-competitive-cls-3 {
+        fill: #81d3ff;
+      }
+    </style>
+  </defs>
+  <g id="Group_1456" data-name="Group 1456" transform="translate(-1617 -301)">
+    <path id="Path_391" data-name="Path 391" class="highly-competitive-cls-1" d="M36,0A36,36,0,1,1,0,36,36,36,0,0,1,36,0Z" transform="translate(1617 301)"/>
+    <g id="podium" transform="translate(1632.926 311.844)">
+      <path id="Path_350" data-name="Path 350" class="highly-competitive-cls-2" d="M13.219,37.329H1.873A.873.873,0,0,1,1,36.456V19.873A.873.873,0,0,1,1.873,19H13.219Z" transform="translate(0 -1.018)"/>
+      <path id="Path_351" data-name="Path 351" class="highly-competitive-cls-3" d="M29.837,36.311H15V11.873A.873.873,0,0,1,15.873,11H28.965a.873.873,0,0,1,.873.873Z" transform="translate(-1.781)"/>
+      <path id="Path_352" data-name="Path 352" class="highly-competitive-cls-2" d="M44.219,38.092H32V25H44.219a.873.873,0,0,1,.873.873V37.219A.873.873,0,0,1,44.219,38.092Z" transform="translate(-3.943 -1.781)"/>
+    </g>
+  </g>
+</svg>

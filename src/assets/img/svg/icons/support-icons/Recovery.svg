@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18">
+  <g id="ambulance" transform="translate(0 -3)">
+    <line id="Line_748" data-name="Line 748" x1="2.3" transform="translate(15 17)" fill="none" stroke="#70868d" stroke-miterlimit="10" stroke-width="2"/>
+    <path id="Path_611" data-name="Path 611" d="M15,8h6v4l2,1v4H20.7" fill="none" stroke="#70868d" stroke-miterlimit="10" stroke-width="2"/>
+    <path id="Path_612" data-name="Path 612" d="M4,17H1V4H15V17H10" fill="none" stroke="#70868d" stroke-miterlimit="10" stroke-width="2"/>
+    <circle id="Ellipse_274" data-name="Ellipse 274" cx="3" cy="3" r="3" transform="translate(4 14)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+    <circle id="Ellipse_275" data-name="Ellipse 275" cx="2" cy="2" r="2" transform="translate(17 16)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_749" data-name="Line 749" y2="4" transform="translate(8 7)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_750" data-name="Line 750" x2="4" transform="translate(6 9)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>

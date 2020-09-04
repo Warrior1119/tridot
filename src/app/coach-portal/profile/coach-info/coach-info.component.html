@@ -1,0 +1,53 @@
+<div class="card mb-4">
+  <div class="card-body px-4">
+    <div class="text-right">
+      <button *ngIf="!editMode" (click)="enableEditMode()" class="btn btn-sm btn-default text-uppercase">
+        <i class="d-none fa fa-spin fa-spinner"></i>
+        Edit
+      </button>
+
+      <button *ngIf="editMode" type="button" class="btn btn-sm btn-default" (click)="cancel()" [disabled]="loading">Cancel</button>
+      <button *ngIf="editMode" type="submit" class="btn btn-sm btn-success" (click)="save()" [disabled]="loading"><i *ngIf="loading" class="fa fa-spin fa-spinner"></i> Save</button>
+    </div>
+
+    <div class="coach-section">
+      <h4 class="h5">Bio</h4>
+      <p *ngIf="!editMode" [innerHTML]="getEncodedText(experienceText)"></p>
+      <div *ngIf="editMode">
+        <textarea class="form-control" [(ngModel)]="experienceText" [disabled]="loading"></textarea>
+      </div>
+    </div>
+
+    <div class="coach-section">
+      <h4 class="h5">About</h4>
+      <p *ngIf="!editMode" [innerHTML]="getEncodedText(aboutText)"></p>
+      <div *ngIf="editMode">
+        <textarea class="form-control" [(ngModel)]="aboutText" [disabled]="loading"></textarea>
+      </div>
+    </div>
+
+    <div class="coach-section">
+      <h4 class="h5">Coaching Philosophy</h4>
+      <p *ngIf="!editMode" [innerHTML]="getEncodedText(coachingPhilosophyText)"></p>
+      <div *ngIf="editMode">
+        <textarea class="form-control" [(ngModel)]="coachingPhilosophyText" [disabled]="loading"></textarea>
+      </div>
+    </div>
+
+    <div class="coach-section">
+      <h4 class="h5">Background</h4>
+      <p *ngIf="!editMode" [innerHTML]="getEncodedText(backgroundText)"></p>
+      <div *ngIf="editMode">
+        <textarea class="form-control" [(ngModel)]="backgroundText" [disabled]="loading"></textarea>
+      </div>
+    </div>
+
+    <div class="coach-section">
+      <h4 class="h5">Qualifications and Accomplishments</h4>
+      <p *ngIf="!editMode" [innerHTML]="getEncodedText(qualificationsText)"></p>
+      <div *ngIf="editMode">
+        <textarea class="form-control" [(ngModel)]="qualificationsText" [disabled]="loading"></textarea>
+      </div>
+    </div>
+  </div>
+</div>

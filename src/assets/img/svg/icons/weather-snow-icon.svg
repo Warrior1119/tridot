@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.459 24.656">
+  <defs>
+    <style>
+      .weather-snow-icon-cls-1 {
+        fill: none;
+        stroke: #5fcedd;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g id="snow" transform="translate(-0.574)">
+    <line id="Line_605" data-name="Line 605" class="weather-snow-icon-cls-1" y2="22.656" transform="translate(12.304 1)"/>
+    <path id="Path_491" data-name="Path 491" class="weather-snow-icon-cls-1" d="M9,2l3.089,3.089L15.179,2" transform="translate(0.215 0.03)"/>
+    <path id="Path_492" data-name="Path 492" class="weather-snow-icon-cls-1" d="M9,22.089,12.089,19l3.089,3.089" transform="translate(0.215 0.537)"/>
+    <line id="Line_606" data-name="Line 606" class="weather-snow-icon-cls-1" x2="19.567" y2="11.328" transform="translate(2.521 6.664)"/>
+    <path id="Path_493" data-name="Path 493" class="weather-snow-icon-cls-1" d="M1.8,9.755,6.022,8.622,4.889,4.4" transform="translate(0 0.101)"/>
+    <path id="Path_494" data-name="Path 494" class="weather-snow-icon-cls-1" d="M19.233,19.755,18.1,15.533,22.322,14.4" transform="translate(0.486 0.4)"/>
+    <line id="Line_607" data-name="Line 607" class="weather-snow-icon-cls-1" x1="19.567" y2="11.328" transform="translate(2.521 6.664)"/>
+    <path id="Path_495" data-name="Path 495" class="weather-snow-icon-cls-1" d="M22.322,9.755,18.1,8.622,19.233,4.4" transform="translate(0.486 0.101)"/>
+    <path id="Path_496" data-name="Path 496" class="weather-snow-icon-cls-1" d="M4.889,19.755l1.133-4.222L1.8,14.4" transform="translate(0 0.4)"/>
+  </g>
+</svg>

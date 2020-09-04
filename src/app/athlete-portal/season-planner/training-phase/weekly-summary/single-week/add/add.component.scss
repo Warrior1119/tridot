@@ -1,0 +1,19 @@
+app-add {
+
+  .form-control::placeholder {
+    color: #C6CBD0;
+  }
+
+  timepicker>table {
+    margin: auto;
+  }
+
+}
+
+timepicker {
+  .form-group {
+    input {
+      padding: 0.5rem !important;
+    }
+  }
+}

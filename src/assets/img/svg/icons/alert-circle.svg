@@ -1,0 +1,10 @@
+<svg id="alert-circle-exc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33">
+  <defs>
+    <style>
+      .alert-circle-cls-1 {
+        fill: #8a88d5;
+      }
+    </style>
+  </defs>
+  <path id="Path_251" data-name="Path 251" class="alert-circle-cls-1" d="M16.5,0A16.5,16.5,0,1,0,33,16.5,16.519,16.519,0,0,0,16.5,0Zm1.989,7.219-.958,12.375H15.469L14.511,7.219ZM16.5,25.781a2.063,2.063,0,1,1,2.063-2.062A2.062,2.062,0,0,1,16.5,25.781Z"/>
+</svg>

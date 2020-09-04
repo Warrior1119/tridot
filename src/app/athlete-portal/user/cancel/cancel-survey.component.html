@@ -1,0 +1,82 @@
+<div class="main">
+  <div class="container">
+
+    <ng-container *ngIf="!done">
+
+      <div class="row mb-3">
+        <div class="col">
+          <h4 class="page-title text-center mb-2 mb-lg-4">Offboard Survey</h4>
+        </div>
+      </div>
+
+      <div *ngIf="!questions" class="text-center"><i class="fas fa-2x fa-spinner fa-spin"></i></div>
+      <div *ngIf="questions" class="col-6 offset-3 card p-5">
+        <div class="row p-2 justify-content-center text-danger" *ngIf="errorMessage">
+          {{errorMessage}}
+        </div>
+        <div *ngIf = "currentQuestionIndex === -1" class="text-center">
+          <h5>We're sorry to see you go!</h5>
+          <p>
+            Need help?  Call us at 866-961-5551 <br/>
+            or email us at support@tridot.com.
+          </p>
+        </div>
+        <div *ngIf = "currentQuestionIndex !== -1" [ngSwitch]="questions[currentQuestionIndex].questionType.toLowerCase()">
+          <p>{{ questions[currentQuestionIndex].question }}</p>
+          <ng-container *ngSwitchCase="'multi'">
+            <ng-container *ngFor="let q of questions[currentQuestionIndex].surveyQuestionOptions; let index = index">
+              <div *ngIf="q.active" class="custom-control custom-checkbox mb-2">
+                <input type="checkbox" class="custom-control-input" (change)="onMultiChange(index, $event.srcElement.checked)" [id]="'a'+index">
+                <label class="custom-control-label" [for]="'a'+index">{{ q.optionValue }}</label>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'radio'">
+            <ng-container *ngFor="let q of questions[currentQuestionIndex].surveyQuestionOptions; let index = index">
+              <div class="mb-2 custom-control custom-radio">
+                <input class="custom-control-input" type="radio" [value]="q.id" [(ngModel)]="questions[currentQuestionIndex].answer" [id]="'a'+index">
+                <label class="custom-control-label" [for]="'a'+index">{{ q.optionValue }}</label>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'comment'">
+            <textarea rows="5" [(ngModel)]="questions[currentQuestionIndex].answer" [id]="'a'+index" class="w-100"></textarea>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <input type="text" [(ngModel)]="questions[currentQuestionIndex].answer" [id]="'a'+index">
+          </ng-container>
+        </div>
+        <div class="text-center mt-4">
+          <div *ngIf="currentQuestionIndex == -1">
+            <button type="button" class="btn btn-default pill mx-2 px-4" (click)="cancel()">Cancel</button>
+            <button type="submit" class="btn btn-success pill mx-2 px-4" (click)="next()">Next</button>
+          </div>
+          <div *ngIf="currentQuestionIndex > -1 && currentQuestionIndex < questions.length - 1">
+            <button type="button" class="btn btn-default pill mx-2 px-4" (click)="prev()">Prev</button>
+            <button type="submit" class="btn btn-success pill mx-2 px-4" (click)="next()">Next</button>
+          </div>
+          <div *ngIf="currentQuestionIndex == questions.length - 1">
+            <button type="button" class="btn btn-default pill mx-2 px-4" (click)="prev()">Prev</button>
+            <button type="submit" class="btn btn-success pill mx-2 px-4" (click)="submit()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    
+    <ng-container *ngIf="done">
+      <div class="col-6 offset-3 card p-5">      
+        <div class="text-center">
+          <h5>Cancellation Request Sent to Support</h5>
+          <p>
+            Your subscription is no longer active, but you may still use the application through the end of current subscription cycle {{subscriptionEndDate}}. 
+            After the current subscription cycle, you will no longer receive training and will need to reactivate to use the application.
+          </p>
+        </div>
+        <div class="text-center mt-4">
+          <button type="button" class="btn btn-default pill mx-2 px-4" routerLink="/">Return to Homepage</button>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

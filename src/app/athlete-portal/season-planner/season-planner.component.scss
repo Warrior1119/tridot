@@ -1,0 +1,79 @@
+app-season-planner {
+
+  .stacked-number-container-col-1 {
+    padding: 30px 24px !important;
+  }
+
+  .selected {
+    background: #cccccc;
+    .stacked-number-inner {
+      span {
+        color: white !important;
+      }
+    }
+  }
+
+  .phase-block .week-span {
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .season-menu-wrap {
+    top: -6px;
+    left: 0;
+    &.open {
+      top: -7px;
+      left: -160px;
+    }
+  }
+
+  .race-menu-wrap {
+    top: 0;
+    right: -23px;
+    .custom-menu__button {
+      transition: none;
+      top: -12px;
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+    &.open {
+      top: -7px;
+      right: -7px;
+      .custom-menu__button {
+        transition: none;
+        right: -7px;
+        top: -7px;
+      }
+    }
+  }
+}
+
+.shadow {
+  -webkit-box-shadow: 0rem 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+  -moz-box-shadow:0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+  box-shadow:0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+}
+
+.shadow-lg {
+  -webkit-box-shadow: 0 .75rem 2.5rem rgba(68, 89, 115, 0.15) !important;
+  -moz-box-shadow:0 .75rem 2.5rem rgba(104, 113, 124, 0.15) !important;
+  box-shadow:0 .75rem 2.5rem rgba(68, 89, 115, 0.15) !important;
+}
+
+.rounded-left {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+// @media (max-width: 575.98px) {
+//   .season-planner-row {
+//     .season-planner-inner-row {
+//       .phase-block {
+//         flex-direction:column;
+//       }
+//     } 
+//   }
+// }

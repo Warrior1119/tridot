@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1076 73">
+  <defs>
+    <style>
+      .premium-upgrade-cls-1 {
+        fill: #414141;
+      }
+
+      .premium-upgrade-cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .premium-upgrade-cls-3 {
+        fill: #e40b14;
+      }
+
+      .premium-upgrade-cls-4, .premium-upgrade-cls-6 {
+        fill: #fff;
+      }
+
+      .premium-upgrade-cls-4 {
+        font-size: 16px;
+        font-family: AzoSans-Bold, Azo Sans;
+        font-weight: 700;
+      }
+
+      .premium-upgrade-cls-5 {
+        font-family: AzoSans-Italic, Azo Sans;
+        font-weight: 400;
+        font-style: italic;
+      }
+
+      .premium-upgrade-cls-6 {
+        font-size: 14px;
+        font-family: AzoSans-Regular, Azo Sans;
+        letter-spacing: -0.01em;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_563" data-name="Rectangle 563" class="premium-upgrade-cls-1" width="1076" height="73" rx="4" transform="translate(927 79)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_1460" data-name="Group 1460" transform="translate(-927 -176)">
+    <rect id="Rectangle_562" data-name="Rectangle 562" class="premium-upgrade-cls-1" width="1076" height="73" rx="4" transform="translate(927 176)"/>
+    <g id="Mask_Group_2" data-name="Mask Group 2" class="premium-upgrade-cls-2" transform="translate(0 97)">
+      <path id="Path_387" data-name="Path 387" d="M9517.023-5197.006v97.787h350.192l64.287-97.787Z" transform="translate(-8596 5258)"/>
+    </g>
+    <g id="Group_838" data-name="Group 838" transform="translate(25)">
+      <g id="Group_836" data-name="Group 836" transform="translate(965.946 194)">
+        <path id="Path_1" data-name="Path 1" class="premium-upgrade-cls-3" d="M32.443,9.273a6.5,6.5,0,0,1-7.379,4.091,5.448,5.448,0,0,1-1.338-.421l-1.415,1.338a4.768,4.768,0,0,1,.344,3.02,4.858,4.858,0,0,1-5.773,3.785,3.765,3.765,0,0,1-1.3-.459L14.32,21.814a3.573,3.573,0,1,1-2.371-1.682,6.589,6.589,0,0,1,.8.268l1.071-1.376a4.857,4.857,0,0,1,5.047-7.456,5.094,5.094,0,0,1,.726.191l1.185-1.491a6.655,6.655,0,0,1-.765-4.55,6.372,6.372,0,0,1,3.518-4.512A17.189,17.189,0,1,0,34.011,20.629,17.4,17.4,0,0,0,32.443,9.273Z" transform="translate(0.028 0.028)"/>
+      </g>
+      <text id="TriDot_Premium_Feature" data-name="TriDot Premium Feature" class="premium-upgrade-cls-4" transform="translate(1013 217)"><tspan x="0" y="0">TriDot </tspan><tspan class="premium-upgrade-cls-5" y="0">Premium Feature</tspan></text>
+    </g>
+    <g id="Facebook_Btn" data-name="Facebook Btn" transform="translate(648 -312)">
+      <rect id="Rectangle_5" data-name="Rectangle 5" class="premium-upgrade-cls-3" width="218" height="37" rx="4" transform="translate(1114 506)"/>
+      <text id="UPGRADE_NOW" data-name="UPGRADE NOW" class="premium-upgrade-cls-4" transform="translate(1161 531)"><tspan x="0" y="0">UPGRADE NOW</tspan></text>
+    </g>
+    <text id="Upgrade_to_select_a_dedicated_coach_and_get_unlimited_communication_with_TriDot_Premium." data-name="Upgrade to select a dedicated coach and get unlimited
+communication with TriDot Premium." class="premium-upgrade-cls-6" transform="translate(1523 207)"><tspan x="-172.557" y="0">Upgrade to select a dedicated coach and get unlimited</tspan><tspan x="-119.567" y="18">communication with TriDot Premium.</tspan></text>
+  </g>
+</svg>

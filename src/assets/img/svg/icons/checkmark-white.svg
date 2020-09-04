@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13.666 10.25">
+  <defs>
+    <style>
+      .checkmark-cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="check-bold" transform="translate(-2 -4)">
+    <path id="Path_123" data-name="Path 123" class="checkmark-cls-1" d="M2,8.783,3.367,7.417l3.417,2.05L14.3,4l1.367,1.367L6.783,14.25Z"/>
+  </g>
+</svg>

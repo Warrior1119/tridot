@@ -1,0 +1,29 @@
+.testimonial {
+  display: flex;
+  $self: &;
+
+  &__avatar {
+    display: block;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+  }
+
+  &__main {
+    flex: 1;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  &:not(:last-child) {
+    #{$self}__body {
+      border-bottom: 1px solid #d6dee3;
+    }
+  }
+
+}

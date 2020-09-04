@@ -1,0 +1,222 @@
+<div class="main">
+  <div class="container">
+    <div class="text-center">
+      <div  [inlineSVG]="'../../assets/img/tridot-logo.svg'" [autosize]="true"  style="width: 200px;" class="mt-4 mb-5 mx-auto d-inline-block"></div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <h4 class="page-title text-center mb-4">
+          Confirm Your Subscription
+        </h4>
+      </div>
+    </div>
+    <div class="row" *ngIf="responseMessage.message">
+
+      <div class="col-12 col-lg-8 offset-lg-2">
+        <div class="alert {{responseMessage.class}} text-center"> {{responseMessage.message}}</div>
+      </div>
+    </div>
+      <ng-container *ngIf="coachPaymentDetails && subscriptionLevelDetails">
+        <div class="row">
+          <div class="col-12 col-lg-8 offset-lg-2">
+            <div class="card-deck">
+              <div class="card card-box shadow mb-4 rounded-lg sub-block sub-active">
+                <div class="card-body">
+                  <h4 class="h4 text-drk card-title font-weight-normal mb-1">{{subscriptionLevelDetails.levelName}}</h4>
+                  <p class="card-text d-flex items-align-center justify-content-between mb-0">
+                    <span>Monthly fee:</span>
+                    <span>{{ subscriptionLevelDetails.subscriptionCost | currency:subscriptionLevelDetails.currencyCode||'USD':'symbol':'1.2-2'}}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container [ngSwitch]="mode">
+          <form *ngSwitchCase="Mode.Payment" #form="ngForm" class="row mx-0" (submit)="changeSubscription()">
+            <div class="col-12 col-lg-8 offset-lg-2">
+              <div class="row">
+                <div class="col-12 col-lg-6 p-0">
+                  <div class="h-100 card card-box shadow p-3 mx-lg-2 mb-4 rounded-lg sub-block border-0">
+                    <div class="card-header card-title text-left px-0 pb-lg-3">
+                      <h6><span>Billing Address</span></h6>
+                    </div>
+                    <div class="card-body m-0 p-0">
+                    </div>
+                    <div class="card-footer pt-2 px-0 pb-lg-3">
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          <input type="text" class="form-control" placeholder="First Name" [(ngModel)]="coachPaymentDetails.billingFirstName" name="billingFirstName" maxlength="30" required
+                            #billingFirstName="ngModel" [customTooltip]="form.submitted && billingFirstName.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                        <div class="col-6">
+                          <input type="text" class="form-control" placeholder="Last Name" [(ngModel)]="coachPaymentDetails.billingLastName" name="billingLastName" maxlength="30" required
+                            #billingLastName="ngModel" [customTooltip]="form.submitted && billingLastName.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-12">
+                          <input type="text" class="form-control" placeholder="Street Address" [(ngModel)]="coachPaymentDetails.billingAddress.address1" name="address1" maxlength="100"
+                            #address1="ngModel" [customTooltip]="form.submitted && address1.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          <input type="text" class="form-control" placeholder="Apt/Suite #" [(ngModel)]="coachPaymentDetails.billingAddress.address2" name="address2" maxlength="100" 
+                            #address2="ngModel" >
+                        </div>
+                        <div class="col-6">
+                          <input type="text" class="form-control" placeholder="City" [(ngModel)]="coachPaymentDetails.billingAddress.city" name="city" maxlength="30" required
+                            #city="ngModel" [customTooltip]="form.submitted && city.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          <select *ngIf="billingStates?.length"
+                              class="custom-select-form-control custom-select custom-select-lg text-md"
+                              [class.border-danger]="state.invalid"
+                              [(ngModel)]="selectedState" name="state"
+                              required
+                              #state="ngModel" [customTooltip]="form.submitted && state.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                            <option value="">State / Province</option>
+                            <option *ngFor="let state of billingStates" [value]="state.code">{{state.name}}</option>
+                          </select>
+                          <input *ngIf="!billingStates?.length"
+                            type="text" class="form-control" maxlength="50"
+                            [class.border-danger]="state.invalid"
+                            [(ngModel)]="coachPaymentDetails.billingAddress.state" name="state"
+                            placeholder="State / Province"
+                            required
+                            #state="ngModel" [customTooltip]="form.submitted && state.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger"
+                            pattern=".*[^\s]+.*">
+                        </div>
+                        <div class="col-6">
+                          <input type="text" class="form-control"
+                            [(ngModel)]="coachPaymentDetails.billingAddress.zip" name="zip"
+                            placeholder="Postal Code"
+                            required
+                            #zip="ngModel" [customTooltip]="form.submitted && zip.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <select class="custom-select-form-control custom-select custom-select-lg text-md"
+                            [(ngModel)]="coachPaymentDetails.billingAddress.country" name="country"
+                            (change)="onCountryCodeChanged()" required
+                            #country="ngModel" [customTooltip]="form.submitted && country.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                              <option value="">Country</option>
+                              <option *ngFor="let country of countries" [value]="country.code">{{country.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div> 
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6 p-0">
+                  <div class="mt-4 mt-lg-0 h-100 card card-box shadow p-3 mx-lg-2 mb-4 rounded-lg sub-block border-0">
+                    <div class="card-header card-title text-left px-0 pb-lg-3 d-flex justify-content-between">
+                      <div><h6>Payment Method</h6></div>
+                      <div class="text-nowrap" *ngIf="coachPaymentDetails.creditCardData.ccNumber">
+                        <button class="btn-default btn-xs px-2 rounded cursor-pointer text-sm text-uppercase" *ngIf = "isEditable === true" (click)="onCancelEditCardDetails()">
+                          Cancel
+                        </button>
+                        <button class="btn-default btn-xs px-2 rounded cursor-pointer text-sm text-uppercase" *ngIf = "isEditable === false" (click)="onEditCardDetails()">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="card-footer pt-4 px-0 pb-lg-3">
+                      <div class="row mb-4" *ngIf = "!showStripeElements">
+                        <div class="col-12">
+                          <input type="text" class="form-control" placeholder="Credit Card Number" [(ngModel)]="coachPaymentDetails.creditCardData.ccNumber" name="ccNumber" maxlength="19"
+                          [disabled]="disableNormalCardElements" #ccNumberInput="ngModel" [customTooltip]="form.submitted && ccNumberInput.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                      </div>
+                      <div class="row mb-4" *ngIf = "!showStripeElements">
+                        <div class="col-6">
+                          <input type="text" class="form-control" [class.border-danger]="expirationDateError" placeholder="mm/yy" [dropSpecialCharacters]="false"
+                            mask="AA/AAAA" name="expirationDate" [(ngModel)]="coachPaymentDetails.creditCardData.expirationDate"
+                            (blur)="validateExpirationDateError(expirationDate.value, expirationDate.dirty)" [disabled]="disableNormalCardElements"
+                            #expirationDate="ngModel" [customTooltip]="expirationDateError" tooltip-class="tooltip-danger">
+                        </div>
+                        <div class="col-6">
+                          <input type="text" class="form-control" [mask]="isCardAMEX ? '0000' : '000'" placeholder="CVC" name="cvc" [(ngModel)]="coachPaymentDetails.creditCardData.cvc"
+                          [disabled]="disableNormalCardElements" #cvc="ngModel" [customTooltip]="form.submitted && cvc.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+                        </div>
+                      </div>
+                      <div class="cell stripe-card stripe-card2" id="stripe-card-2" *ngIf = "showStripeElements">
+                        <div class="row">
+                          <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+                          <div class="field col-12">
+                            <div id="stripe-card-number" class="input empty"></div>
+                            <label for="stripe-card-number" data-tid="elements_examples.form.card_number_label">Card number</label>
+                            <div class="baseline"></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="field half-width col-4">
+                            <div id="stripe-card-expiry" class="input empty"></div>
+                            <label for="stripe-card-expiry" data-tid="elements_examples.form.card_expiry_label">Expiration</label>
+                            <div class="baseline"></div>
+                          </div>
+                          <div class="field half-width col-4 offset-1">
+                            <div id="stripe-card-cvc" class="input empty"></div>
+                            <label for="stripe-card-cvc" data-tid="elements_examples.form.card_cvc_label">CVC</label>
+                            <div class="baseline"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr class="my-4">
+                      <div class="row">
+                        <div class="col-6">
+                          <button type="button" class="btn btn-lg btn-dark btn-block text-md text-uppercase"
+                            routerLink="/coach/subscription-options">Cancel</button>
+                        </div>
+                        <div class="col-6">
+                          <button type="submit" class="btn btn-lg btn-primary btn-block text-md text-uppercase"
+                            [disabled]="form.invalid || isBusy">
+                            <ng-container *ngIf="isBusy"><i class="fal fa-spin fa-spinner"></i></ng-container>
+                            <ng-container *ngIf="!isBusy">Confirm</ng-container>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </form>
+          <ng-container *ngSwitchCase="Mode.Success">
+            <div class="col-12 col-lg-8 offset-lg-2">
+              <div class="card-deck">
+                <div class="card card-box shadow mb-4 rounded-lg sub-block border-0">
+                    <div class="card-body pt-4 pb-4 text-center">
+                      <div class="my-4">
+                        <i class="fa fa-check-circle text-xxl text-success"></i>
+                      </div>
+                      <h4 class="font-weight-light mb-4">Your payment was successful!</h4>
+                      <button class="btn btn-sm btn-dark text-sm px-4 py-2" (click)="closeWindow()">Close Subscriptions Window</button>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      
+    
+    <div class="row text-center">
+      <div class="col-12 col-lg-4 offset-lg-4 mt-5 mt-lg-3">
+        <p><small>This form and your information is 100% secure and is submitted over an encrypted SSL with Transport
+            Layer Security (TLS)</small></p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a class="text-body text-sm" target="_blank" href="/coach/pages/privacy-policy">Privacy Policy</a></li>
+          <li class="list-inline-item"><a class="text-body text-sm" target="_blank" href="/coach/pages/terms-and-conditions">Terms and Conditions</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

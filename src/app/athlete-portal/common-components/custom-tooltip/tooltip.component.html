@@ -1,0 +1,3 @@
+<div *ngIf="isThemeLight" class="tooltip-arrow"></div>
+<ng-container *ngIf="!template">{{value}}</ng-container>
+<ng-container *ngIf="template"><ng-container *ngTemplateOutlet="template; context: context"></ng-container></ng-container>

@@ -1,0 +1,91 @@
+<nav id="sidebar" class="sidebar" (mouseenter)="isHovering=true" (mouseleave)="isHovering=false">
+  <div class="position-relative">
+    <div class="sidebar-toggle-hover-zone">
+      <button *ngIf="isHovering" [@ngIfFadeIn] [@ngIfFadeOut] class="sidebar-toggle bg-white shadow-sm text-center text-secondary position-absolute d-flex align-items-center justify-content-center {{!getSideBarState() ? 'sidebar-toggle-chevron' : 'sidebar-toggle-burger'}}" (click)="toggleSidebar()">
+        <i *ngIf="getSideBarState()" class="fa fa-bars text-sm"></i>
+        <i *ngIf="!getSideBarState()" class="fa fa-chevron-left text-sm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="sidebar-content">
+    <perfect-scrollbar>
+      <div class="sidebar-header">
+        <div class="mx-auto">
+          <a class="row" href="/">
+            <div *ngIf="!getSideBarState()" class="sidebar-logo-lg" style="width: 115px;" inlineSVG="../assets/img/svg/logo-white.svg"> </div>
+            <div *ngIf="getSideBarState()" class="sidebar-logo-sm" style="width: 115px;position: relative;right: -150px;" inlineSVG="../assets/img/svg/logo-sm-red.svg"> </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-menu d-flex justify-content-center">
+        <ul class="sidebar-expanded mt-2" *ngIf="!getSideBarState()">
+          <li class="sidebar-dropdown">
+            <a class="text-uppercase cursor-pointer d-inline-flex align-items-center justify-content-between" (click)="changeActiveUrl('athletes');"
+              routerLinkActive="active" [class.active]="activeMenuItem === 'athletes'" routerLink="/coach/coachAthletes">
+              <span class="text-sm font-weight-bold text-white">Athletes</span>
+              <div class="float-right" inlineSVG="../../../../assets/img/svg/athletes.svg" class="nav-icon-lg icon-correction fix-up-2"></div>
+            </a>
+          </li>
+          <li class="sidebar-dropdown">
+            <a class="text-uppercase cursor-pointer d-inline-flex align-items-center justify-content-between" (click)="changeActiveUrl('my-profile');"
+                  routerLinkActive="active" [class.active]="activeMenuItem === 'my-profile'" routerLink="/coach/coachProfile">
+              <span class="text-sm font-weight-bold text-white">My Profile</span>
+              <div class="float-right" inlineSVG="../../../../assets/img/svg/my-profile.svg" class="nav-icon-lg icon-correction fix-up-2"></div>
+            </a>
+          </li>
+        </ul>
+        <ul *ngIf="getSideBarState()" class="sidebar-collapsed float-right">
+          <li #dropdown2="bs-dropdown" dropdown triggers="mouseover" (mouseenter)="dropdown1.isOpen = false;">
+            <a class="btn btn-lg rounded btn-sidebar-collapsed cursor-pointer d-inline-block" [class.active]="activeMenuItem === 'athletes'" dropdownToggle>
+              <div inlineSVG="../../../../assets/img/svg/athletes.svg" class="nav-icon-sm"></div>
+            </a>
+          </li>
+          <li #dropdown1="bs-dropdown" dropdown triggers="mouseover" (mouseenter)="dropdown2.isOpen = false;"
+              class="mt-3">
+            <a class="btn btn-lg rounded btn-sidebar-collapsed cursor-pointer d-inline-block" [class.active]="activeMenuItem === 'my-profile'" dropdownToggle>
+              <div inlineSVG="../../../../assets/img/svg/my-profile.svg" class="nav-icon-sm"></div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <div class="sidebar-footer">
+    <ng-container *ngIf="profile && profilePicture">
+      <div class="footer-profile-group d-flex flex-row justify-content-between px-3">
+        <ng-container *ngIf="!getSideBarState()">
+          <div class="sidebar-profile-details d-flex align-items-center">
+            <i *ngIf="loading" class="fal fa-spinner fa-spin text-danger"></i>
+            <div *ngIf="!loading" class="mr-1 profile-picture rounded-circle shadow-sm">
+              <img *ngIf="profilePicture" width="55" [src]="profilePicture" alt="">
+            </div>
+            <div class="mx-2">
+              <div class="font-weight-bold text-sm text-white">
+                <span>{{profile.firstName | ucwords}}</span> <span>{{profile.lastName | ucwords}}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div class="d-flex align-items-center" dropdown [dropup]="true" [class.dropdown-left]="!getSideBarState()">
+          <button *ngIf="!getSideBarState()" class="dropdown-toggle btn text-xl d-flex justify-content-center p-2 ml-1 mr-1" dropdownToggle>
+            <i class="fa fa-cog"></i>
+          </button>
+          <div *ngIf="getSideBarState()">
+            <div>
+              <i *ngIf="loading" class="fal fa-spinner fa-spin text-danger"></i>
+              <div *ngIf="!loading" class="mr-1 profile-picture profile-picture-mini rounded-circle shadow-sm">
+                <img *ngIf="profilePicture" width="35" [src]="profilePicture" alt="">
+              </div>
+            </div>
+            <button class="text-center text-secondary bg-transparent text-xl dropdown-toggle py-2 mr-2"><i class="fa fa-ellipsis-h pr-1" dropdownToggle></i></button>
+          </div>
+          <ul class="dropdown-menu dropup" [class.profile-menu]="!getSideBarState()" [class.profile-menu-mini]="getSideBarState()" *dropdownMenu>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/coach/subscription-options">Subscription</a></li>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" (click)="logout()">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</nav>

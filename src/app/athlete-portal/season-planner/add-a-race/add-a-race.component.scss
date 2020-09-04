@@ -1,0 +1,65 @@
+app-add-a-race {
+  .close-icon {
+    width: 15px;
+  }
+
+  .rounded-left {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  .season-menu-btn {
+    height: 40px;
+    width: 40px;
+  }
+
+  .season-menu-wrap {
+    top: -6px;
+    left: 0;
+  }
+
+  .season-menu-wrap.open {
+    top: -7px;
+    left: -160px;
+  }
+
+  .stacked-number-container-col-1 {
+    padding: 30px 24px !important;
+  }
+
+  .selected {
+    background: #3c383626;
+
+    .stacked-number-inner {
+      span {
+        color: white !important;
+      }
+    }
+  }
+
+  .close-selectedRace {
+    position: absolute;
+    right: 10px;
+    top: 11px;
+  }
+
+  .close-unlisted {
+    position: absolute;
+    right: 10px;
+    top: 14px;
+  }
+
+  .race-a-selected {
+    background-color: #71d855;
+    color: white;
+  }
+
+  .btn {
+  }
+
+  .p-2 {
+  }
+
+  .shadow {
+  }
+}

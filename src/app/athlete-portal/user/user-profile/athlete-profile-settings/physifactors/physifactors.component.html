@@ -1,0 +1,321 @@
+<div class="card card-box"
+  [class.children-editable]="isEditMode"
+  [class.children-disabled]="!isEditMode"
+  >
+  <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+    <div class="text-md mb-0">Athlete Profile</div>
+    <div class="text-nowrap">
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize mr-2"
+              *ngIf = "isEditMode" (click)="cancel()">
+        Cancel
+      </button>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+          (click)="isEditMode = true;" *ngIf = "isEditMode === false">
+        Edit
+      </button>
+      <button class="btn-success btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize" [disabled]="isSaveDisabled()"
+        *ngIf = "isEditMode" (click)="updateProfile(profile);">
+        Save<i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body card-body-md pb-0 pt-0">
+    <!-- Profile Image -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }">Profile Image</div>
+      <ng-container *ngIf="!isEditMode">
+        <div class="d-flex">
+          <img *ngIf="profilePicture" class="rounded-circle profile-assess border-2 border-info shadow"
+            [src]="profilePicture ||  '../assets/img/svg/icons/profile-icon.svg'" alt=""
+            width="40" height="40">
+          <div *ngIf="!profilePicture" [inlineSVG]="'../assets/img/svg/icons/profile-icon.svg'" [autosize]="true" style="width: 40px;" data-toggle="modal"
+          data-target="#" class="cursor-pointer d-inline-block ml-2 d-inline-block"></div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isEditMode">
+        <div class="d-flex align-items-center">
+          <div class="mr-2">
+            <input style="display: none" type="file" (change)="uploadPicture($event)" #fileInput>
+            <button class="btn-default cursor-pointer text-sm text-capitalize py-1" [ngClass]="{'px-2' : !isMobile, 'profileImage-item' : isMobile}"
+                (click)="fileInput.click()">
+              <div [inlineSVG]="'../assets/img/svg/icons/rotate.svg'" [autosize]="true" style="width: 12px; color: #ffffff"
+                class="cursor-pointer d-inline-block d-inline-block" *ngIf="!isMobile"></div>
+              {{ profilePicture ? "Update" : "Upload"}}
+            </button>
+            <button class="btn-danger cursor-pointer text-sm text-capitalize py-1 ml-2" [ngClass]="{'px-2' : !isMobile, 'profileImage-item' : isMobile}"
+              (click)="removeProfileImage();" *ngIf="profilePicture">
+              <div [inlineSVG]="'../assets/img/svg/icons/letter-x.svg'" [autosize]="true" style="width: 12px;"
+                    class="cursor-pointer d-inline-block d-inline-block" *ngIf="!isMobile"></div>
+              Remove
+            </button>
+          </div>
+          <img class="rounded-circle profile-assess border-2 border-info shadow"
+            [src]="profilePicture ||  '../assets/img/svg/icons/profile-icon.svg'" alt=""
+            width="40" height="40">
+        </div>
+      </ng-container>
+    </div>
+    <!-- Gender -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }">Gender</div>
+      <ng-container *ngIf="!isEditMode">
+        <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }">{{(profile.gender?.toLowerCase() == 'm')? 'Male' : '' }} {{(profile.gender?.toLowerCase() == 'f')?
+          'Female'
+          : '' }}</div>
+      </ng-container>
+      <ng-container *ngIf="isEditMode">
+        <button type="button" class="btn athlete-item dropdown-toggle shadow d-flex justify-content-between px-3 py-1" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false"
+        [disabled]="!isEditMode">
+          <span class="text-sm text-body mr-3">{{(profile.gender?.toLowerCase() == 'm')? 'Male' : '' }} {{(profile.gender?.toLowerCase() == 'f')?
+            'Female'
+            : '' }} </span>
+          <span>
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu athlete-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.gender = 'm';">Male</a>
+          <a class="dropdown-item" (click)="profile.gender = 'f';">Female</a>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Date of birth -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" for="dob" [ngClass]="{'text-sm' : isMobile }">Date of Birth</div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{ getDobValue() }}
+      </div>
+      <div class="position-relative" *ngIf="isEditMode">
+        <input class="form-control athlete-item editable p-2" type="text" id="dob"
+          [attr.disabled]="isEditMode ? null : ''" 
+          [value]="getDobValue()" (blur)="dobChange($event)" (focus)="afterDOBChange = false"
+          minlength="10" [pattern]="dobPattern"
+          [mask]="dobInputMask" [dropSpecialCharacters]="false"
+          autocomplete="off">
+        <label *ngIf="afterDOBChange" for="dob" class="inside-label">
+          <span class="custom-tooltip border-0" *ngIf="ageError">
+            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+            <span class="custom-tooltiptext">{{ageError}}</span>
+          </span>
+          <i class="far fa-check-circle text-success cursor-pointer" *ngIf="!ageError"></i>
+        </label>
+      </div>
+    </div>
+
+    <!-- Height -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" for="height" [ngClass]="{'text-sm' : isMobile }">Height</div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{ height }}
+      </div>
+      <div class="position-relative" *ngIf="isEditMode">
+        <input type="text" class="editable p-2 w-100 athlete-item" id="height" #heightInput 
+          maxlength="6" 
+          [attr.disabled]="isEditMode ? null : ''"
+          [(ngModel)]="height"
+          (change)="afterHeightChange=true;"
+          (blur)="validateHeight()"
+          (focus)="onFocus('height')"
+          [mask]="heightMask" [dropSpecialCharacters]="false" suffix=" &"
+          [placeholder]=" ('height')">
+
+          <label *ngIf="height && profile.measurementSystem === 'metric'" style="left: 15px;" for="height" class="backdrop">
+            <span class="backdrop-placeholder">{{height}}</span>{{ getHeightPostfix(profile.measurementSystem) }}
+          </label>
+
+          <label *ngIf="afterHeightChange" for="height" class="inside-label">
+            <span class="custom-tooltip border-0" *ngIf="heightError">
+              <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+              <span class="custom-tooltiptext">
+                {{heightError}}
+              </span>
+            </span>
+            <i class="far fa-check-circle text-success cursor-pointer" *ngIf="profile.height && !heightError"></i>
+          </label>
+      </div>
+    </div>
+
+    <!-- Weight -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }" for="weight">Weight</div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{ profile.weight }} &nbsp;{{ getWeightPostfix(profile.measurementSystem) }}
+      </div>
+      <div class="position-relative" *ngIf="isEditMode">
+        <input class="editable p-2 w-100 athlete-item" type="text" id="weight"
+          [(ngModel)]="profile.weight"
+          (change)="afterWeightChange = true"
+          [attr.disabled]="isEditMode ? null : ''" [placeholder]="getPlaceholder('weight')"
+          (blur)="validateWeight()" mask="000"
+          (focus)="onFocus('weight')">
+
+        <label *ngIf="profile.weight && profile.measurementSystem === 'metric'" for="weight" style="left: 15px;" class="backdrop">
+          <span class="backdrop-placeholder">{{profile.weight}}</span>{{ getWeightPostfix(profile.measurementSystem) }}
+        </label>
+
+        <label *ngIf="afterWeightChange" for="weight" class="inside-label">
+          <span class="custom-tooltip border-0" *ngIf="weightError">
+            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+            <span class="custom-tooltiptext">
+              {{weightError}}
+            </span>
+          </span>
+          <i class="far fa-check-circle text-success cursor-pointer" *ngIf="profile.weight && !weightError"></i>
+        </label>
+      </div>
+    </div>
+
+    <!-- BMI -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }" for="bmi">BMI</div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{ profile.bmi }}
+      </div>
+      <div class="position-relative" *ngIf="isEditMode">
+          <input type="text" id="bmi" class="disabled w-2 w-100 athlete-item" [ngModel]="profile.bmi | number: '2.1-1'" disabled>
+      </div>
+    </div>
+
+    <!-- Typical Race Weight -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }" for="typicalRaceWeigth">Typical Race Weight</div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{profile.typicalRaceWeigth}} &nbsp;{{ getWeightPostfix(profile.measurementSystem) }}
+      </div>
+      <div class="position-relative" *ngIf="isEditMode">
+        <input class="editable p-2 w-100 athlete-item" type="text" id="typicalRaceWeigth"
+          [(ngModel)]="profile.typicalRaceWeigth"
+          [attr.disabled]="isEditMode ? null : ''"
+          (blur)="validateRaceWeight()" mask="000"
+          (focus)="afterRaceWeightChange = false">
+
+        <label *ngIf="profile.typicalRaceWeigth && profile.measurementSystem === 'metric'" for="typicalRaceWeigth" style="left: 15px;" class="backdrop">
+          <span class="backdrop-placeholder">{{profile.typicalRaceWeigth}}</span>{{ getWeightPostfix(profile.measurementSystem) }}
+        </label>
+
+        <label *ngIf="afterRaceWeightChange" for="raceweight" class="inside-label">
+          <span class="custom-tooltip border-0" *ngIf="raceWeightError">
+            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+            <span class="custom-tooltiptext">
+              {{raceWeightError}}
+            </span>
+          </span>
+          <i class="far fa-check-circle text-success cursor-pointer" *ngIf="profile.typicalRaceWeigth && !raceWeightError"></i>
+        </label>
+      </div>
+    </div>
+
+    <!-- Arm Span -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }" for="armSpan">Arm Span</div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{armSpan}} &nbsp;{{ getHeightPostfix(profile.measurementSystem) }}
+      </div>
+      <div class="position-relative" *ngIf="isEditMode">
+        <input type="text" #heightInput id="armSpan"
+          class="editable p-2 w-100 athlete-item"
+          maxlength="6" [attr.disabled]="isEditMode ? null : ''"
+          [(ngModel)]="armSpan"
+          (change)="afterHeightChange = true"
+          (blur)="validateArmSpan()"
+          (focus)="afterArmSpanChange = false"
+          [mask]="heightMask" [dropSpecialCharacters]="false" suffix=" &"
+          [placeholder]=" ('arm span')" >
+
+        <label *ngIf="armSpan && profile.measurementSystem === 'metric'" for="armSpan" style="left: 15px;" class="backdrop mb-0">
+          <span class="backdrop-placeholder">{{armSpan}}</span>{{ getHeightPostfix(profile.measurementSystem) }}
+        </label>
+
+        <label *ngIf="afterArmSpanChange" for="armSpan" class="inside-label mb-0">
+          <span class="custom-tooltip border-0" *ngIf="armSpanError">
+            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+            <span class="custom-tooltiptext">
+              {{armSpanError}}
+            </span>
+          </span>
+          <i class="far fa-check-circle text-success cursor-pointer" *ngIf="profile.armSpan && !armSpanError"></i>
+        </label>
+      </div>
+    </div>
+
+    <!-- Typical Sleep Hours -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex">
+        <div class="text-left" [ngClass]="{'text-sm' : isMobile }">Typical Sleep Hours</div>
+        <div class="text-left text-muted ml-2" *ngIf="!isMobile">How long do you typically sleep per night?</div>
+      </div>
+
+      <div class="text-right text-muted athlete-item" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{(profile.sleepHours)? profile.sleepHours : ''}}
+      </div>
+
+      <ng-container *ngIf="isEditMode">
+        <button type="button" [attr.disabled]="isEditMode ? null : ''" class="btn athlete-item dropdown-toggle shadow px-2 py-2 mb-2 d-flex justify-content-between px-3" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3"> {{(profile.sleepHours)? profile.sleepHours : ''}} </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu athlete-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" *ngFor="let item of createRange(10); let i = index" (click)=" profile.sleepHours = i+1;">
+            {{i+1}} {{(i+1 == 1)? 'hour': 'hours'}}
+          </a>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Life Stress Rating -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }">Life Stress Rating</div>
+        <div class="text-left mb-0 text-muted ml-2" *ngIf="!isMobile">Select your life stress rating, where 1 is minimal stress, and 10 is severe stress.</div>
+      </div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{(profile.lifeStressRating)? profile.lifeStressRating :
+          ''}}
+      </div>
+      <ng-container *ngIf="isEditMode">
+        <button type="button" [attr.disabled]="isEditMode ? null : ''" class="btn athlete-item dropdown-toggle shadow px-2 py-2 mb-2 d-flex justify-content-between px-3" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">{{(profile.lifeStressRating)? profile.lifeStressRating :
+            ''}}
+          </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu athlete-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" *ngFor="let item of createRange(10); let i = index" (click)=" profile.lifeStressRating = i+1;">
+            {{i+1}} </a>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Nutrition Rating -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 ">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }">Nutrition Rating</div>
+        <div class="text-left mb-0 text-muted ml-2" *ngIf="!isMobile">Select your nutrition rating, where 1 is poor nutrition, and 10 is excellent nutrition.</div>
+      </div>
+      <div class="text-right text-muted" [ngClass]="{'text-sm' : isMobile }" *ngIf="!isEditMode">
+        {{(profile.nutritionRating)? profile.nutritionRating : ''}}
+      </div>
+      <ng-container *ngIf="isEditMode">
+        <button type="button" [attr.disabled]="isEditMode ? null : ''" class="btn athlete-item dropdown-toggle shadow px-2 py-2 mb-2 d-flex justify-content-between px-3" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">{{(profile.nutritionRating)? profile.nutritionRating : ''}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu athlete-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" *ngFor="let item of createRange(10); let i = index" (click)=" profile.nutritionRating = i+1;">
+            {{i+1}} </a>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

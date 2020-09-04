@@ -1,0 +1,78 @@
+app-add-a-race {
+  .close-icon {
+    width: 15px;
+  }
+
+  .stacked-number-container-col-1 {
+    padding: 30px 24px !important;
+  }
+
+  .selected {
+    background: #3c383626;
+
+    .stacked-number-inner {
+      span {
+        color: white !important;
+      }
+    }
+  }
+
+  .close-selectedRace {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    background: #f2f2f2;
+  }
+
+  .close-racepriority {
+    background: #f2f2f2;
+    position: relative;
+    right: 5px;
+    top: -22px;
+    cursor: pointer;
+  }
+
+  .close-unlisted {
+    background: #f2f2f2;
+    position: relative;
+    right: 25px;
+    top: 6px;
+  }
+
+  .race-a-selected {
+    background-color: #71d855;
+    color: white;
+  }
+
+  .cal-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 17px;
+    border-left: 1px solid #eeeeee;
+    padding: 10px 14px;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  button .dismiss {
+    height: 45px;
+    min-width: 200px;
+  }
+  
+  .dropdown-menu {
+    max-height: 450px;
+    overflow: auto;
+  }
+
+  .btn {
+  }
+
+  .p-2 {
+  }
+
+  .shadow {
+  }
+}

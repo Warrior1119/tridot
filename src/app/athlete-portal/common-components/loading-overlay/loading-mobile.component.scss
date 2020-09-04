@@ -1,0 +1,32 @@
+:host {
+  height: 100px;
+  margin: auto;
+  transform: translate(17%);
+}
+
+#Logo {
+  position: relative;
+  margin: 0;
+  left: 0;
+}
+
+#Overlay {
+  mix-blend-mode: lighten;
+  fill: #f4f4f4;
+  opacity: 0.8;
+}
+
+.loading-small {
+  margin: -160px 0 -250px -15px !important;
+}
+
+.loading-text {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  transform: translateX(-45%);
+  font-style: italic;
+  font-weight: 700;
+  font-size: small;
+  white-space: nowrap;
+}

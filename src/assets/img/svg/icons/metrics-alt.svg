@@ -1,0 +1,19 @@
+<svg id="molecule" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+  <defs>
+    <style>
+      .metrics-alt-cls-1 {
+        fill: none;
+        stroke: #a4acb2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <circle id="Ellipse_248" data-name="Ellipse 248" class="metrics-alt-cls-1" cx="1.2" cy="1.2" r="1.2" transform="translate(0.5 0.5)"/>
+  <circle id="Ellipse_249" data-name="Ellipse 249" class="metrics-alt-cls-1" cx="1.2" cy="1.2" r="1.2" transform="translate(0.5 7.1)"/>
+  <circle id="Ellipse_250" data-name="Ellipse 250" class="metrics-alt-cls-1" cx="1.5" cy="1.5" r="1.5" transform="translate(6.5 3.5)"/>
+  <line id="Line_727" data-name="Line 727" class="metrics-alt-cls-1" y2="1.8" transform="translate(1.7 4.1)"/>
+  <line id="Line_728" data-name="Line 728" class="metrics-alt-cls-1" x2="1.94" y2="1.016" transform="translate(3.752 2.775)"/>
+  <line id="Line_729" data-name="Line 729" class="metrics-alt-cls-1" y1="1.016" x2="1.94" transform="translate(3.752 6.209)"/>
+</svg>

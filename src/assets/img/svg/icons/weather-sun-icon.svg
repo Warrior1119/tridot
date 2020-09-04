@@ -1,0 +1,22 @@
+<svg id="brightness-46" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <defs>
+    <style>
+      .weather-sun-icon-cls-1 {
+        fill: none;
+        stroke: #f7ca10;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <line id="Line_593" data-name="Line 593" class="weather-sun-icon-cls-1" x2="1.6" transform="translate(1 13)"/>
+  <line id="Line_594" data-name="Line 594" class="weather-sun-icon-cls-1" x2="1.12" y2="1.12" transform="translate(4.52 4.52)"/>
+  <line id="Line_595" data-name="Line 595" class="weather-sun-icon-cls-1" y2="1.6" transform="translate(13 1)"/>
+  <line id="Line_596" data-name="Line 596" class="weather-sun-icon-cls-1" x1="1.12" y2="1.12" transform="translate(20.36 4.52)"/>
+  <line id="Line_597" data-name="Line 597" class="weather-sun-icon-cls-1" x1="1.6" transform="translate(23.4 13)"/>
+  <line id="Line_598" data-name="Line 598" class="weather-sun-icon-cls-1" x1="1.12" y1="1.12" transform="translate(20.36 20.36)"/>
+  <line id="Line_599" data-name="Line 599" class="weather-sun-icon-cls-1" y1="1.6" transform="translate(13 23.4)"/>
+  <line id="Line_600" data-name="Line 600" class="weather-sun-icon-cls-1" y1="1.12" x2="1.12" transform="translate(4.52 20.36)"/>
+  <circle id="Ellipse_210" data-name="Ellipse 210" class="weather-sun-icon-cls-1" cx="6.4" cy="6.4" r="6.4" transform="translate(6.6 6.6)"/>
+</svg>

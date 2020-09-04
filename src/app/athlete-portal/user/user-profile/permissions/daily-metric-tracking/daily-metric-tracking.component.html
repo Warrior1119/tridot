@@ -1,0 +1,87 @@
+<div class="main">
+  <div class="container" *ngIf="athleteProfile">
+    <div class="row mb-3">
+      <div class="d-none d-lg-block col-12 col-md-3">
+        <h4 class="page-title mt-2 mb-3 mt-sm-0 mb-sm-0 text-center text-md-left">
+
+        </h4>
+      </div>
+      <div class="col-6 col-md-3 text-left d-flex d-sm-flex align-items-center ">
+        <button class="btn card-box rounded-lg shadow" (click)="goBack()">
+          <div class=""  [inlineSVG]="'../assets/img/svg/icons/back-stick-icon.svg'" [autosize]="true" style="width: 15px;" height="18" class="mx-auto d-inline-block"></div>
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-none d-lg-block col-lg-3 col-xl-3">
+
+        <app-health-related-data-side-bar></app-health-related-data-side-bar>
+      </div>
+
+      <div class=" col-lg-9 col-xl-9">
+        <div class="card card-box">
+          <div class="card-title card-header text-left">
+            Daily Metric Tracking
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <p>Select up to 10 metrics to display on your daily training screen.</p>
+                <div class="border rounded">
+                  <div class="card-title card-header border-bottom-0 px-3 mb-2 text-left">
+                    Garmin Health
+
+                    <button *ngIf="!devices.garminhealth" type="button"
+                      class="text-black btn-sm float-right btn btn-rounded shadow text-sm btn-default"
+                      (click)="addGarminHealthStart()">
+                      Connect Garmin Health
+                    </button>
+
+                  </div>
+
+                </div>
+                <br>
+                <div class="border rounded">
+                  <p class="card-title card-header border-bottom-0 pl-3 text-left">
+                    Metric Tracking
+                  </p>
+                  <div class="class=pl-3">
+                    <div class="pl-3">
+                      <button type="button" class="text-black px-3 btn-sm btn btn-rounded shadow text-sm btn-default" (click)="clearSelectedMetrics()">
+                        Clear All
+                      </button>
+                      <button type="button" class="text-black px-3 btn-sm btn btn-rounded shadow text-sm  btn-success"
+                        (click)="saveMetric()">
+                        Save
+                        <i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+                      </button>
+                      <p></p>
+                      <div class="row pl-3" *ngFor="let metric of allMetrics?allMetrics.Manual : []">
+                        <input type="checkbox" (change)="editTrackableMetric(metric.metricId)" #track_user_metric />
+                        
+                        <label (click)="track_user_metric.click()" *ngIf="selectedMetrics?.includes(metric.metricId)">
+                          <div class="bg-success"><i class="fa fa-check fa-xs white"></i></div>
+                          {{metric.metricsName}}
+                          <span *ngIf="selectedGarminHealthMetrics?.includes(metric.metricId)" class="p-1 bg-default border rounded-pill">Garmin Health</span>
+                        </label>
+
+                        <label (click)="track_user_metric.click()" *ngIf="!selectedMetrics?.includes(metric.metricId)">
+                          <div class="bg-default">
+                            <i class="fa fa-check fa-xs white" style="opacity:0"></i></div>
+                          {{metric.metricsName}}
+                          <span *ngIf="selectedGarminHealthMetrics?.includes(metric.metricId)" class="p-1 bg-default border rounded-pill">Garmin Health</span>
+                        </label>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

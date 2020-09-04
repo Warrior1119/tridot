@@ -1,0 +1,79 @@
+<div class="card-box session-numbers-block rounded shadow mb-4">
+  <div class="box-content p-2 p-sm-4">
+    <div class="row">
+
+      <div *ngIf="details.raceEventDetails.swimDistance" class="col-md-4 col-lg-3 border-right mb-2 mb-sm-0 then-box p-0 px-4">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-4">
+            <div class="stacked-number-inner">
+              <ng-container *ngIf="race.daysTillRace != 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Predicted Swim</h5>
+                <span customTooltip="Predicted time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 swim-box d-inline-block">{{ details.swimPlanned.split | timeFormat }}</span>
+              </ng-container>
+              <ng-container *ngIf="race.daysTillRace == 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Swim</h5>
+                <span customTooltip="Actual time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 swim-box d-inline-block">{{ details.uiRaceDetails.actualSwim | timeFormat }}</span>
+                <div customTooltip="Predicted time" class="number-sm-sub font-weight-bold text-muted mt-1">{{ details.swimPlanned.split | timeFormat }}</div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="details.raceEventDetails.bikeDistance" class="col-md-4 col-lg-3 border-right mb-2 mb-sm-0 then-box p-0 px-4">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <ng-container *ngIf="race.daysTillRace != 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Predicted Bike</h5>
+                <span customTooltip="Predicted time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 bike-box d-inline-block">{{ details.bikePlanned.split | timeFormat }}</span>
+              </ng-container>
+              <ng-container *ngIf="race.daysTillRace == 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Bike</h5>
+                <span customTooltip="Actual time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 bike-box d-inline-block">{{ details.uiRaceDetails.actualBike | timeFormat }}</span>
+                <div customTooltip="Predicted time" class="number-sm-sub font-weight-bold text-muted mt-1">{{ details.bikePlanned.split | timeFormat }}</div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="details.raceEventDetails.runDistance" class="col-md-4 col-lg-3 border-right mb-2 mb-sm-0 then-box p-0 px-4">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <ng-container *ngIf="race.daysTillRace != 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Predicted Run</h5>
+                <span customTooltip="Predicted time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 run-box d-inline-block">{{ details.runPlanned.split | timeFormat }}</span>
+              </ng-container>
+              <ng-container *ngIf="race.daysTillRace == 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Run</h5>
+                <span customTooltip="Actual time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 run-box d-inline-block">{{ details.uiRaceDetails.actualRun | timeFormat }}</span>
+                <div customTooltip="Predicted time" class="number-sm-sub font-weight-bold text-muted mt-1">{{ details.runPlanned.split | timeFormat }}</div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="details.raceEventDetails.runDistance" class="col-sm mb-2 mb-sm-0 then-box p-0 px-4 mt-0 mt-sm-3 mt-lg-0">
+        <div class="info-block bg-light h-100 rounded py-0 py-sm-3">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <ng-container *ngIf="race.daysTillRace != 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Predicted Total</h5>
+                <span customTooltip="Predicted time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 d-inline-block">{{ details.uiRaceDetails.projectedTotalTime | timeFormat }}</span>
+              </ng-container>
+              <ng-container *ngIf="race.daysTillRace == 0">
+                <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold text-nowrap">Total</h5>
+                <span customTooltip="Actual time" class="number-sm font-weight-bold pb-1 px-1 border-bottom border-3 d-inline-block">{{ details.uiRaceDetails.actualTotalTime | timeFormat }}</span>
+                <div customTooltip="Predicted time" class="number-sm-sub font-weight-bold text-muted mt-1">{{ details.uiRaceDetails.projectedTotalTime | timeFormat }}</div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+</div>

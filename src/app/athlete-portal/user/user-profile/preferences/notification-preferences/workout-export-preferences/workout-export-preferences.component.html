@@ -1,0 +1,252 @@
+<div class="card card-box mt-4">
+  <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+    <div class="title">Bike Data Preferences</div>
+    <div>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize mr-2"
+              *ngIf = "editMode === true" (click)="cancel()">
+        Cancel
+      </button>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+              (click)="editMode = true;" *ngIf = "editMode === false">
+        Edit
+      </button>
+      <button class="btn-success btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+              *ngIf = "editMode === true" (click)="saveWorkoutExportPreferences();">
+        Save<i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body card-body-md py-0 card-body-md d-flex flex-column justify-content-between training-preference">
+    <!-- Push to Garmin -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex align-items-baseline">
+        <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Push to Garmin</div>
+        <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" data-toggle="modal"
+              data-target="#pushToGarminModal" class="info-icon cursor-pointer d-inline-block d-inline-block ml-1"
+              >
+        </div>
+      </div>
+      <ng-container *ngIf="!editMode">
+        <div [ngClass]="{'select-container': workoutExportPreferences.autoPushToDevice == true, 'select-container-false': workoutExportPreferences.autoPushToDevice == false}">
+          <div class="align-middle d-inline-block garmin-param"
+              [ngClass]="{'selected-param': workoutExportPreferences.autoPushToDevice == true }">
+          </div>
+          <div class="align-middle d-inline-block garmin-param"
+              [ngClass]="{'selected-param': workoutExportPreferences.autoPushToDevice == false }">
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="editMode">
+        <span class="select-container" 
+        [ngClass]="{'select-container': workoutExportPreferences.autoPushToDevice == true, 'select-container-false': workoutExportPreferences.autoPushToDevice == false}">
+          <h6 class="align-middle d-inline-block garmin-param cursor-pointer" (click)="workoutExportPreferences.autoPushToDevice = true"
+              [ngClass]="{'selected-param': workoutExportPreferences.autoPushToDevice === true }">
+            </h6>
+          <h6 class="align-middle d-inline-block garmin-param cursor-pointer" (click)="workoutExportPreferences.autoPushToDevice = false"
+              [ngClass]="{'selected-param': workoutExportPreferences.autoPushToDevice === false }">
+            </h6>
+        </span>
+      </ng-container>
+    </div>
+    <!-- Export Bike Session Defaults -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="!editMode">
+      <div class="text-left text-md mb-0" [ngClass]="{'item-title' : isMobile}">Export bike Session Defaults</div>          
+      <div [ngClass]="{'d-flex' : !isMobile}">
+          <div class="setting-item item-content text-center">
+              Export {{ prefExportFileType }}
+          </div>
+          <div class="setting-item item-content text-center">
+              Export {{ prefIntensityMetric }}
+          </div>
+          <div class="setting-item item-content text-center" *ngIf = "workoutExportPreferences.defaultPrependWUTime > 0">
+            Prepend {{workoutExportPreferences.defaultPrependWUTime}} mins
+          </div>
+          <div class="setting-item item-content text-center" *ngIf = "workoutExportPreferences.defaultWUMSInsertTime > 0">
+            Insert {{workoutExportPreferences.defaultWUMSInsertTime}} mins
+          </div>
+          <div class="setting-item item-content text-center" *ngIf = "workoutExportPreferences.defaultAppendMSTime > 0">
+            Append {{workoutExportPreferences.defaultAppendMSTime}} mins
+          </div>
+      </div>
+    </div>
+
+    <!-- Intensity Metric for files -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode">
+      <div class="text-left text-md mb-0" [ngClass]="{'item-title' : isMobile}">Default Export File Format</div>
+      <div class="d-flex" *ngIf="!isMobile">
+          <div class="setting-item item-content text-center cursor-pointer" [ngClass]="{'selected-item': prefExportFileType === '.erg'}"
+                (click)="workoutExportPreferences.prefExportFileType = 'ERG'">.erg</div>
+          <div class="setting-item item-content text-center cursor-pointer" [ngClass]="{'selected-item': prefExportFileType === '.mrc'}" 
+                (click)="workoutExportPreferences.prefExportFileType = 'MRC'">.mrc</div>
+          <div class="setting-item item-content text-center cursor-pointer" [ngClass]="{'selected-item': prefExportFileType === '.fit'}" 
+                (click)="workoutExportPreferences.prefExportFileType = 'FIT'">.fit</div>
+          <div class="setting-item item-content text-center cursor-pointer" [ngClass]="{'selected-item': prefExportFileType === '.zwo'}" 
+                (click)="onChangeFileType('ZWO')">.zwo</div>
+      </div>
+
+      <div class="d-flex w-50 justify-content-end" *ngIf="isMobile">
+        <button type="button" class="btn dropdown-toggle dropdown-content shadow px-3 py-2 align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">{{ prefExportFileType }}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="workoutExportPreferences.prefExportFileType = 'ERG';">.erg</a>
+          <a class="dropdown-item" (click)="workoutExportPreferences.prefExportFileType = 'MRC';">.mrc</a>
+          <a class="dropdown-item" (click)="workoutExportPreferences.prefExportFileType = 'FIT';">.fit</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode">
+      <div class="text-left text-md mb-0">
+        <div class="d-flex">
+          <div class="text-left text-md mb-0" [ngClass]="{'item-title' : isMobile}">
+              Intensity Metric for {{ prefExportFileType }} Files
+          </div>
+          <div [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" data-toggle="modal"
+              data-target="#" class="info-icon cursor-pointer d-inline-block d-inline-block ml-1"></div>
+        </div>
+      </div>
+      <div class="d-flex" *ngIf="!isMobile">
+          <div class="setting-item text-sm text-center cursor-pointer" 
+                  [ngClass]="{'selected-item': workoutExportPreferences.prefIntensityMetric === 'VARIABLE' }" 
+                  (click)="onClickVariablePref()">
+              <div class="d-flex">
+                  <div [inlineSVG]="'../assets/img/svg/icons/pace-icn.svg'" [autosize]="true" style="width: 15px;" data-toggle="modal"
+                  data-target="#" class="cursor-pointer d-inline-block ml-2"></div>
+                  <div class="text-left text-sm mb-0 ml-2">
+                      Variable
+                  </div>
+              </div>
+          </div>
+          <div class="setting-item text-sm text-center cursor-pointer" 
+                      [ngClass]="{'selected-item': workoutExportPreferences.prefIntensityMetric === 'POWER'}" 
+                      (click)="workoutExportPreferences.prefIntensityMetric = 'POWER'">
+              <div class="d-flex">
+                  <div [inlineSVG]="'../assets/img/svg/icons/power-icn.svg'" [autosize]="true" style="width: 10px;" data-toggle="modal"
+                  data-target="#" class="cursor-pointer d-inline-block ml-2"></div>
+                  <div class="text-left text-sm mb-0 ml-2">
+                      Power
+                  </div>
+              </div>
+          </div>
+          <div class="setting-item text-sm text-center cursor-pointer" 
+                  [ngClass]="{'selected-item': workoutExportPreferences.prefIntensityMetric === 'HR'}" 
+                  (click)="onClickHRPref()">
+              <div class="d-flex">
+                  <div [inlineSVG]="'../assets/img/svg/icons/heartrate-icn.svg'" [autosize]="true" style="width: 15px;" data-toggle="modal"
+                  data-target="#" class="cursor-pointer d-inline-block ml-2"></div>
+                  <div class="text-left text-sm mb-0 ml-2">
+                      Heart Rate
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="isMobile">
+        <button type="button" class="btn dropdown-toggle dropdown-content shadow px-3 py-2 align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">{{ prefIntensityMetric }}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="workoutExportPreferences.prefIntensityMetric = 'VARIABLE';">Variable</a>
+          <a class="dropdown-item" (click)="workoutExportPreferences.prefIntensityMetric = 'POWER';">Power</a>
+          <a class="dropdown-item" (click)="workoutExportPreferences.prefIntensityMetric = 'HR';">Heart Rate</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Time for Desktop-->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode && !isMobileOrTablet">
+      <div class="d-flex">
+        <div class="text-left text-md mb-0">Additional Time</div>
+        <div [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+            data-target="#weeklyPatternInfoModal" class="cursor-pointer d-inline-block ml-2"></div>
+      </div>
+      <div class="d-flex">
+        <div class="d-flex ">
+          <div class="text-sm text-center pt-1">Prepend(before WU)</div>
+          <div class="time-button text-sm text-center cursor-pointer ml-2" (click)="decrementPrependTime()">-</div>
+          <input
+              type="text"
+              [(ngModel)]="workoutExportPreferences.defaultPrependWUTime"
+              class="text-center additional-input"
+          />
+          <div class="time-button add text-sm text-center cursor-pointer" (click)="incrementPrependTime()">+</div>
+        </div>
+        <div class="d-flex ml-3">
+            <div class="text-sm text-center pt-1">Insert(between WU&MS)</div>
+            <div class="time-button text-sm text-center cursor-pointer ml-2" (click)="decrementInsertTime()">-</div>
+            <input
+              type="text"
+              [(ngModel)]="workoutExportPreferences.defaultWUMSInsertTime"
+              class="text-center additional-input"
+            />
+            <div class="time-button add text-sm text-center cursor-pointer" (click)="incrementInsertTime()">+</div>
+        </div>
+        <div class="d-flex ml-3">
+          <div class="text-sm text-center pt-1">Append(before CD)</div> 
+          <div class="time-button text-sm text-center cursor-pointer ml-2" (click)="decrementAppendTime()">-</div>
+          <input
+            type="text"
+            [(ngModel)]="workoutExportPreferences.defaultAppendMSTime"
+            class="text-center additional-input"
+          />
+          <div class="time-button add text-sm text-center cursor-pointer" (click)="incrementAppendTime()">+</div>
+        </div>
+      </div>
+    </div>
+    <!-- Additional Time for Mobile and Tablet-->
+    <div *ngIf="isMobileOrTablet">
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode">
+        <div class="d-flex align-items-center">
+          <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Additional Time</div>
+          <div [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" data-toggle="modal"
+              data-target="#weeklyPatternInfoModal" class="info-icon cursor-pointer d-inline-block ml-2"></div>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode">
+        <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Prepend(Before Warmup)</div>
+        <div class="d-flex">
+          <div class="time-button text-sm text-center cursor-pointer ml-2" (click)="decrementPrependTime()">-</div>
+          <input
+              type="text"
+              [(ngModel)]="workoutExportPreferences.defaultPrependWUTime"
+              class="text-center additional-input"
+          />
+          <div class="time-button add text-sm text-center cursor-pointer" (click)="incrementPrependTime()">+</div>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode">
+        <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Insert(Between Warmup & Main Set)</div>
+        <div class="d-flex">
+          <div class="time-button text-sm text-center cursor-pointer ml-2" (click)="decrementInsertTime()">-</div>
+          <input
+          type="text"
+          [(ngModel)]="workoutExportPreferences.defaultWUMSInsertTime"
+          class="text-center additional-input"
+          />
+          <div class="time-button add text-sm text-center cursor-pointer" (click)="incrementInsertTime()">+</div>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" *ngIf="editMode">
+        <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Append(Before Cooldown)</div>
+        <div class="d-flex">
+          <div class="time-button text-sm text-center cursor-pointer ml-2" (click)="decrementAppendTime()">-</div>
+          <input
+          type="text"
+          [(ngModel)]="workoutExportPreferences.defaultAppendMSTime"
+          class="text-center additional-input"
+          />
+          <div class="time-button add text-sm text-center cursor-pointer" (click)="incrementAppendTime()">+</div>
+        </div>
+      </div>
+    </div>
+
+
+</div>

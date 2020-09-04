@@ -1,0 +1,102 @@
+<svg version="1.1" viewBox="0 0 32 32" xml:space="preserve" width="18" height="18">
+	<g class="nc-icon-wrapper" fill="#FFF">
+		<g class="nc-interact_menu-close-2-o-32-alt">
+			<path fill="none" stroke="#FFF" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4" d="M2 6h28" stroke-linejoin="miter" transform="translate(0 0.00) rotate(0.00 16 6)">
+			</path>
+			<path data-color="color-2" fill="none" stroke="#FFF" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4" d="M2 16h28" stroke-linejoin="miter" opacity="1">
+			</path>
+			<path fill="none" stroke="#FFF" stroke-linecap="square" stroke-miterlimit="10" stroke-width="4" d="M2 26h28" stroke-linejoin="miter" transform="translate(0 0) rotate(0 16 26)">
+			</path>
+		</g>
+		<script>
+! function() {
+  function findSvgRecursive(e) {
+      var i = e.parentNode;
+      if ("svg" !== i.tagName) i = findSvgRecursive(i);
+      return i;
+  }
+
+  function isCheck1(x, y, u, v) {
+      return 1 > (x /= v / 2) ? u / 2 * x * x * x * x + y : -u / 2 * ((x -= 2) * x * x * x - 2) + y
+  }
+
+  function HamburgerMenuClass(t) {
+      this.element = t;
+      this.topLine = this.element.getElementsByTagName("path")[0];
+      this.centerLine = this.element.getElementsByTagName("path")[1];
+      this.bottomLine = this.element.getElementsByTagName("path")[2];
+      this.time = {
+          start: null,
+          total: 250,
+      };
+      this.status = {
+          interacted: !1,
+          animating: !1,
+      };
+      this.init();
+  }
+  if (!window.requestAnimationFrame) {
+      var n = null;
+      window.requestAnimationFrame = function(t, e) {
+          var i = (new Date).getTime();
+          n || (n = i);
+          var a = Math.max(0, 16 - (i - n)),
+              s = window.setTimeout(function() {
+                  t(i + a)
+              }, a);
+          return n = i + a, s;
+      }
+  }
+  HamburgerMenuClass.prototype.init = function() {
+      var that = this;
+      this.element.addEventListener("click", function() {
+          if (!that.status.animating) { 
+            that.status.animating = true;
+            window.requestAnimationFrame(that.triggerAnimation.bind(that));
+          }
+      })
+  };
+  HamburgerMenuClass.prototype.triggerAnimation = function(t) {
+      var e = this.getProgress(t),
+          i = this.status.interacted ? this.time.total - e : e;
+      this.animateIcon(i);
+      this.checkProgress(e);
+  };
+  HamburgerMenuClass.prototype.getProgress = function(t) {
+      return this.time.start || (this.time.start = t), t - this.time.start
+  };
+  HamburgerMenuClass.prototype.checkProgress = function(t) {
+      var e = this;
+      this.time.total > t ? window.requestAnimationFrame(e.triggerAnimation.bind(e)) : (this.status = {
+          interacted: !this.status.interacted,
+          animating: !1
+      }, this.time.start = null)
+  };
+  HamburgerMenuClass.prototype.animateIcon = function(t) {
+      if (t > this.time.total) {
+        t = this.time.total;
+      }
+      if (0 > t) {
+        t = 0;
+      }
+      var i = isCheck1(Math.min(t, this.time.total / 2), 0, 10, this.time.total / 2).toFixed(2);
+      var n = isCheck1(Math.max(t - this.time.total / 2, 0), 0, 45, this.time.total / 2).toFixed(2);
+      this.topLine.setAttribute("transform", "translate(0 " + i + ") rotate(" + n + " 16 6)");
+	  this.bottomLine.setAttribute("transform", "translate(0 " + -i + ") rotate(" + -n + " 16 26)");
+	  var halftime = t > 0.5 * this.time.total;
+	  var last30percent = t > 0.7 * this.time.total;
+      this.topLine.setAttribute('stroke', last30percent ? '#A2A9AD' : '#FFF');
+      this.centerLine.setAttribute("opacity", halftime ? 0 : 1);
+      this.centerLine.setAttribute('stroke', last30percent ? '#A2A9AD' : '#FFF');
+      this.bottomLine.setAttribute('stroke', last30percent ? '#A2A9AD' : '#FFF');
+  };
+  var a = document.getElementsByClassName("nc-interact_menu-close-2-o-32-alt");
+  if (a) {
+      for (var s = 0; a.length > s; s++) {
+        new HamburgerMenuClass(findSvgRecursive(a[s]));
+      }
+  }
+}();
+		</script>
+	</g>
+</svg>

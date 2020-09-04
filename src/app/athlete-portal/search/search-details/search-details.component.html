@@ -1,0 +1,25 @@
+<div class="modal-header" *ngIf="item">
+  <h4 class="modal-title pull-left">
+    {{item.title | ucwords}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body text-center" *ngIf="item">
+  <video controls *ngIf="item.result_type == 'video'">
+    <source [src]="santizer.bypassSecurityTrustResourceUrl(item.url)" type="video/mp4">
+  </video>
+
+  <div class="text-info mt-2" *ngIf="item.result_type == 'video'">
+    {{formatDescription(item.body)}}
+  </div>
+
+  <div class="text-info mt-2" *ngIf="item.result_type == 'article'">
+    <p [innerHTML]="formatHTML(item.article)"> </p>
+  </div>
+</div>
+<div class="modal-footer position-relative">
+  <textarea type="username" class="form-control comments" [(ngModel)]="comments" placeholder="Comment"> </textarea>
+  <br>
+  <button type="button" class="btn btn-sm send-comment position-absolute btn-info text-md mt-2" (click)="send(item.id,comments)">Send</button>
+</div>

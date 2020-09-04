@@ -1,0 +1,72 @@
+<div class="main">
+  <div class="container">
+    <dismissable *ngIf="connectionStatus" id="23andme-connect-popup" #dismissable>
+      <div class="row">
+        <div class="col-12 col-md-10 offset-md-1">
+          <div class="bg-white shadow p-4 rounded text-center position-relative mb-4">
+            <button class="pt-3 position-absolute" style="top: 0; right: 15px;" (click)="dismissable.hide()">
+              <i class="fal fa-times text-secondary"></i>
+            </button>
+            <h4 class="font-weight-normal">Upload Complete <i class="text-success fal fa-check-circle"></i></h4>
+            <p class="mt-3 text-center text-secondary">Your genome was successfully uploaded! Your training can now be further optimizing based on your genetics.</p>
+            <div>
+              <button class="btn btn-success text-white flex-grow-1 m-2 text-nowrap" (click)="openModal(geneticsInformationModal)">Important Information</button>
+              <button class="btn btn-default text-secondary flex-grow-1 m-2 text-nowrap" (click)="dismissable.hide()">Dismiss <i class="fal fa-times ml-1"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </dismissable>
+
+    <div class="row">
+      <div class="col-12 col-md-10 offset-md-1">
+        <div *ngIf="geneticsData?.geneEffectSummary" class="row">
+          <div class="col-md-6 mb-4" *ngFor="let tab of geneticsData.geneEffectSummary; let index = index">
+            <div class="bg-white shadow p-4 rounded text-secondary text-center border-top border-5 border-default v-100">
+              <div [ngSwitch]="index">
+                <gauge-chart-svg *ngSwitchCase="0" chartType="power" title="Training Intensity Response" [result]="tab.geneEffectScore"></gauge-chart-svg>
+                <gauge-chart-svg *ngSwitchCase="1" chartType="aerobic" title="Aerobic Potential" [result]="tab.geneEffectScore"></gauge-chart-svg>
+                <gauge-chart-svg *ngSwitchCase="2" chartType="recovery" title="Recovery Rate" [result]="tab.geneEffectScore"></gauge-chart-svg>
+                <gauge-chart-svg *ngSwitchCase="3" chartType="injury" title="Injury Predisposition" [result]="tab.geneEffectScore"></gauge-chart-svg>
+              </div>
+              <div class="border-top m-4 py-3 text-justify">{{ tab.geneEffectDescription }}</div>
+              <button class="btn btn-default text-secondary" (click)="toResults(index)">View Results</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-md-10 offset-md-1">
+          <div class="card p-4 rounded shadow mb-4 px-0 py-1">
+            <div class="d-flex justify-content-center align-items-center">
+              <button class="btn btn-md btn-success text-md m-2" (click)="openModal(geneticsInformationModal)">Important Information</button>
+              <input #fileUpload class="d-none" type="file" (change)="onFileChange($event)" placeholder="Upload File" accept=".txt">
+              <button class="btn btn-md btn-default text-md text-secondary m-2" (click)="fileUpload.click();serverError = null;">
+                <span *ngIf="!busy">Upload a new Genome <i class="fal fa-cloud-upload"></i></span>
+                <span *ngIf="busy">Loading <i class="fas fa-spinner fa-spin"></i></span>
+              </button>
+            </div>
+            <div *ngIf="serverSuccess" class="mt-4 alert alert-success">Genome has been successfully uploaded</div>
+            <div *ngIf="serverError" class="mt-4 alert alert-danger">{{ serverError }}</div>
+          </div>
+      </div>
+    </div>
+    
+    
+  </div>
+</div>
+
+<ng-template #geneticsInformationModal>
+  <div class="modal-header">
+    <h5 class="modal-title">Important Genetic Information</h5>
+    <button class="close" type="button" (click)="geneticsInformationModalRef.hide()">
+      <span>×</span>
+    </button>
+  </div>
+  <div class="modal-body p-4">
+    <genetics-glossary></genetics-glossary>
+  </div>
+</ng-template>

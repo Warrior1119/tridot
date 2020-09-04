@@ -1,0 +1,38 @@
+.form-control {
+    width: 100%;
+    padding: 0.3rem 0.3rem !important;
+}
+
+.custom-width {
+  width: 30%;
+  option{
+      width: 30%;
+  }
+}
+
+.custom-select-lg {
+  font-size: 1rem !important;
+  padding: 0 1.75rem 0 0.75rem !important;
+  height: calc(1.5rem + 0.8rem) !important;
+}
+
+
+.card-type {
+  min-width: 40px;
+  border-radius: 4px;
+  background-color: #f4f5f7;
+  margin-right: 0.5rem;
+
+  input {
+    max-width: 70px;
+
+    &.input-error {
+      border-color: #DC3545;
+    }
+  }
+}
+
+.item-title {
+  font-size: 13px !important;
+}
+  

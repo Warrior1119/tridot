@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17">
+  <defs>
+    <style>
+      .edit-alt-cls-1 {
+        fill: #a4acb2;
+      }
+    </style>
+  </defs>
+  <g id="edit-72" transform="translate(-2 -1)">
+    <path id="Path_247" data-name="Path 247" class="edit-alt-cls-1" d="M11.145,6,2.176,14.969a.532.532,0,0,0-.176.41v4.1a.554.554,0,0,0,.586.586h4.1a.532.532,0,0,0,.41-.176l8.969-8.969Z" transform="translate(0 -2.069)"/>
+    <path id="Path_248" data-name="Path 248" class="edit-alt-cls-1" d="M25.859,5.279l-4.1-4.1a.567.567,0,0,0-.821,0L19,3.11l4.924,4.924L25.859,6.1A.567.567,0,0,0,25.859,5.279Z" transform="translate(-7.034)"/>
+  </g>
+</svg>

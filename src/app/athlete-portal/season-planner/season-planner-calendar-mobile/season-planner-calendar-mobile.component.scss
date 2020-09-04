@@ -1,0 +1,19 @@
+.phase-block .week-span {
+  width: unset;
+  min-width: 60px;
+  max-width: 80px;
+  height: 90px;
+  .race-block-c {
+    .number-lg {
+      color: #fff;
+    }
+  }
+  .number-lg-sub {
+    margin-bottom: auto;
+  }
+}
+
+.pagination-controls {
+  position: relative;
+  z-index: 3;
+}

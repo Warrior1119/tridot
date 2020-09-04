@@ -1,0 +1,149 @@
+app-daily-workout {
+  .dailyMetrics-block {
+    width: 100% !important;
+    .metrics-content {
+      max-width: initial !important;
+    }
+  }
+  .daily-workut-burger-button {
+    border-color: #e0e2e2;
+    border-radius: 4px;
+    background-color: #e0e2e2;
+    height: 33px;
+    width: 38px;
+
+    .custom-menu__button {
+      line-height: 1;
+
+      svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
+
+    .my-icon {
+      position: relative;
+      left: -2px;
+      top: -5px;
+
+      /deep/ svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
+  }
+
+  // .tutorial-select {
+  //   padding:3px 14px;
+  //   transition: all 200ms ease-in-out;
+  //   &:hover {
+  //     background-color: #ececec;
+  //     padding: 3px 14px;
+  //     border-radius: 34px;
+  //   }
+  // }
+
+  .session-inc {
+    &.bg-success {
+      .border-right {
+        border-color: darken(#66D24B, 10%) !important;
+
+        .stacked-number-container {
+          span {
+            font-weight: 400;
+          }
+        }
+      }
+    }
+  }
+
+  .daily-menu-wrap {
+    top: -8px;
+
+    &.open {
+      top: -9px;
+      right: 19px
+    }
+
+    .custom-menu__button {
+      right: -7px;
+      top: -4px;
+    }
+  }
+
+  .burger-active {
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  .metric-name {
+    font-size: 14px;
+  }
+
+  .metric-model {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    min-width: 100px;
+
+    span {
+      margin: auto;
+    }
+
+    img {
+      margin-left: 5px;
+    }
+  }
+
+  .metric-btn {
+    font-size: 12px;
+  }
+
+  .trainx-mobile {
+    padding-right: 0px !important;
+  }
+
+  .daily-metrics-button {
+    border-radius: 5px !important;
+  }
+}
+
+.shadow {
+  -webkit-box-shadow: 0rem 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+  -moz-box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+  box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+}
+
+.shadow-lg {
+  -webkit-box-shadow: 0 .75rem 2.5rem rgba(68, 89, 115, 0.15) !important;
+  -moz-box-shadow: 0 .75rem 2.5rem rgba(68, 89, 115, 0.15) !important;
+  box-shadow: 0 .75rem 2.5rem rgba(68, 89, 115, 0.15) !important;
+}
+
+agm-map {
+  height: 500px;
+}
+
+.blur {
+  -webkit-filter: blur(4px);
+  -moz-filter: blur(4px);
+  -o-filter: blur(4px);
+  -ms-filter: blur(4px);
+  filter: blur(4px);
+}
+
+.no-data {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 2;
+}
+
+.data-selector {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}

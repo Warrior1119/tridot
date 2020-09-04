@@ -1,0 +1,60 @@
+app-manual-completion-modal {
+  .time {
+    background-color: #6f42c1;
+    color: white;
+
+    &.active {
+      background-color: #71d855;
+    }
+  }
+
+  timepicker {
+    >table>tbody>tr>td>.btn-default {
+      /* AM/PM button */
+      border: 1px #eee solid;
+      background: transparent;
+    }
+    .form-control.bs-timepicker-field {
+      border: 1px #eee solid;
+      color: #000;
+      background: transparent;
+      width: 100%;
+      &.is-invalid {
+        border: 1px solid #e00a15;
+      }
+    }
+    td:nth-of-type(5) {
+      width: 26%;
+    }
+  }
+
+  ng4geo-autocomplete {
+    display: block;
+    height: 42px;
+    .custom-autocomplete__input input {
+      box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+      color: #6c757d !important;
+      border: none !important;
+      height: 42px !important;
+      &::placeholder { color: #6c757d !important; }
+    }
+  }
+
+  ngxgeo-autocomplete {
+    display: block;
+    height: 42px;
+    .custom-autocomplete__input input {
+      box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+      color: #6c757d !important;
+      border: none !important;
+      height: 42px !important;
+      &::placeholder { color: #6c757d !important; }
+    }
+  }
+
+  .interference-active {
+    background: #9b9c9d;
+    border-color: #9b9c9d;
+    color: #fff;
+  }
+}

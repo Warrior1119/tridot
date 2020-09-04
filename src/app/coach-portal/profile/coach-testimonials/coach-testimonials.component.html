@@ -1,0 +1,43 @@
+<div class="card mb-4">
+  <div class="card-body px-4">
+    <div class="pb-3">
+      <button
+        class="btn rounded-pill"
+        [class.btn-default]="selected.key === fi.key"
+        *ngFor="let fi of filterItems"
+        (click)="filterTestimonials(fi)"
+      >{{ fi.label }}</button>
+    </div>
+
+    <div *ngIf="data">
+      <div>
+        <div class="testimonial mt-4" *ngFor="let item of data | paginate: { itemsPerPage: 2, currentPage: page }">
+          <img class="testimonial__avatar mr-3" [src]="item.athletePhotoLarge" alt="">
+          <div class="testimonial__main">
+            <div class="testimonial__header">
+              <div>
+                <h5 class="mb-0">{{ item.athleteName }}</h5>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-default text-uppercase" (click)="toggleApprove(item)" [disabled]="loading">{{ selected.key === 'pending' ? 'Approve' : 'Disapprove' }}</button>
+                <button class="btn btn-sm btn-default text-uppercase px-2" (click)="remove(item)" [disabled]="loading"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <p class="testimonial__body pb-4 mt-2 mb-0">{{ item.message }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="data.length > 0" class="text-right pagination-controls">
+        <pagination-controls
+          class="my-pager"
+          previousLabel=""
+          nextLabel=""
+          (pageChange)="page = $event">
+        </pagination-controls>
+      </div>
+
+      <p *ngIf="data.length === 0">There is no data.</p>
+    </div>
+  </div>
+</div>

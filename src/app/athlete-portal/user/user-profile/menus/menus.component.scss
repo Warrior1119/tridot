@@ -1,0 +1,16 @@
+li {
+    cursor: pointer;
+    .menu-item {
+        color: #989fa5;
+        &:hover {
+          background-color: inherit;
+        //   color: #fff;
+        }
+        &:active {
+            color: #000000;
+        }
+    }
+    .menu-active {
+        color: #000000;
+    }
+}

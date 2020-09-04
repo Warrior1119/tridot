@@ -1,0 +1,216 @@
+<div class="card card-box">
+  <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+    <div class="text-md mb-0">Training Information</div>
+    <div>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize mr-2"
+              *ngIf = "isEditMode === true" (click)="cancel()">
+        Cancel
+      </button>
+      <button class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+          (click)="isEditMode = true;" *ngIf = "isEditMode === false">
+        Edit
+      </button>
+      <button class="btn-success btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize" [disabled]="isSaveDisabled()"
+        *ngIf = "isEditMode === true" (click)="updateProfile();">
+        Save<i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body card-body-md pb-0 pt-0">
+    <!-- Description -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="descriptor text-center">
+        <span class="text-mb" [ngClass]="{'text-sm' : isMobile }">When are the approximate dates that you began actively swimming, biking, and running for fitness or competition?</span>
+      </div>
+    </div>
+
+    <form class="selectors" #f="ngForm">
+      <!-- Swim Age -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-2 px-0 border-bottom">
+        <div class="d-flex align-items-center">
+          <div class="text-left" [ngClass]="{'text-sm' : isMobile }">Swim Age</div>
+          <div class="tridot-score tridot-score-setting comp m-0 ml-2">
+            <span>{{profile.swimAge}}</span>
+          </div>
+        </div>
+        <div class="text-right text-sm text-muted" *ngIf="!isEditMode">
+          {{ formatDate(profile.swimStartDate) }}
+        </div>
+        <div class="button-selector" *ngIf="isEditMode">
+          <div class="calendar-dropdown position-relative d-inline-flex">
+            <input type="text" class="btn training-item btn-sm dropdown-toggle text-left shadow px-3 py-2 editable"
+                   [class.border-danger]="f.controls && f.controls.swimStartDate && f.controls.swimStartDate.errors"
+                   name="swimStartDate"
+                   [placeholder]="prefDateFormat" [attr.disabled]="isEditMode ? null : ''"
+                   [ngModel]="formatDate(profile.swimStartDate)"
+                   (ngModelChange)="swimStartDate = $event"
+                   minlength="10" [pattern]="dobPattern"
+                   [mask]="prefDateMask" [dropSpecialCharacters]="false"
+                   autocomplete="off">
+            <span class="text-danger input-error" *ngIf="f.controls && f.controls.swimStartDate && f.controls.swimStartDate.errors">Please enter correct date in {{ prefDateFormat.toLowerCase() }} format!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bike Age -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-2 px-0 border-bottom">
+        <div class="d-flex align-items-center">
+          <div class="text-left" [ngClass]="{'text-sm' : isMobile }">Bike Age</div>
+          <div class="tridot-score tridot-score-setting comp m-0 ml-3">
+            <span>{{profile.bikeAge}}</span>
+          </div>
+        </div>
+        <div class="text-right text-sm text-muted" *ngIf="!isEditMode">
+          {{ formatDate(profile.bikeStartDate) }}
+        </div>
+        <div class="button-selector" *ngIf="isEditMode">
+          <div class="calendar-dropdown position-relative d-inline-flex">
+            <input type="text" class="btn training-item btn-sm dropdown-toggle text-left shadow px-3 py-2 editable"
+                   name="bikeStartDate"
+                   [class.border-danger]="f.controls && f.controls.bikeStartDate && f.controls.bikeStartDate.errors"
+                   [placeholder]="prefDateFormat" [attr.disabled]="isEditMode ? null : ''"
+                   [ngModel]="formatDate(profile.bikeStartDate)"
+                   (ngModelChange)="bikeStartDate = $event"
+                   minlength="10" [pattern]="dobPattern"
+                   [mask]="prefDateMask" [dropSpecialCharacters]="false"
+                   autocomplete="off">
+            <span class="text-danger input-error" *ngIf="f.controls && f.controls.bikeStartDate && f.controls.bikeStartDate.errors">Please enter correct date in {{ prefDateFormat.toLowerCase() }} format!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Run Age -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-2 px-0 border-bottom">
+        <div class="d-flex align-items-center">
+          <div class="text-left" [ngClass]="{'text-sm' : isMobile }">Run Age</div>
+          <div class="tridot-score tridot-score-setting comp m-0 ml-3">
+            <span>{{profile.runAge}}</span>
+          </div>
+        </div>
+        <div class="text-right text-sm text-muted" *ngIf="!isEditMode">
+          {{ formatDate(profile.runStartDate) }}
+        </div>
+        <div class="button-selector" *ngIf="isEditMode">
+          <div class="calendar-dropdown position-relative d-inline-flex">
+            <input type="text" class="btn training-item btn-sm dropdown-toggle text-left shadow px-3 py-2 editable"
+                   name="runStartDate"
+                   [class.border-danger]="f.controls && f.controls.runStartDate && f.controls.runStartDate.errors"
+                   [placeholder]="prefDateFormat" [attr.disabled]="isEditMode ? null : ''"
+                   [ngModel]="formatDate(profile.runStartDate)"
+                   (ngModelChange)="runStartDate = $event"
+                   minlength="10" [pattern]="dobPattern"
+                   [mask]="prefDateMask" [dropSpecialCharacters]="false"
+                   autocomplete="off">
+            <span class="text-danger input-error" *ngIf="f.controls && f.controls.runStartDate && f.controls.runStartDate.errors">Please enter correct date in {{ prefDateFormat.toLowerCase() }} format!</span>
+          </div>
+        </div>
+      </div>
+    </form>
+  
+    <!-- Performance Level -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom" 
+        [class.children-editable]="isEditMode" 
+        [class.children-disabled]="!isEditMode">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'text-sm' : isMobile }">Performance Level</div>
+      </div>
+      <div class="text-right text-sm text-muted" *ngIf="!isEditMode">
+        {{ profile.performanceLevel == '1' ? 'Beginner' : '' }}
+        {{ profile.performanceLevel == '2' ? 'Intermediate' : '' }}
+        {{ profile.performanceLevel == '3' ? 'Competitive' : '' }}
+        {{ profile.performanceLevel == '4' ? 'Highly Competetive' : '' }}
+        {{ profile.performanceLevel == '5' ? 'Elite' : '' }}
+      </div>
+      <ng-container *ngIf="isEditMode">
+        <button type="button" [disabled]="!isEditMode" class="btn training-select-item dropdown-toggle shadow px-2 py-2 d-flex justify-content-between" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">
+            <ng-container *ngIf="profile.performanceLevel == '1'">Beginner</ng-container>
+            <ng-container *ngIf="profile.performanceLevel == '2'">Intermediate</ng-container>
+            <ng-container *ngIf="profile.performanceLevel == '3'">Competitive</ng-container>
+            <ng-container *ngIf="profile.performanceLevel == '4'">Highly Competetive</ng-container>
+            <ng-container *ngIf="profile.performanceLevel == '5'">Elite</ng-container>
+          </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-select-item text-sm" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.performanceLevel = 1;profile.performanceLevelName = 'Beginner';update(profile);">Beginner</a>
+          <a class="dropdown-item" (click)="profile.performanceLevel = 2;profile.performanceLevelName = 'Intermediate';update(profile);">Intermediate</a>
+          <a class="dropdown-item" (click)="profile.performanceLevel = 3;profile.performanceLevelName = 'Competetive';update(profile);">Competitive</a>
+          <a class="dropdown-item" (click)="profile.performanceLevel = 4;profile.performanceLevelName = 'Highly-Competetive';update(profile);">Highly Competetive</a>
+          <a class="dropdown-item" (click)="profile.performanceLevel = 5;profile.performanceLevelName = 'Elite';update(profile);">Elite</a>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Primary Race Distance -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left" [ngClass]="{'text-sm' : isMobile }">Primary Race Distance</div>
+      <div class="text-right text-sm text-muted" *ngIf="!isEditMode">
+        {{ profile.primaryDistance == '1' ? 'Sprint' : '' }}
+        {{ profile.primaryDistance == '2' ? 'Olympic' : '' }}
+        {{ profile.primaryDistance == '3' ? 'Half' : '' }}
+        {{ profile.primaryDistance == '4' ? 'Full' : '' }}
+      </div>
+      <ng-container *ngIf="isEditMode">
+        <button type="button" [disabled]="!isEditMode" class="btn training-select-item dropdown-toggle shadow px-2 py-2 d-flex justify-content-between" data-toggle="dropdown"        aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">
+            <ng-container *ngIf="profile.primaryDistance == '1'">Sprint</ng-container>
+            <ng-container *ngIf="profile.primaryDistance == '2'">Olympic</ng-container>
+            <ng-container *ngIf="profile.primaryDistance == '3'">Half</ng-container>
+            <ng-container *ngIf="profile.primaryDistance == '4'">Full</ng-container>
+          </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-select-item text-sm" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="distanceName(1,'Sprint')">Sprint</a>
+          <a class="dropdown-item" (click)="distanceName(2,'Olympic')">Olympic</a>
+          <a class="dropdown-item" (click)="distanceName(3,'Half')">Half</a>
+          <a class="dropdown-item" (click)="distanceName(4,'Full')">Full</a>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Race Division -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left" [ngClass]="{'text-sm' : isMobile }">Race Division</div>
+      <div class="text-right text-sm text-muted" *ngIf="!isEditMode">
+        {{ getActiveRaceDivision() }}
+      </div>
+      <ng-container *ngIf="isEditMode">
+        <button type="button" [disabled]="!isEditMode" class="btn training-select-item dropdown-toggle shadow px-2 py-2 d-flex justify-content-between" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+          <span class="text-sm text-body mr-3">{{ getActiveRaceDivision() }}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-select-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item text-sm" *ngFor="let div of racex_division"
+            (click)="profile.raceDivision = div.value">{{div.name}}</a>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- <div class="box-footer d-flex align-items-center justify-content-around">
+    <span class="text-sm">Have you swam competitively or on a swim team? </span>
+    <span>
+      <button type="button" class="btn dropdown-toggle shadow px-3 py-2" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <span class="text-sm text-body mr-3">{{(profile.swamInTeam == 'true')? 'YES': 'NO'}}</span>
+        <span class="">
+          <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+        </span>
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="profile.swamInTeam = 'true'; update(profile)"> YES </a>
+        <a class="dropdown-item" (click)="profile.swamInTeam = 'false'; update(profile)"> NO </a>
+      </div>
+    </span>
+  </div> -->
+</div>

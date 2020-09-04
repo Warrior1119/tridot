@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6.65 11.836">
+  <defs>
+    <style>
+      .right-arrow-cls-1 {
+        fill: none;
+        stroke: #808e98;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <path id="Path_390" data-name="Path 390" class="right-arrow-cls-1" d="M0,0,4.651,4.918,0,9.836" transform="translate(1 1)"/>
+</svg>

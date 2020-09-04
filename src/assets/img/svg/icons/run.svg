@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65.123 65.124">
+  <defs>
+    <style>
+      .run-cls-1 {
+        fill: #55da6a;
+      }
+
+      .run-cls-2 {
+        fill: #fff;
+      }
+
+      .run-cls-3 {
+        fill: #42ac53;
+      }
+    </style>
+  </defs>
+  <g id="user-run" transform="translate(0.001 0)">
+    <rect id="Rectangle_16" data-name="Rectangle 16" class="run-cls-1" width="65.124" height="65.124" rx="32.562" transform="translate(0 0)"/>
+    <g id="sport" transform="translate(16.38 17.19)">
+      <ellipse id="Ellipse_162" data-name="Ellipse 162" class="run-cls-2" cx="4.448" cy="4.448" rx="4.448" ry="4.448" transform="translate(22.794 0)"/>
+      <path id="Path_276" data-name="Path 276" class="run-cls-3" d="M16.593,18.392l4.17-2.78,1.949,1.24c.563-.607.953-1.022,1.093-1.162a4.967,4.967,0,0,1,2.321-1.311L21.461,12.2a1.666,1.666,0,0,0-1.716.081l-5,3.336a1.668,1.668,0,1,0,1.851,2.775Z" transform="translate(-7.328 -7.552)"/>
+      <path id="Path_277" data-name="Path 277" class="run-cls-3" d="M29.554,36.75c-1.024.777-2.293,1.756-3.7,2.848l2.372,2.851L21.921,45.96a1.668,1.668,0,1,0,1.492,2.984l8.9-4.448a1.668,1.668,0,0,0,.576-2.509Z" transform="translate(-10.437 -18.542)"/>
+      <path id="Path_278" data-name="Path 278" class="run-cls-2" d="M34.684,25.165a1.667,1.667,0,0,0-2.168-.929L28.031,26.03s-2.119-5.745-3.264-6.889a3.891,3.891,0,0,0-5.5,0c-1.051,1.051-16.717,18.2-16.717,18.2A1.668,1.668,0,1,0,4.79,39.806s17.5-13.931,18.356-14.19l3.195,3.514a1.669,1.669,0,0,0,1.854.427l5.56-2.224A1.669,1.669,0,0,0,34.684,25.165Z" transform="translate(-2.001 -10.217)"/>
+    </g>
+  </g>
+</svg>

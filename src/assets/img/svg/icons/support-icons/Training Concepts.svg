@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 22 24">
+  <g id="rope" transform="translate(-1)">
+    <path id="Path_618" data-name="Path 618" d="M4,9V5A4,4,0,0,1,8,1H8a4,4,0,0,1,4,4V19a4,4,0,0,0,4,4h0a4,4,0,0,0,4-4V15" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+    <rect id="Rectangle_882" data-name="Rectangle 882" width="4" height="9" transform="translate(2 12)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+    <rect id="Rectangle_883" data-name="Rectangle 883" width="4" height="9" transform="translate(18 3)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>

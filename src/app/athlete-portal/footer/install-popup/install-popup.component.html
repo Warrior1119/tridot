@@ -1,0 +1,13 @@
+<dismissable *ngIf="showInstallMessage" id="app-install-popup" #dismissable>
+  <div class="installPopup d-flex align-items-center">
+      <div class="right">
+          <img src="assets/img/pwa/install-icon2.png" class="icon2" alt="" />
+      </div>
+      <div className="left">
+          Install this webapp on your iPhone: tap
+          <img src="assets/img/pwa/install-icon1.png" class="icon1" alt="" />
+          and then Add to homescreen.
+      </div>
+      <button class="btn btn-sm btn-default text-uppercase text-secondary px-3 mb-3 text-nowrap text-sm" (click)="dismiss()">Dismiss<i class="ml-1 fa fa-times"></i></button>
+  </div>
+</dismissable>

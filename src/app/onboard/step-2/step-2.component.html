@@ -1,0 +1,161 @@
+<div class="container h-100 green-borders">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-lg-8 col-xl-6 text-center">
+      <form [formGroup]="step2Form" #form="ngForm">
+        <div class="box shadow rounded">
+          <div class="row">
+            <div class="col">
+              <h1 class="display-1 text-darker text-uppercase page-heading">Basic Information
+              </h1>
+              <p class="text-drk mb-4">Provide more details so we can optimize your training.</p>
+            </div>
+          </div>
+          <div class="row mb-md-3">
+            <div class="col-sm-12 col-md-6 pl-md-2 mb-3 mb-sm-3 mb-md-0">
+
+              <div class="dropdown" dropdown #countryDropdown="bs-dropdown">
+                <div class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                        type="button" id="dropdownCountryButton" dropdownToggle aria-haspopup="true" aria-expanded="false">
+                  <span class="text-body font-weight-normal w-100">
+                    <input type="text" class="border-0 w-100" placeholder="Select a country" name="queryCountry" autocomplete="off" [(ngModel)]="countryQuery" [ngModelOptions]="{standalone: true}" (input)="countryDropdown.show()" />
+                  </span>
+                  <span>
+                    <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                  </span>
+                </div>
+                <div *dropdownMenu class="dropdown-menu w-100" style="max-height: 320px; overflow: auto" aria-labelledby="dropdownCountryButton">
+                  <a class="dropdown-item" *ngFor="let country of filteredCountries" (click)="selectedCountry = country.code; countryQuery = country.name; onCountryCodeChanged()">{{ country.name }}</a>
+                  <a class="dropdown-item disabled" *ngIf="filteredCountries.length === 0">No countries were found</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-6 pr-md-2 mb-3 mb-sm-3 mb-md-0">
+              <label for="units" class="inside-label inside-label-alt">
+                <span>(Units)</span>
+              </label>
+              <div class="dropdown h-100">
+                <button class="btn btn-block dropdown-toggle shadow h-100 px-3 py-2 d-flex align-items-center justify-content-between"
+                  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="text-body font-weight-normal mr-3">
+                    {{ (preferredMeasurementSystem)? preferredMeasurementSystem.charAt(0).toUpperCase() +
+                    preferredMeasurementSystem.slice(1) : 'Units of Measurement'}}
+                  </span>
+                  <span class="">
+                    <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                  </span>
+                </button>
+                <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" (click)="preferredMeasurementSystem='standard'">Standard</a>
+                  <a class="dropdown-item" (click)="preferredMeasurementSystem='metric'">Metric</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-md-3">
+            <div class="col-sm-12 col-md-6 pl-md-2 mb-3 mb-sm-3 mb-md-0">
+              <label for="dob" class="inside-label">
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('required', 'dob') && (form.submitted || step2Form.get('dob').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> Please enter your date of birth </span>
+                </span>
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('pattern', 'dob') && (form.submitted || step2Form.get('dob').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> Please format date as MM/DD/YYYY </span>
+                </span>
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('format', 'dob') && !step2Form.hasError('pattern', 'dob') && (form.submitted || step2Form.get('dob').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> Please provide valid date </span>
+                </span>
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('age', 'dob') && !step2Form.hasError('pattern', 'dob') && (form.submitted || step2Form.get('dob').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext">
+                    You must be between the ages of 13 and 99 to sign up for TriDot
+                  </span>
+                </span>
+                <i class="far fa-check-circle text-success cursor-pointer" *ngIf="!step2Form.hasError('age', 'dob') && !step2Form.hasError('pattern', 'dob') && !step2Form.hasError('required', 'dob') && !step2Form.hasError('format', 'dob')"></i>
+              </label>
+
+              <input type="text"
+                     class="form-control {{form.submitted ? step2Form.get('dob').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                     (blur)="placeholders.dob.current = placeholders.dob.unselect"
+                     (focus)="placeholders.dob.current = placeholders.dob.select"
+                     [(ngModel)]="dob" id="exampleInputtext1"
+                     formControlName="dob"
+                     minlength="10" [pattern]="dobPattern"
+                     [dropSpecialCharacters]="false" [mask]="dobInputMask"
+                     [placeholder]="placeholders.dob.current"
+                     autocomplete="off">
+
+            </div>
+            <div class="col-sm-12 col-md-3 pr-md-2 mb-3 mb-sm-3 mb-md-0">
+              <label for="height" class="inside-label">
+
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('required', 'height') && (form.submitted || step2Form.get('height').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> This is a required field </span>
+                </span>
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('incorrect', 'height') && (form.submitted || step2Form.get('height').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext">
+                    {{heightError}}
+                  </span>
+                </span>
+                <i class="far fa-check-circle text-success cursor-pointer" *ngIf="!step2Form.hasError('incorrect', 'height') && !step2Form.hasError('required', 'height') && (form.submitted || step2Form.get('height').touched)"></i>
+              </label>
+
+              <input *ngIf="inited" type="text" id="height"
+                class="form-control {{form.submitted ? step2Form.get('height').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                [(ngModel)]="height"
+                formControlName="height"
+                (blur)="placeholders.height.current = placeholders.height.unselect"
+                (focus)="placeholders.height.current = getHeightPlaceholder(preferredMeasurementSystem)"
+                [mask]="masks.height[preferredMeasurementSystem]" [dropSpecialCharacters]="false" suffix=" &"
+                [placeholder]="placeholders.height.current">
+
+              <span *ngIf="height && preferredMeasurementSystem === 'metric'" style="left: 35px;" class="backdrop">
+                <span class="backdrop-placeholder">{{height}}</span>{{ getHeightPostfix(preferredMeasurementSystem) }}
+              </span>
+            </div>
+            <div class="col-sm-12 col-md-3 pr-md-2 mb-3 mb-sm-3 mb-md-0">
+              <label for="weight" class="inside-label">
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('required', 'weight') && (form.submitted || step2Form.get('weight').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext"> This is a required field </span>
+                </span>
+                <span class="custom-tooltip" *ngIf="step2Form.hasError('incorrect', 'weight') && (form.submitted || step2Form.get('weight').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext">
+                    {{weightError}}
+                  </span>
+                </span>
+                <i class="far fa-check-circle text-success cursor-pointer" *ngIf="!step2Form.hasError('required', 'weight') && !step2Form.hasError('incorrect', 'weight') && (form.submitted || step2Form.get('weight').touched)"></i>
+              </label>
+
+              <input type="text" id="weight"
+                class="form-control {{form.submitted ? step2Form.get('weight').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                [placeholder]="placeholders.weight.current"
+                [(ngModel)]="weight"
+                formControlName="weight"
+                (blur)="placeholders.weight.current = placeholders.weight.unselect"
+                (focus)="placeholders.weight.current = getWeightPlaceholder(preferredMeasurementSystem)"
+                mask="000">
+
+              <span *ngIf="weight" style="left: 28px;" class="backdrop weight-placeholder">
+                <span class="backdrop-placeholder">{{weight}}</span>{{ getWeightPostfix(preferredMeasurementSystem) }}
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 pl-md-2 order-1 order-sm-0">
+              <a [routerLink]="['/onboard/step-1']" class="btn btn-lg btn-block btn-default text-md">Go Back</a>
+            </div>
+            <div class="col-sm-12 col-md-6 pr-md-2 mb-3 mb-sm-0">
+              <button type="submit" class="btn btn-lg btn-block btn-info text-md"
+                (click)="nextStep(step2Form.valid && preferredMeasurementSystem)">Continue</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div *ngIf="loading" class="text-center"><i class="fas fa-2x fa-spinner fa-spin"></i></div>
+<div *ngIf="!loading">
+  <div *ngIf="!selectedTicket">
+    <div class="row">
+      <div class="col-10">
+        <h3 class="font-weight-normal">Past Support Requests</h3>
+      </div>
+      <div class="col-2" style="text-align: right">
+        <button class="btn-default btn btn-md d-inline-flex" (click)="backToHome()" customTooltip="Back to support home"
+          placement="left" container="body">
+          <svg version="1.1" viewBox="0 0 32 32" xml:space="preserve" width="18" height="18">
+            <g class="nc-icon-wrapper" fill="#A5ACB1">
+              <path fill="#A5ACB1" d="M1,15L15,2v8c10.497,0.35,16,5.544,16,16.383V30c-3.938-6.688-5.812-9-16-9v8L1,15z"></path>
+            </g>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <hr class="short-line" />
+    <div class="row">
+      <div class="col-12" *ngFor="let ticket of ticketList | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
+        (click)="selectedTicket = ticket">
+        <div class="row">
+          <div class="col-12">
+            <h4 class="ticket-item-header text-lg font-weight-bold mb-3 d-inline-block cursor-pointer" [innerHtml]="ticket.subject + ' ' + (ticket.created_at | date: 'MM/dd/yy')"></h4>
+            <h5 class="align-middle d-inline-block param-size cursor-pointer mb-1 status" [ngClass]="{'open': ticket.status != 'CLOSED', 'closed': ticket.status == 'CLOSED' }">
+                {{ticket.status}} </h5>
+          </div>
+        </div>
+        <div class="ticket-item-description" >
+            <span style="white-space:pre-wrap;" >{{textEncodeDecode.getDecodedText(ticket.description)}}</span>
+        </div>
+      </div>
+    </div>
+    <pagination-controls *ngIf="ticketList.length > 10" (pageChange)="pageNumber = $event" previousLabel="" nextLabel=""
+      class="my-pager"></pagination-controls>
+    <span *ngIf="ticketList.length == 0">No Tickets Found</span>
+  </div>
+
+  <div *ngIf="selectedTicket">
+    <app-ticket-view [ticket]="selectedTicket" (back)="selectedTicket = undefined"></app-ticket-view>
+  </div>
+</div>

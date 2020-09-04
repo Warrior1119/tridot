@@ -1,0 +1,25 @@
+.start-time-input {
+  text-align: center;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  font-size: 1.75rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  // margin-top: -8px;
+
+  ::placeholder {
+    color: #a4acb3;
+  }
+}
+.weight-input-wrap {
+  margin-top: -5px;
+  margin-left: -10px;
+  .weight-input {
+    font-size: 1.75rem;
+    line-height: 1.75rem;
+    height: 35px;
+    background: transparent;
+  }
+}

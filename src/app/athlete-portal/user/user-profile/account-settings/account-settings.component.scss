@@ -1,0 +1,29 @@
+app-account-settings {
+  .dropdown-menu {
+    height: 150px;
+    overflow-y: auto;
+  }
+  .form-control:disabled {
+    background-color: #fff;
+  }
+  .custom-select:disabled {
+    color: #adb4bb;
+    background-color: #fff;
+  }
+  fieldset:disabled {
+    // display:none;
+    .form-control, .custom-select-form-control {
+      &:disabled {
+        background-color:#f3f3f3;
+        border-color:#f3f3f3 !important;
+        box-shadow:inset 0 0 0px 1px #f3f3f3 !important;
+      }
+    }
+  }
+  .item-title {
+    font-size: 13px !important;
+  }
+  .table-mobile {
+    font-size: 8px !important;
+  }
+}

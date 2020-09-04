@@ -1,0 +1,19 @@
+.tridot_toggle {
+  visibility: hidden;
+  display: none;
+}
+
+input{ display:none; }
+
+label div{
+	width:26px;
+	height:26px;
+	display:inline-block;
+	text-align:center;
+	margin-right:6px;	
+	border-radius:3px;
+	cursor:pointer;
+}
+label i{ color: white;	opacity:0; }
+label:hover div{ background:#6c726d; }
+label i{ opacity:1; }

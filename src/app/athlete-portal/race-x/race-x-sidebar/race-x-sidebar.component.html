@@ -1,0 +1,11 @@
+<div>
+  <app-race-x-profile (selectedRace)="updateRace($event)" (updatedRaceX)="updateRace($event)" [race]="race"
+    [races]="races"></app-race-x-profile>
+</div>
+<app-race-x-profile *ngIf="races" (selectedRace)="updateRace($event)" (updatedRaceX)="updateRace($event)" [race]="race"
+  [details]="details" [races]="races"></app-race-x-profile>
+
+<div class="position-relative d-none d-lg-block">
+  <app-upcoming-races *ngIf="races" (selectedRace)="updateRace($event)" (updatedRaceX)="updateRace($event)" [race]="race"
+  ></app-upcoming-races>
+</div>

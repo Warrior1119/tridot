@@ -1,0 +1,9 @@
+*.mode1v3
+*.perspectivev3
+*.pbxuser
+.DS_Store
+build/
+#Ignore built bundles - these are to be rebuilt every time
+/www
+#Ignore generated images - these are to be regenerated every time
+TriDot/Images.xcassets

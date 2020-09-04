@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">
+  <defs>
+    <style>
+      .connect-icon-cls-1 {
+        fill: #9e56cb;
+      }
+
+      .connect-icon-cls-2 {
+        fill: #502c67;
+      }
+
+      .connect-icon-cls-3 {
+        fill: #6d3d8b;
+      }
+
+      .connect-icon-cls-4 {
+        fill: #ac77d3;
+      }
+
+      .connect-icon-cls-5 {
+        fill: #e8d9f2;
+      }
+
+      .connect-icon-cls-6 {
+        fill: #c9a5e3;
+      }
+
+      .connect-icon-cls-7 {
+        fill: #b569ed;
+      }
+    </style>
+  </defs>
+  <g id="Group_527" data-name="Group 527" transform="translate(-1398 -506)">
+    <g id="watch-circle" transform="translate(1398 506)">
+      <rect id="Rectangle_17" data-name="Rectangle 17" class="connect-icon-cls-1" width="130" height="130" rx="65"/>
+      <g id="Group_21" data-name="Group 21" transform="translate(36.692 25.675)">
+        <path id="Path_46" data-name="Path 46" class="connect-icon-cls-2" d="M7.27,19.948,41.049,20h0a1.709,1.709,0,0,0,1.676-2.045L39.511,1.874A1.709,1.709,0,0,0,37.834.5H10.478A1.709,1.709,0,0,0,8.8,1.874L5.6,17.9A1.71,1.71,0,0,0,7.27,19.948Z" transform="translate(4.91 -0.5)"/>
+        <path id="Path_47" data-name="Path 47" class="connect-icon-cls-2" d="M42.406,18.456a1.71,1.71,0,0,0-1.32-.627L7.266,17.764h0A1.709,1.709,0,0,0,5.586,19.81L8.825,36A1.709,1.709,0,0,0,10.5,37.378H37.857A1.709,1.709,0,0,0,39.534,36L42.76,19.874A1.711,1.711,0,0,0,42.406,18.456Z" transform="translate(4.887 41.272)"/>
+        <rect id="Rectangle_18" data-name="Rectangle 18" class="connect-icon-cls-3" width="7.707" height="13.678" transform="translate(55.554 32.486)"/>
+        <path id="Path_48" data-name="Path 48" class="connect-icon-cls-4" d="M31.566,3.5A29.066,29.066,0,1,0,60.632,32.566,29.1,29.1,0,0,0,31.566,3.5Z" transform="translate(-2.5 6.759)"/>
+        <path id="Path_49" data-name="Path 49" class="connect-icon-cls-5" d="M4.295,14a23.923,23.923,0,0,0,45.858,0Z" transform="translate(1.842 32.164)"/>
+        <path id="Path_50" data-name="Path 50" class="connect-icon-cls-6" d="M50.866,35.776a23.937,23.937,0,1,0-45.858,0Z" transform="translate(1.129 10.388)"/>
+        <circle id="Ellipse_18" data-name="Ellipse 18" class="connect-icon-cls-7" cx="6.839" cy="6.839" r="6.839" transform="translate(32.486 39.325)"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+<div class="p-4">
+  <ng-container *ngIf="!showMobile; else downloadTemplate">
+    <div class="modal-header d-block text-center border-bottom border-2 p-0 mt-4">
+      <h4 class="text-uppercase text-dark">Almost there!</h4>
+      <p class="lead text-sm text-dark">Please double check to make sure you've completed some of the basic steps required to utilize all of TriDot's new features. Don't worry, we've saved your progress from your previous trial.</p>
+    </div>
+    
+    <div class="modal-body p-0 pt-4">
+      <button class="btn btn-lg text-sm text-nowrap {{firstRace ? 'btn-success' : 'btn-dark'}}"
+        (click)="onDismiss()" [routerLink]="'/season-planner/training-phase/add-a-race'">
+        {{firstRace ? 'I\'ve added my first race' : 'Add a race'}}
+        <i class="ml-1 {{firstRace ? 'fas fa-check' : 'fal fa-plus'}}"></i>
+      </button>
+      <button class="btn btn-lg text-sm text-nowrap {{device ? 'btn-success' : 'btn-dark'}}"
+        (click)="onDismiss()" [routerLink]="'/user/devices'">
+        {{device ? 'I\'ve connected a device' : 'Add a device'}}
+        <i class="ml-1 {{device ? 'fas fa-check' : 'fal fa-plus'}}"></i>
+      </button>
+      <button class="btn btn-lg text-sm text-nowrap {{mobileApp ? 'btn-success' : 'btn-dark'}}"
+        (click)="showMobile = true">
+        {{mobileApp ? 'I\'ve installed the mobile app' : 'Download the mobile app'}}
+        <i class="ml-1 {{mobileApp ? 'fas fa-check' : 'fal fa-plus'}}"></i>
+      </button>
+      <button class="btn btn-lg text-sm text-nowrap {{assessCheck ? 'btn-success' : 'btn-dark'}}"
+        (click)="onDismiss()" [routerLink]="'/assessments'">
+        {{assessCheck ? 'I\'ve viewed my assessments' : 'Check assessments'}}
+        <i class="ml-1 {{assessCheck ? 'fas fa-check' : 'fal fa-plus'}}"></i>
+      </button>
+    </div>
+    
+    <div class="modal-footer d-block px-0 mt-3">
+      <p class="text-dark text-center text-xs">If you've previously downloaded out mobile app on the App Store or Google Play store, you'll need to add our new mobile app to your home screen using the instructions found when accessing the app from your mobile device's browser.</p>
+      <button class="btn btn-lg btn-block btn-primary text-md" (click)="onDismiss()">Take me to my new Dashboard<i class="ml-1 fa fa-chevron-right"></i></button>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #downloadTemplate>
+  <div class="modal-header d-block text-center border-bottom border-2 p-0 pb-3 mt-4">
+    <h4 class="text-uppercase text-dark">Download the App</h4>
+  </div>
+  <div class="modal-body d-block p-4 text-dark">
+    <div class="text-center">
+      To install the mobile app on your iPhone login to the site using Safari, tap the
+      <img src="assets/img/pwa/install-icon1.png" class="icon1" alt="" width="22"/> icon and then click the <img src="assets/img/pwa/install-icon2.png" class="icon2" alt="" width="25" /> "Add to Homescreen" option. For Android devices, you'll be prompted to add to homescreen immediately upon accessing the site from your mobile browser.
+    </div>
+  </div>
+  <div class="modal-footer d-block px-0 mt-3">
+    <p class="text-dark text-center text-xs font-weight-bold">If you've previously downloaded out mobile app on the App Store or Google Play store, you'll need to add our new mobile app to your home screen using the instructions found here.</p>
+    <button class="btn btn-lg btn-block btn-primary text-md" (click)="showMobile = false"><i class="mr-1 fa fa-chevron-left"></i>Got it</button>
+  </div>
+</ng-template>

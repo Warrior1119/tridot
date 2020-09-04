@@ -1,0 +1,13 @@
+.modal-header h4 {
+  font-weight: 900;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 9px;
+  row-gap: 13px;
+  @media (max-width: 575.98px) {
+    grid-template-columns: 100%;
+  }
+}

@@ -1,0 +1,17 @@
+<form #form="ngForm" (submit)="updateTime.emit(form.value.timeModel)" autocomplete="off" novalidate>
+  <div class="form-group d-block mx-auto text-center">
+    <label for="time-input" class="mt-3">Edit Start Time</label>
+    <timepicker class="btn btn-block form-control px-3 py-2" [ngClass]="{ 'border border-1 border-danger': !timeModel.valid }" id="time-input"
+      [showSpinners]="false" #timeModel="ngModel"
+      [ngModel]="time | amParse:'hh:mma' | amDateFormat:'YYYY-MM-DD HH:mm:ss'" name="timeModel"
+      required
+      [customTooltip]="timeModel.valid ? '' : 'Please enter valid time'"
+      [tooltip-type]="'error'"
+    ></timepicker>
+    <i *ngIf="!timeModel.valid" class="far fa-exclamation-circle text-danger err-icon"></i>
+    <div class="mt-3 d-flex justify-content-center">
+      <button type="button" class="btn btn-default px-4 mr-3" (click)="updateTime.emit(false)">Cancel</button>
+      <button type="submit" class="btn btn-success px-4">Save</button>
+    </div>
+  </div>
+</form>

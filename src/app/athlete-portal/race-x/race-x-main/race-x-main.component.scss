@@ -1,0 +1,68 @@
+app-race-x-main {
+  .actual-inputs {
+    width: 75px;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .actual-split {
+    width: 110px;
+  }
+
+  .inside-label {
+    position: absolute;
+    right: 25px;
+    top: 9px;
+  }
+
+  .time-input-wrap {
+    &.filled {
+      .time-input-label {
+        position: absolute;
+        top: 0px;
+        left: 53px;
+        background: transparent;
+      }
+      .time-input {
+        padding-right: 0 !important;
+        padding-left: 2rem !important;
+      }
+    }
+  }
+
+  input.editable:disabled,
+  textarea.editable:disabled {
+    background: transparent;
+  }
+
+  input:disabled,
+  textarea:disabled {
+    background: #f2f2f2;
+  }
+
+  button.disabled {
+    cursor: not-allowed;
+  }
+
+  .btn-group {
+    .distance-input {
+      border-right-style: none;
+      text-align: center;
+      padding: 0;
+      width: 60px;
+      font-size: inherit;
+      font-weight: 700;
+
+      &:focus {
+        outline: none;
+      }
+      &:active,
+      &:hover {
+        background-color: transparent;
+        border: 1px solid #dcdcdc;
+        border-right-style: none;
+      }
+    }
+  }
+}

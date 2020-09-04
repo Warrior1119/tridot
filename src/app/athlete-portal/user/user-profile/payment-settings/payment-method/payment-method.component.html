@@ -1,0 +1,150 @@
+<form #form="ngForm" class="w-100">
+  <!-- <div class="px-4 d-flex align-items-center justify-content-between">
+    <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Payment Method</div> -->
+    <!-- <div>
+      <ng-container *ngIf="canEdit">
+        <button type="button" class="btn-default btn-xs text-sm text-uppercase px-2 rounded" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn-success btn-xs text-sm text-uppercase px-2 rounded ml-2" (click)="updatePayment(showUpdateForBilling && !form.invalid)">
+          Save <i class="fal fa-spinner fa-spin" *ngIf="billingLoading"></i>
+        </button>
+      </ng-container>
+      <button *ngIf="!canEdit" type="button" class="btn-default btn-xs rounded text-sm px-2 text-uppercase" (click)="onEditCardDetails();">Edit</button>
+    </div> -->
+  <!-- </div> -->
+  <!-- <app-alerts *ngIf="!canEdit && billingSuccessAlerts" [alerts] = "billingSuccessAlerts"></app-alerts> -->
+  <div class="col-12 d-flex justify-content-between align-items-center py-3 border-bottom px-0">
+    <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Payment Method</div>
+    <ng-container *ngIf="!canEdit">
+      <div class="d-flex align-items-center">
+        <div class="card-type text-sm text-center text-muted" [ngClass]="{'card-type-mobile' : isMobile}"> 
+          <strong>
+            {{creditCardType }} 
+          </strong>
+        </div>
+        <div class="text-right text-sm text-muted"> Card ending in {{subscription?.creditCardData.expirationDate}} </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="canEdit">
+      <div [ngClass]="{'d-flex justify-content-end':!isMobile}" *ngIf = "!showStripeElements">
+        <input type="text" 
+                class="form-control" 
+                [ngClass]="{'item-title w-100 mt-1':isMobile, 'form-input col-4 ml-2':!isMobile}"
+                maxlength="19" 
+                placeholder="Card Number" 
+                name="ccNumber" 
+                [(ngModel)]="subscription.creditCardData.ccNumber" 
+                (ngModelChange)="showUpdateForBilling = true" required
+                #ccNumberInput="ngModel" 
+                [customTooltip]="ccNumberInput.invalid ? 'This field is required' : null"  
+                tooltip-class="tooltip-danger">
+        <input type="text" 
+                class="form-control" 
+                [ngClass]="{'item-title w-100 mt-1':isMobile, 'form-input col-4 ml-2':!isMobile}"
+                [class.border-danger]="expirationDateError" 
+                placeholder="mm/yy" 
+                [dropSpecialCharacters]="false"
+                mask="00/0000" name="expirationDate" [(ngModel)]="subscription.creditCardData.expirationDate" required
+                (blur)="validateExpirationDateError(expirationDate.value, expirationDate.dirty); showUpdateForBilling = true"
+                #expirationDate="ngModel" [customTooltip]="expirationDateError"  tooltip-class="tooltip-danger">
+        <input type="text" 
+                class="form-control" [mask]="isCardAMEX ? '0000' : '000'" 
+                [ngClass]="{'item-title w-100 mt-1':isMobile, 'form-input col-4 ml-2':!isMobile}"
+                placeholder="CVC" name="cvc" 
+                [(ngModel)]="subscription.creditCardData.cvc" 
+                (ngModelChange)="showUpdateForBilling = true" required
+                #cvc="ngModel" [customTooltip]="cvc.invalid ? 'This field is required' : null"  
+                tooltip-class="tooltip-danger">
+      </div>
+
+      <div class="col-8 stripe-card stripe-card2" [ngClass]="{'d-flex justify-content-end':!isMobile}" *ngIf="showStripeElements">
+        <div [ngClass]="{'col-5' : !isMobile}">
+          <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+          <div class="field col-12">
+            <div id="stripe-card-number" class="input empty"></div>
+            <label for="stripe-card-number" data-tid="elements_examples.form.card_number_label">Card Number</label>
+            <div class="baseline"></div>
+          </div>
+        </div>
+        <div class="field" [ngClass]="{'col-3' : !isMobile}">
+          <div id="stripe-card-expiry" class="input empty"></div>
+          <label for="stripe-card-expiry" data-tid="elements_examples.form.card_expiry_label">Expiration</label>
+          <div class="baseline"></div>
+        </div>
+        <div class="field" [ngClass]="{'col-3 offset-1' : !isMobile}">
+          <div id="stripe-card-cvc" class="input empty"></div>
+          <label for="stripe-card-cvc" data-tid="elements_examples.form.card_cvc_label">CVC</label>
+          <div class="baseline"></div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- <fieldset [disabled]="!canEdit">
+    <div class="card-header card-title text-left pt-3 pb-3 border-bottom-0">
+      <div class="custom-control custom-radio">
+        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked>
+        <label class="custom-control-label d-inline-flex justify-content-around" for="customRadio1"><span class="">Credit
+            or Debit Card</span>
+          <ul class="list-inline mb-0 ml-3">
+            <li class="list-inline-item"><i class="fab fa-cc-visa text-xl" [ngClass]="{'text-primary': subscription?.creditCardData.cardType == 'VI'}"></i></li>
+            <li class="list-inline-item"><i class="fab fa-cc-mastercard text-xl" [ngClass]="{'text-primary': subscription?.creditCardData.cardType == 'CA'}"></i></li>
+            <li class="list-inline-item"><i class="fab fa-cc-amex text-xl" [ngClass]="{'text-primary': subscription?.creditCardData.cardType == 'AX'}"></i></li>
+            <li class="list-inline-item"><i class="fab fa-cc-discover text-xl" [ngClass]="{'text-primary': subscription?.creditCardData.cardType == 'DS'}"></i></li>
+          </ul>
+        </label>
+      </div>
+    </div>
+    <div class="card-body pb-0">
+      <div class="col">
+        <div class="mt-3 mb-3" *ngIf = "!showStripeElements" >
+          <div class="row mb-4">
+            <div class="col-12">
+              <input type="text" class="form-control" name="fullName" [(ngModel)]="fullName" (ngModelChange)="showUpdateForBilling = true" placeholder="Name on Card" maxlength="30" required
+              #fullNameInput="ngModel" [customTooltip]="fullNameInput.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-12">
+              <input type="text" class="form-control" maxlength="19" placeholder="Card Number" name="ccNumber" [(ngModel)]="subscription?.creditCardData.ccNumber" (ngModelChange)="showUpdateForBilling = true" required
+              #ccNumberInput="ngModel" [customTooltip]="ccNumberInput.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 col-md-5">
+              <input type="text" class="form-control" [class.border-danger]="expirationDateError" placeholder="mm/yy" [dropSpecialCharacters]="false"
+                mask="00/0000" name="expirationDate" [(ngModel)]="subscription?.creditCardData.expirationDate" required
+                (blur)="validateExpirationDateError(expirationDate.value, expirationDate.dirty); showUpdateForBilling = true"
+                #expirationDate="ngModel" [customTooltip]="expirationDateError"  tooltip-class="tooltip-danger">
+            </div>
+            <div class="col-6 col-md-4">
+              <input type="text" class="form-control" [mask]="isCardAMEX ? '0000' : '000'" placeholder="CVC" name="cvc" [(ngModel)]="subscription?.creditCardData.cvc" (ngModelChange)="showUpdateForBilling = true" required
+              #cvc="ngModel" [customTooltip]="cvc.invalid ? 'This field is required' : null"  tooltip-class="tooltip-danger">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cell stripe-card stripe-card2" id="stripe-card-2" *ngIf = "!showStripeElements">
+        <div class="row">
+          <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+          <div class="field col-12">
+            <div id="stripe-card-number" class="input empty"></div>
+            <label for="stripe-card-number" data-tid="elements_examples.form.card_number_label">Card Number</label>
+            <div class="baseline"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field half-width col-4">
+            <div id="stripe-card-expiry" class="input empty"></div>
+            <label for="stripe-card-expiry" data-tid="elements_examples.form.card_expiry_label">Expiration</label>
+            <div class="baseline"></div>
+          </div>
+          <div class="field half-width col-4 offset-1">
+            <div id="stripe-card-cvc" class="input empty"></div>
+            <label for="stripe-card-cvc" data-tid="elements_examples.form.card_cvc_label">CVC</label>
+            <div class="baseline"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset> -->
+</form>

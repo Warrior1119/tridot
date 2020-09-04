@@ -1,0 +1,72 @@
+<div class="row mb-4 season-planner-row"  style="margin-right: -22px;">
+  <div *ngFor="let row of currentPlan.rowData | paginate: { itemsPerPage: 5, currentPage: page }"
+    class="season-planner-inner-row d-flex align-items-center mt-4 ml-4 w-100">
+    <ng-container *ngFor="let data of row">
+      <div class="card-box phase-block d-flex justify-content-between align-items-center flex-fill shadow rounded {{getPhaseBorder(data[0])}} mr-4"
+        (mouseenter)="setHoverPhase(data)"
+        (mouseleave)="removeHoverPhase()"
+        [class.phase-block-hover]="isHoverPhase(data)">
+        <ng-container *ngFor="let week of data; let index = index">
+          <div class="week-span cursor-pointer"
+            (click)="setWeek(week)">
+            <div class="race-block v-100" *ngIf="week.raceData"
+              [customTooltip]="weekTemplate" [tooltipContext]="{week:week}"
+              (click)="goToRace(week)"
+              [class.race-block-c]="week.raceData.raceCategory === 'C'">
+              <custom-menu menuClass="race-menu-wrap" iconName="burger-icon-alt">
+                <li (click)="addRace(week)">Add a New Race</li>
+                <li (click)="goToRace(week)">View RaceX Details</li>
+                <li (click)="deleteRace(week)">Delete Race</li>
+              </custom-menu>
+              <div *ngIf="week.raceData.raceCategory !== 'nrp'" class="race-priority">
+                <span>{{week.raceData.raceCategory}}</span>
+              </div>
+              <div class="race-name mt-2">{{week.raceData.raceName | ucwords}}</div>
+              <div class="race-date">{{week.raceData.raceDate | amDateFormat: prefDateFormatLong || 'LL'}}</div>
+              <div class="race-title">{{week.raceData.raceType}}</div>
+              <div class="race-type">
+                <span class="btn btn-outline btn-outline-white text-white">
+                  {{week.raceData.raceDistanceName}}
+                </span>
+              </div>
+            </div>
+            <ng-template #weekTemplate let-week="week">
+              <div class="px-2 py-2">
+                <div class="mb-1">
+                  {{week.weekdayStartDate | amLocal | amDateFormat: prefDateFormatMmm || 'll'}} 
+                  -
+                  {{week.weekEndDate | amLocal | amDateFormat: prefDateFormatMmm || 'll'}}
+                </div>
+                <div class="mb-1"> <strong> Weekly Hours </strong> </div>
+                <div class="mb-1">Swim: <strong> {{week.totalSwimHrs}} </strong> </div>
+                <div class="mb-1">Bike: <strong> {{week.totalBikeHrs}} </strong> </div>
+                <div class="mb-1">Run: <strong> {{week.totalRunHrs}} </strong> </div>
+                <div>Total Hours: <strong> {{week.totalHrs}} </strong> </div>
+              </div>
+            </ng-template>
+            <div class="stacked-number-container" *ngIf="!week.raceData"
+              [customTooltip]="weekTemplate" [tooltipContext]="{week:week}" [offset]="-75"
+              (click)="goToTrainingPhase(week)"
+              [ngClass]="{ 'selected': (selectedWeek)? week.phaseId == selectedWeek.phaseId : '' }">
+              <div class="stacked-number-inner">
+                <span class="number-lg-sub">{{week.weekdayStartDate | amLocal | amDateFormat: 'MMM'}}</span>
+                <span class="number-lg">{{week.weekdayStartDate | amLocal | amDateFormat: 'DD'}}</span>
+              </div>
+            </div>
+
+          </div>
+          <!-- <div class="divider" *ngIf="data[index+1]?.raceData?.raceCategory !== 'C' && week.raceData?.raceCategory !== 'C' && index < data.length - 2"></div> -->
+          <div class="divider" *ngIf="!data[index]?.raceData && !data[index+1]?.raceData && index < (data.length - 1)"></div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div class="text-right">
+  <pagination-controls 
+    class="my-pager"
+    previousLabel=""
+    nextLabel=""
+    (pageChange)="page = $event">
+  </pagination-controls>
+</div>

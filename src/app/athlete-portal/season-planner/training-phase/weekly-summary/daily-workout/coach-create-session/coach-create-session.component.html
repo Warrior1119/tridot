@@ -1,0 +1,214 @@
+<div class="card-box session-numbers-block rounded shadow mb-4">
+  <div class="box-content p-0 container d-flex">
+
+    <div *ngIf="selectedSessionType == 'Blank Session' && addNewSessionToggled" class="flex-fill d-flex justify-content-center align-items-center flex-wrap border-right ng-star-inserted px-2 px-sm-5">
+      <span class="text-sm px-3">Type</span>
+      <div class="tutorial-select border-right px-3 py-3">
+        <div class="btn-group-sm">
+          <button type="button" class="btn btn-link dropdown-toggle border p-2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="text-body text-sm mr-2">{{selectedSessionType}}</span>
+            <span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+            </span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" (click)="setSelectedSessionType(type)" *ngFor="let type of sessionTypes"
+              type="button">{{type}}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center pl-3 pb-3 pt-sm-3 tutorial-select">
+        <div class="btn-group-sm d-flex align-items-stretch">
+          <button type="button" class="btn btn-primary btn-shadow p-2" (click)="createBlankSession()">
+            Create Session
+          </button>
+          <button type="button" class="btn rounded btn-default ml-3" (click)="close()">
+            <svg style="width: 15px;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve"><g class="nc-icon-wrapper" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" fill="#111111" stroke="#111111"><line fill="none" stroke="#111111" stroke-miterlimit="10" x1="19" y1="5" x2="5" y2="19"></line> <line fill="none" stroke="#111111" stroke-miterlimit="10" x1="19" y1="19" x2="5" y2="5"></line></g></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tridot session -->
+    <div *ngIf="selectedSessionType == 'TriDot Session' && addNewSessionToggled" class="flex-fill d-flex justify-content-center flex-wrap px-5">
+
+      <div class="d-flex justify-content-center align-items-center border-right px-1 px-sm-3 py-3">
+        <div class="btn-group-sm">
+          <button type="button" class="btn btn-link dropdown-toggle border p-2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="text-body text-sm mr-2">{{selectedSessionType}}</span>
+            <span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+            </span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" (click)="setSelectedSessionType(type)" *ngFor="let type of sessionTypes"
+              type="button">{{type}}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center border-right px-1 px-sm-3 py-3">
+        <div class="btn-group-sm">
+          <button type="button" class="btn btn-link dropdown-toggle border p-2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="text-body text-sm mr-2">Zone-{{selectedZone?.zoneId || 1}}</span>
+            <span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+            </span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" (click)="setSelectedZone(zone)" *ngFor="let zone of zoneForAdd"
+              type="button">Zone-{{zone.zoneId}}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center border-right px-1 px-sm-3 py-3">
+        <div class="btn-group-sm">
+          <button type="button" class="btn btn-link dropdown-toggle border p-2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="text-body text-sm mr-2">{{selectedSessionStack?.name || 'Select Session'}}</span>
+            <span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+            </span>
+          </button>
+          <div class="dropdown-menu force-scroll">
+            <button class="dropdown-item" (click)="selectedSessionStack = stack" *ngFor="let stack of sessionStacks"
+              type="button">{{stack?.name}}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center border-right px-1 px-sm-3 py-3">
+        <div class="btn-group-sm">
+          <button type="button" class="btn btn-link dropdown-toggle border p-2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="text-body text-sm mr-2">{{newSession.warmUpImpact || 'Warmup Impact'}}</span>
+            <span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+            </span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" (click)="newSession.warmUpImpact = n" *ngFor="let n of [1,2,3,4,5,6]"
+              type="button">{{n}}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center border-right px-1 px-sm-3 py-3">
+        <button type="button" class="btn btn-sm btn-default" (click)="decreaseLevel()">
+          <i class="fal fa-minus"></i>
+        </button>
+        <div class="col px-2" style="line-height: 1;">
+          <p class="text-xs text-center m-0">
+            LEVEL
+          </p>
+          <h4 class="font-weight-bold text-center m-0">
+            {{this.newSession.sessionLevel}}
+          </h4>
+        </div>
+        <button type="button" class="btn btn-sm btn-default" (click)="increaseLevel()">
+          <i class="fal fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center pl-2 py-3">
+        <div class="btn-group-sm p-2 d-flex align-items-stretch">
+          <button type="button" class="btn btn-primary p-2 btn-create-session rounded" (click)="createTridotSession()" [disabled]="!selectedSessionStack">
+            Create Session
+          </button>
+          <button type="button" class="btn rounded btn-default ml-3" (click)="close()">
+            <svg style="width: 15px;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve"><g class="nc-icon-wrapper" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" fill="#111111" stroke="#111111"><line fill="none" stroke="#111111" stroke-miterlimit="10" x1="19" y1="5" x2="5" y2="19"></line> <line fill="none" stroke="#111111" stroke-miterlimit="10" x1="19" y1="19" x2="5" y2="5"></line></g></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- tridot session creation end -->
+    
+    <div *ngIf="!addNewSessionToggled && session && day && !day.noData" class="flex-fill d-flex justify-content-center flex-wrap px-2 px-sm-5">
+      <div class="d-flex justify-content-center align-items-center border-right py-4 px-2 px-sm-4">
+        <button type="button" class="btn btn-sm btn-default" (click)="decrementPlannedTotal()">
+          <i class="fal fa-minus"></i>
+        </button>
+        <div class="col px-2" style="line-height: 1;" (click)="plannedTimeEdit = true">
+          <p class="text-xs text-center m-0">
+            PLANNED
+          </p>
+          <h4 *ngIf="!plannedTimeEdit" class="font-weight-bold text-center m-0">
+            {{convertToHHMM(session.plannedTotal) |timeFormat}}</h4>
+          <h4 *ngIf="plannedTimeEdit">
+            <input type="text" class="font-weight-bold text-secondary text-center border-0 p-0" timeFormatMask
+              id="plannedTotal" placeholder="hh:mm" AutoSizeInput autofocus blurOnEnter
+              [ngModel]="getSessionTime(convertToHHMM(session.plannedTotal))" (ngModelChange)="updatePlannedTime($event)"
+              (blur)="plannedTimeEdit = false;">
+          </h4>
+        </div>
+        <button type="button" class="btn btn-sm btn-default" (click)="incrementPlannedTotal()">
+          <i class="fal fa-plus"></i>
+        </button>
+      </div>
+
+      <div *ngIf="session.sessionType.toLowerCase() == 'swim'" class="d-flex justify-content-center align-items-center border-right py-4 px-2 px-sm-4">
+        <button type="button" class="btn btn-sm btn-default" (click)="decreaseWarmupDuration()">
+          <i class="fal fa-minus"></i>
+        </button>
+        <div class="col px-2" style="line-height: 1;">
+          <p class="text-xs text-center m-0">
+            WARMUP
+          </p>
+          <h4 class="font-weight-bold text-center m-0">{{convertWarmUpToHHMM(session.warmUpDuration) |timeFormat}}</h4>
+        </div>
+        <button type="button" class="btn btn-sm btn-default" (click)="increaseWarmupDuration()">
+          <i class="fal fa-plus"></i>
+        </button>
+      </div>
+
+      <div *ngIf="session.sessionType.toLowerCase() == 'run'" class="d-flex justify-content-center align-items-center border-right py-4 px-2 px-sm-4">
+        <div class="btn-group-sm">
+          <button type="button" class="btn btn-link dropdown-toggle border p-2" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="text-body text-sm mr-2">{{session.warmUpImpact || 'Warmup Impact'}}</span>
+            <span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+            </span>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" (click)="session.warmUpImpact = n" *ngFor="let n of [1,2,3,4,5,6]"
+              type="button">{{n}}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center border-right py-4 px-2 px-sm-4">
+        <button type="button" class="btn btn-sm btn-default" (click)="decreaseLevel()">
+          <i class="fal fa-minus"></i>
+        </button>
+        <div class="col px-2" style="line-height: 1;">
+          <p class="text-xs text-center m-0">
+            LEVEL
+          </p>
+          <h4 class="font-weight-bold text-center m-0">
+            {{session.sessionLevel}}
+          </h4>
+        </div>
+        <button type="button" class="btn btn-sm btn-default" (click)="increaseLevel()">
+          <i class="fal fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="d-flex justify-content-center py-4 px-2 px-sm-4">
+        <div class="btn-group">
+          <button type="button" class="btn rounded btn-primary btn-save py-2 px-5" (click)="update()"
+            [disabled]="busy">
+            <i *ngIf="busy" class="fa fa-spin fa-spinner"></i>
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

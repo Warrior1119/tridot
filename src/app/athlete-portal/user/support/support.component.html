@@ -1,0 +1,69 @@
+<div class="main">
+  <div class="container">
+    <div class="row">
+      <div class="row mb-3">
+        <div class="col">
+          <h4 class="page-title text-center mb-2 mb-lg-4">Knowledgebase</h4>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-12 col-md-6 offset-md-3">
+          <input
+            type="text"
+            class="form-control support-search-form mb-3 border-0 shadow py-3 pl-3"
+            placeholder="Search for answers to your common questions…"
+            [(ngModel)]="searchText" (ngModelChange)="fireSearch()"
+          />
+          <ul class="list-inline pop-topic-list text-center my-4" *ngIf="!loadingSections || !loadingSearchResults">
+            <li class="list-inline-item"><span>Popular Topics:</span></li>
+            <li class="list-inline-item" (click)="selectArticle('206923713')">Performance Assessments</li>
+            <!-- <li class="list-inline-item" (click)="selectSection('News and Entertainment')">News and Entertainment</li> -->
+            <!-- <li class="list-inline-item" (click)="selectSection('Swim')">Swim</li> -->
+          </ul>
+        </div>
+      </div>
+      <app-loading-overlay *ngIf="loadingSections && loadingSearchResults" style="margin-top: 40vh;"></app-loading-overlay>
+      <div class="row rounded overflow-hidden shadow" *ngIf="!loadingSections || !loadingSearchResults">
+        <div class="col-12 col-md-3 bg-dark px-0">
+          <h5 class="font-weight-normal mb-3 cursor-pointer pt-3 text-center" style="color:white">Select Support Category</h5>
+  
+          <div *ngIf="loadingSections" class="text-center"><i class="fas fa-2x fa-spinner fa-spin"></i></div>
+  
+          <app-support-menu *ngIf="!loadingSections" [sections]="sections" [selectedSection]="selectedSectionIndex" (sectionChange)="sectionChanged($event)" [mobile]="mobile"></app-support-menu>
+          <div class="text-center" *ngIf="!mobile">
+            <hr class="light mb-3">
+            <h6 class="font-weight-normal mb-3">Didn’t find what you’re looking for?</h6>
+            <button class="btn btn-rounded btn-dark mb-3 py-3 px-4" (click)="openRequestModel()">Submit a Request</button>
+            <h6 class="font-weight-normal mb-3 cursor-pointer" (click)="openSupportRequests()">Check on open support requests.</h6>
+          </div>
+        </div>
+        <div class="col-12 col-md-9 bg-white p-3 p-md-5">
+          <ng-container *ngIf="!viewSupportTickets">
+  
+            <div *ngIf="loadingSections || loadingSearchResults" class="text-center"><i class="fas fa-2x fa-spinner fa-spin"></i></div>
+  
+            <ng-container *ngIf="!loadingSearchResults && !loadingSections">
+              <app-article-list [articleList]="selectedSectionWithArticles"
+              [recommendedArticleIds]="recommendedArticleIds"
+              [selectedArticleId]="selectedArticleId"
+              (back)="sectionChanged($event)"
+              (recommendationToggled)="toggleRecommendation($event)" ></app-article-list>
+            </ng-container>
+  
+          </ng-container>
+  
+          <app-ticket-list *ngIf="viewSupportTickets" (back)="sectionChanged($event)"></app-ticket-list>
+  
+          <div class="text-center" *ngIf="mobile">
+            <hr class="light mb-3">
+            <h6 class="font-weight-normal mb-3">Didn’t find what you’re looking for?</h6>
+            <button class="btn btn-rounded btn-dark mb-3 py-3 px-4" (click)="openRequestModel()">Submit a Request</button>
+            <h6 class="font-weight-normal mb-3 cursor-pointer" (click)="openSupportRequests()">Check on open support requests.</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<app-footer></app-footer>

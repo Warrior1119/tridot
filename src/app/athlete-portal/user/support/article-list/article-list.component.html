@@ -1,0 +1,45 @@
+<div>
+  <div *ngIf="!selectedArticleId">
+    <div class="row">
+      <div class="col-10">
+        <h3 class="font-weight-normal">{{_articleList.section}}</h3>
+      </div>
+      <div class="col-2" style="text-align: right">
+        <button class="btn-default btn btn-md d-inline-flex" (click)="backToRecommended()" *ngIf="!_articleList.recommended" customTooltip="Back to support home"
+          placement="left" container="body">
+          <svg version="1.1" viewBox="0 0 32 32" xml:space="preserve" width="18" height="18">
+            <g class="nc-icon-wrapper" fill="#A5ACB1">
+              <path fill="#A5ACB1" d="M1,15L15,2v8c10.497,0.35,16,5.544,16,16.383V30c-3.938-6.688-5.812-9-16-9v8L1,15z"></path>
+            </g>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <hr class="short-line" />
+    <div class="row">
+      <div class="col-12 col-md-6" *ngFor="let article of _articleList.articles | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
+        (click)="selectedArticleId = article.id; selectedArticleType = article.type">
+        <div class="row">
+          <div class="col-8">
+            <h4 class="article-item-header text-lg font-weight-bold mb-3 cursor-pointer" [innerHtml]="article.title"></h4>
+          </div>
+          <div class="col-4" *ngIf="article.articleType=='video'" style="text-align: right">
+            <div  [inlineSVG]="'../../../../../assets/img/svg/icons/support-icons/video-icon.svg'" [autosize]="true" style="vertical-align:top"  class="mx-auto d-inline-block"></div>
+          </div>
+        </div>
+        <div class="article-item-description" innerHtml="{{article.body}}">
+        </div>
+      </div>
+    </div>
+    <pagination-controls *ngIf="_articleList.articles.length > 10" (pageChange)="pageNumber = $event" previousLabel="" nextLabel=""
+      class="my-pager"></pagination-controls>
+    <span *ngIf="_articleList.articles.length == 0">No Articles Found</span>
+  </div>
+
+  <div *ngIf="selectedArticleId">
+    <app-article-view [articleId]="selectedArticleId" [articleType]="selectedArticleType" [sectionTitle]="_articleList.section" [recommendedArticleIds]="recommendedArticleIds"
+    (recommendationToggled)="toggleRecommendation($event)"
+    (backToRecommended)="backToRecommended()"
+    (back)="selectedArticleId = undefined"></app-article-view>
+  </div>
+</div>

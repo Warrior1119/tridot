@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.805 27.805">
+  <defs>
+    <style>
+      .data-file-default-cls-1 {
+        fill: #f4f4f4;
+      }
+
+      .data-file-default-cls-2 {
+        fill: none;
+        stroke: #a4acb2;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="Group_281" data-name="Group 281" transform="translate(-721.902 -391)">
+    <circle id="Ellipse_50" data-name="Ellipse 50" class="data-file-default-cls-1" cx="13.902" cy="13.902" r="13.902" transform="translate(721.902 391)"/>
+    <g id="chart-bar" transform="translate(730.346 397.743)">
+      <rect id="Rectangle_262" data-name="Rectangle 262" class="data-file-default-cls-2" width="11.322" height="13.838"/>
+      <line id="Line_147" data-name="Line 147" class="data-file-default-cls-2" y2="5.032" transform="translate(5.661 4.403)"/>
+      <line id="Line_148" data-name="Line 148" class="data-file-default-cls-2" y2="1.258" transform="translate(3.145 8.177)"/>
+      <line id="Line_149" data-name="Line 149" class="data-file-default-cls-2" y2="3.145" transform="translate(8.177 6.29)"/>
+    </g>
+  </g>
+</svg>

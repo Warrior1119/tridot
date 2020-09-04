@@ -1,0 +1,40 @@
+.backdrop {
+  position: absolute;
+  top: 12px;
+  &-placeholder {
+  height: 0;
+  overflow: hidden;
+  display: inline-block;
+  }
+}
+
+.err-icon {
+  position: relative;
+  float: right;
+  margin-right: 7px;
+  margin-top: -29px;
+}
+
+ng4geo-autocomplete {
+  display: block;
+  height: 42px;
+  .custom-autocomplete__input input {
+    box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+    color: #6c757d !important;
+    border: none !important;
+    height: 42px !important;
+    &::placeholder { color: #6c757d !important; }
+  }
+}
+
+ngxgeo-autocomplete {
+  display: block;
+  height: 42px;
+  .custom-autocomplete__input input {
+    box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important;
+    color: #6c757d !important;
+    border: none !important;
+    height: 42px !important;
+    &::placeholder { color: #6c757d !important; }
+  }
+}

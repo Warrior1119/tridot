@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
+  <defs>
+    <style>
+      .trophy-cls-1 {
+        fill: #ef8b17;
+      }
+
+      .trophy-cls-2 {
+        fill: #edb723;
+      }
+
+      .trophy-cls-3 {
+        fill: #fadf13;
+      }
+    </style>
+  </defs>
+  <g id="Group_753" data-name="Group 753" transform="translate(-1774 -319)">
+    <rect id="Rectangle_16" data-name="Rectangle 16" class="trophy-cls-1" width="72" height="72" rx="36" transform="translate(1774 319)"/>
+    <g id="trophy" transform="translate(1793.586 338.586)">
+      <path id="Path_353" data-name="Path 353" class="trophy-cls-2" d="M7.7,15.053a4.7,4.7,0,0,1-4.691-4.691V7.011H7.7V5H1.67A.67.67,0,0,0,1,5.67v4.691a6.7,6.7,0,0,0,6.7,6.7Z" transform="translate(0 -1.319)"/>
+      <path id="Path_354" data-name="Path 354" class="trophy-cls-2" d="M37,15.053a4.7,4.7,0,0,0,4.691-4.691V7.011H37V5h6.032a.67.67,0,0,1,.67.67v4.691a6.7,6.7,0,0,1-6.7,6.7Z" transform="translate(-11.874 -1.319)"/>
+      <path id="Path_355" data-name="Path 355" class="trophy-cls-2" d="M25.393,39.042h-.67a2.681,2.681,0,0,1-2.681-2.681V31H19.361v5.361a2.681,2.681,0,0,1-2.681,2.681h-.67A2.011,2.011,0,0,0,14,41.053v.67H27.4v-.67A2.011,2.011,0,0,0,25.393,39.042Z" transform="translate(-4.288 -9.895)"/>
+      <path id="Path_356" data-name="Path 356" class="trophy-cls-3" d="M19.053,22.446A10.064,10.064,0,0,1,9,12.393V1.67A.67.67,0,0,1,9.67,1H28.435a.67.67,0,0,1,.67.67V12.393A10.064,10.064,0,0,1,19.053,22.446Z" transform="translate(-2.639)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,75 @@
+.table {
+  background-color: #fff;
+  .gene-list-item {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    &.gene-summary {
+      font-size: 14px;
+      line-height: 1.25rem;
+    }
+  }
+  .gene-list-row {
+    width: 100%;
+    line-height: 1.5rem;
+    display: inline-grid;
+    grid-template-columns: 25% 10% 10% auto 1.5%;
+  }
+  .gene-effects {
+    .gene-effect-bar {
+      &:nth-of-type(2) {
+        margin-left: 3px;
+      }
+      width: 6px;
+      height: 18px;
+      background: grey;
+      border-radius: 29%;
+      &.active {
+        background: red;
+      }
+      &.empty {
+        background: white;
+        border: gray 1px solid;
+      }
+    }
+  }
+  .gene-expanded {
+    background-color: #F4F4F4;
+    .gene-sublist-row {
+      display: inline-grid;
+      grid-template-columns: 25% auto;
+      .gene-desc {
+        grid-row-start: 1;
+        grid-row-end: span 999;
+        .gene-desc-body {
+          font-size: 13px;
+          line-height: 1rem;
+        }
+      }
+      .gene-sublist {
+        display: inline-grid;
+        grid-template-columns: 13.33% 13.33% auto;
+        margin: 4px 0;
+        &.active {
+          background-color: #dedede;
+          border-radius: 50px;
+        }
+        .gene-list-item {
+          padding-top: 0.25rem;
+          padding-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+  .collapse-btn {
+    padding: 5px 6px;
+    position: relative;
+    float: right;
+    top: -6px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
+  }
+}

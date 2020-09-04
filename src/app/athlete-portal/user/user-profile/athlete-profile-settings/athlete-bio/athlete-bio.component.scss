@@ -1,0 +1,9 @@
+input.editable:disabled,
+  textarea.editable:disabled {
+    background: transparent;
+  }
+
+  input:disabled,
+  textarea:disabled {
+    background: #f2f2f2;
+  }

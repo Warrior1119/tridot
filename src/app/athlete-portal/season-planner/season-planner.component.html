@@ -1,0 +1,95 @@
+<div class="main">
+  <div class="container season-planner-container">
+    <div class="row mb-3">
+      <div class="col-12">
+        <h4 class="page-title mt-2">
+          My Training Season
+        </h4>
+      </div>
+      <div *ngIf="!isMobile" class="col text-right">
+        <button class="btn btn-outline-secondary pull-right pr-4 pl-4 py-2 rounded" routerLink="/season-planner/training-phase/add-a-race">Add a Race +</button>
+      </div>
+    </div>
+    <div class="row" [class.mb-4]="!isMobile">
+      <div class="col">
+        <div class="d-inline-flex align-items-center justify-content-between position-relative">
+          <div class="btn-group" dropdown>
+            <button type="button" class="btn dropdown-toggle rounded-left shadow px-3 py-2" [disabled]="loading" dropdownToggle>
+              <span class="text-body mr-2">
+                <ng-container *ngIf="!loading">
+                  {{ currentPlan?.seasonName || 'Select Season' }}
+                  <ng-container *ngIf="currentPlan?.isThisPrimarySeason === 'true'">(live)</ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="loading">
+                  <i class="fal fa-spinner fa-spin"></i>
+                </ng-container>
+              </span>
+              <span>
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu" *dropdownMenu>
+              <button class="dropdown-item" *ngFor="let plan of plans" type="button" (click)="getPlanById(plan)">
+                {{plan.seasonName}}
+                <ng-container *ngIf="plan.isThisPrimarySeason === 'true'">(live)</ng-container>
+              </button>
+            </div>
+            <div class="ml-1 season-menu-btn btn btn-lg btn-white shadow rounded-right pl-2 pr-0 pt-1 pb-2 m-0" style="height: 40px; width: 40px;">
+              <custom-menu menuClass="season-menu-wrap" buttonClass="btn-lg pl-2 pr-0 pt-1 pb-2 m-0 session-menu__button">
+                <li><h6 class="custom-menu__title mb-0 p-0">Season Menu</h6></li>
+                <li (click)="currentPlan && addNewSeason(currentPlan)">Add Season</li>
+                <li (click)="currentPlan && renameSeason(currentPlan)">Rename Season</li>
+                <li *ngIf="currentPlan?.isThisPrimarySeason !== 'true' && plans?.length > 1" (click)="makeLiveSeason(currentPlan)">Make Live</li>
+                <li *ngIf="canDeleteSeason(currentPlan)" (click)="deleteSeason(currentPlan)">Delete Season</li>
+              </custom-menu>
+            </div>
+          </div>
+        </div>
+        <button *ngIf="isMobile" class="ml-2 btn btn-md add-race-button text-light position-relative"
+          routerLink="/season-planner/training-phase/add-a-race"
+          style="bottom: 2px;">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <div *ngIf="!isMobile" class="col d-inline-flex justify-content-end align-items-center">
+        <div class="legend-container d-inline-flex">
+          <div class="legend d-inline-flex align-items-center ml-3">
+            <div class="color-graph prep-phase mr-2"></div>
+            <div class="legend-title">
+              Race Prep Phase
+            </div>
+          </div>
+          <div class="legend d-inline-flex align-items-center ml-3">
+            <div class="color-graph dev-phase mr-2"></div>
+            <div class="legend-title">
+              Development Phase
+            </div>
+          </div>
+          <div class="legend d-inline-flex align-items-center ml-3">
+            <div class="color-graph no-phase mr-2"></div>
+            <div class="legend-title">
+              No Phase
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="loading || !currentPlan" [ngSwitch]="isMobile">
+      <app-loading-overlay *ngSwitchCase="false" class="mt-5 pt-5"></app-loading-overlay>
+      <app-loading-mobile *ngSwitchCase="true" [loadingText]="'Loading your current season...'"></app-loading-mobile>
+    </ng-container>
+    <season-planner-calendar
+      *ngIf="!isMobile && !loading && currentPlan"
+      [currentPlan]="currentPlan"
+      (deleteRace)="deleteRace($event)"
+    ></season-planner-calendar>
+    <season-planner-calendar-mobile
+      *ngIf="isMobile && !loading && currentPlan"
+      [currentPlan]="currentPlan"
+      (deleteRace)="deleteRace($event)"
+    ></season-planner-calendar-mobile>
+  </div>
+</div>
+<app-footer></app-footer>

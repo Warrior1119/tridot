@@ -1,0 +1,8 @@
+/deep/ .user-profile.race-card {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  &.active {
+    border-color: #5bd86f !important;
+  }
+}

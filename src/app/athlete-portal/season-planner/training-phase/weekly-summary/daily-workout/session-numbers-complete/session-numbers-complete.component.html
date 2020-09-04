@@ -1,0 +1,283 @@
+<div class="card-box session-numbers-block" >
+  <div *ngIf="session" class="box-content px-2 pt-2 pb-0 px-sm-4 pt-sm-4 w-100" [class.custom-tooltip]="isMobileOrTablet" [class.custom-tooltip-bottom]="isMobileOrTablet">
+    <div class="custom-tooltiptext tooltip-panel" *ngIf="isMobileOrTablet"><ng-container *ngTemplateOutlet="numbersTooltip"></ng-container></div>
+    <div class="row">
+      <div class="order-0 col-3 col-sm-3 col-lg-3 mb-2 mb-sm-0 pr-0 border-right">
+        <div class="stacked-number-container">
+          <div class="stacked-number-inner custom-tooltip custom-tooltip-bottom" [class.custom-tooltip]="!isMobileOrTablet" [class.custom-tooltip-bottom]="!isMobileOrTablet">
+            <div class="custom-tooltiptext tooltip-panel" *ngIf="!isMobileOrTablet"><ng-container *ngTemplateOutlet="numbersTooltip"></ng-container></div>
+            <h5 class="d-sm-none text-xxs text-sm-sm text-sm-muted mt-2 text-uppercase font-weight-bold">Planned</h5>
+            <div class="d-flex justify-content-center align-items-center">
+              <ng-template #enterSessionTime>
+                <span class="text-nowrap">Enter session time</span>
+              </ng-template>
+              <span class="time-at text-muted d-none d-sm-inline">@</span>
+              <div class="pr-0 pr-sm-3">
+                <span *ngIf="!sessionTimeEdit" class="session-time-input d-inline text-nowrap text-xl"
+                  [customTooltip]="enterSessionTime"
+                  (click)="editTime()">
+                  {{ getSessionTime(session.sessionTime) | timeFormat }}
+                </span>
+                <span *ngIf="sessionTimeEdit" style="position: relative; top: -2px;">
+                  <input type="text" class="session-time-input"
+                    [customTooltip]="sessionTimeError" [isOpen]="sessionTimeError" tooltip-type="error"
+                    #sessionTimeInput
+                    [class.border]="sessionTimeError"
+                    [class.border-1]="sessionTimeError"
+                    [class.border-danger]="sessionTimeError"
+                    mask="00:00 aa" [dropSpecialCharacters]="false" [patterns]="sessionTimePatterns"
+                    placeholder="--:-- am"
+                    autofocus blurOnEnter
+                    [ngModel]="getSessionTime(session.sessionTime)"
+                    (ngModelChange)="updateSessionTime($event)"
+                    (blur)="sessionTimeEdit = false;sessionChange.emit()"
+                  >
+                </span>
+              </div>
+            </div>
+            <div *ngIf="session.location && accountAddress" class="w-100 my-lg-3">
+              <ng-container *ngIf="!isMobileOrTablet; then locationTemplate"></ng-container>
+            </div>
+            <div *ngIf="weather" class="w-100 d-flex justify-content-between align-items-center">
+              <ng-container *ngIf="!isMobileOrTablet; then weatherTemplate"></ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="session.plannedTotal" class="order-1 col-3 col-sm-3 col-lg mb-2 mb-lg-0 border-right">
+        <!-- <div class="info-block text-white h-100 rounded" [ngClass]="session.sessionType + '-bg'"> -->
+        <div class="info-block h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Planned</h5>
+              <span class="number-xxs font-weight-bold">{{convertToHHMM(session.plannedTotal) |timeFormat}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="session.actualTotal" class="order-2 col-3 col-sm-3 col-lg mb-2 mb-lg-0 border-right">
+        <div class="info-block bg-lg-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Actual</h5>
+              <span class="number-xxs font-weight-bold text-lowercase">{{session.actualTotal ? (convertToHHMM(session.actualTotal) |timeFormat) : '--:--'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="order-4 order-lg-3 col-3 col-sm-3 col-lg mb-2 mb-lg-0 pr-1">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Distance</h5>
+              <ng-container *ngIf="getLinkedData('distance'); else noData">
+                <span class="number-xxs font-weight-bold d-inline-block">{{getLinkedData('distance')}}</span>
+                <span *ngIf="session.sessionType !== 'swim'" class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                <span *ngIf="session.sessionType === 'swim'" class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Yds' : 'M'}}</span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="session.sessionType === 'swim'">
+        <!-- Calories -->
+        <div class="order-5 order-lg-4 col-3 col-sm-3 col-lg mb-2 mb-lg-0 px-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Calories</h5>
+                <span *ngIf="getLinkedData('calories'); else noData" class="number-xxs font-weight-bold">{{getLinkedData('calories')}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Avg Moving Pace -->
+        <div class="order-6 order-lg-5 col-3 col-sm-3 col-lg mb-2 mb-lg-0 px-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Avg Moving Pace</h5>
+                <ng-container *ngIf="getLinkedData('avg-moving-pace'); else noData">
+                  <span class="number-xxs font-weight-bold">{{getLinkedData('avg-moving-pace') | timeFormat}}</span>
+                  <span class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Per 100yds' : 'Per 100m'}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Avg HR -->
+        <div class="order-7 order-lg-6 col-3 col-sm-3 col-lg mb-2 mb-lg-0 px-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Avg HR</h5>
+                <span *ngIf="getLinkedData('heartrate'); else noData" class="number-xxs font-weight-bold">{{getLinkedData('heartrate')}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="session.sessionType === 'bike'">
+        <!-- Avg Power -->
+        <div class="order-5 order-lg-4 col-3 col-sm-3 col-lg mb-2 mb-lg-0 px-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Avg Power</h5>
+                <span *ngIf="getLinkedData('power'); else noData" class="number-xxs font-weight-bold">{{getLinkedData('power')}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Avg Speed -->
+        <div class="order-6 order-lg-5 col-3 col-sm-3 col-lg mb-2 mb-lg-0 px-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Avg Speed</h5>
+                <ng-container *ngIf="getLinkedData('avg-speed'); else noData">
+                  <span class="number-xxs font-weight-bold">{{getLinkedData('avg-speed')}}</span>
+                  <span class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Mph' : 'Kph'}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Elev Gain -->
+        <div class="order-7 order-lg-6 col-3 col-sm-3 col-lg mb-2 mb-lg-0 pl-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Elev Gain</h5>
+                <ng-container *ngIf="getLinkedData('elevation'); else noData">
+                  <span class="number-xxs font-weight-bold d-inline-block">{{getLinkedData('elevation')}}</span>
+                  <span class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="session.sessionType === 'run'">
+        <!-- Avg Moving Pace -->
+        <div class="order-5 order-lg-4 col-3 col-sm-3 col-lg mb-2 mb-lg-0 px-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Avg Moving Pace</h5>
+                <ng-container *ngIf="getLinkedData('avg-moving-pace'); else noData">
+                  <span class="number-xxs font-weight-bold">{{(getLinkedData('avg-moving-pace') | timeFormat)}}</span>
+                  <span class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Per mi' : 'Per km'}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Elev Gain -->
+        <div class="order-6 order-lg-5 col-3 col-sm-3 col-lg mb-2 mb-lg-0 pl-1">
+          <div class="info-block bg-light h-100 rounded">
+            <div class="stacked-number-container py-2">
+              <div class="stacked-number-inner">
+                <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Elev Gain</h5>
+                <ng-container *ngIf="getLinkedData('elevation'); else noData">
+                  <span class="number-xxs font-weight-bold d-inline-block">{{getLinkedData('elevation')}}</span>
+                  <span class="unit text-lowercase d-inline">{{profile.measurementSystem == 'standard' ? 'Ft' : 'M'}}</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="!(session.power && session.avgSpeed)">
+          <!-- Avg HR -->
+          <div class="order-7 order-lg-6 col-3 col-sm-3 col-lg mb-2 mb-lg-0 pl-1">
+            <div class="info-block bg-light h-100 rounded">
+              <div class="stacked-number-container py-2">
+                <div class="stacked-number-inner">
+                  <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Avg HR</h5>
+                  <span *ngIf="getLinkedData('heartrate'); else noData" class="number-xxs font-weight-bold">{{getLinkedData('heartrate')}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <div class="order-3 order-lg-7 col-3 col-sm-3 col-lg mb-2 mb-lg-0 text-center border-left border-1 pl-2 pr-1 d-flex flex-column justify-content-center">
+        <h5 class="d-none d-sm-block text-xxs text-sm-sm text-sm-muted mb-1 mb-lg-3 font-weight-bold text-center pr-2">TrainX</h5>
+        <div class="score-box ml-1 mr-3 font-weight-bold number-sm d-flex align-items-center justify-content-center v-100"
+                [title]="trainXTitleMessage">{{getScore()}}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="workout-zones d-flex mt-4" [ngClass]="[session.actualTotal > 0 || session.sessionType === 'strength' ? 'workout-'+session.sessionType : '']">
+          <div *ngFor="let zone of session.zones" [ngClass]="getZoneClass(zone)"
+          [ngStyle]="getZoneStyle(session, zone)"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 row m-0">
+        <div *ngIf="weather" class="col-6 pl-0 d-flex justify-content-between align-items-center">
+          <ng-container *ngIf="isMobileOrTablet; then weatherTemplate"></ng-container>
+        </div>
+        <div *ngIf="session.location && accountAddress" class="col-6 pr-0 my-3">
+          <ng-container *ngIf="isMobileOrTablet; then locationTemplate"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <span class="text-sm">No Data</span>
+</ng-template>
+
+<ng-template #locationTemplate>
+  <span class="d-inline-block w-100 px-4 py-2 bg-light btn-rounded text-xs mx-auto text-nowrap text-ellipsis text-center">{{ getLocationText() }}</span>
+</ng-template>
+
+<ng-template #weatherTemplate>
+  <div class="mx-sm-2 d-inline-flex align-items-center text-nowrap">
+    <div class="weather-icons inline-svg" [inlineSVG]="'../assets/img/svg/icons/temp-icon.svg'"></div>
+    <span class="weather-nums d-inline">
+      {{ originalOverrides.overrideTemp }}&deg;</span>
+  </div>
+  <div class="ml-1 mx-sm-2 d-inline-flex align-items-center text-nowrap">
+    <div class="weather-icons inline-svg" [inlineSVG]="'../assets/img/svg/icons/humidity-icon.svg'"></div>
+    <span class="weather-nums font-weight-bold">{{ originalOverrides.overrideHumidity }}&#37;</span>
+  </div>
+  <div class="ml-1 mx-sm-2 d-inline-flex align-items-center text-nowrap">
+    <div class="weather-icons inline-svg" [inlineSVG]="'../assets/img/svg/icons/elevation-icon.svg'"></div>
+    <span class="weather-nums font-weight-bold text-lowercase">{{ originalOverrides.overrideElevation }} {{getElevation()}}</span>
+  </div>
+</ng-template>
+
+
+<ng-template #numbersTooltip>
+  <div class="weather-panel">
+    <div class="weather-panel__header py-3 text-center border-bottom">Edit Environmental Data</div>
+    <div class="weather-panel__body">
+      <div class="d-flex">
+        <div class="weather-input">
+          <label class="text-uppercase">Temp</label>
+          <input type="text" class="form-control" [customTooltip]="errors['temperature']" [isOpen]="errors['elevation']" tooltip-type="error" placement="right" [class.border-danger]="errors['temperature']" [(ngModel)]="overrideTemp" (ngModelChange)="validateWeatherNumbers('temperature', $event)" />
+        </div>
+
+        <div class="weather-input mx-3">
+          <label class="text-uppercase">Humidity</label>
+          <input type="text" class="form-control" [customTooltip]="errors['humidity']" [isOpen]="errors['elevation']" tooltip-type="error" [class.border-danger]="errors['humidity']" [(ngModel)]="overrideHumidity" (ngModelChange)="validateWeatherNumbers('humidity', $event)" />
+        </div>
+
+        <div class="weather-input">
+          <label class="text-uppercase">Elev.</label>
+          <input type="text" class="form-control" [customTooltip]="errors['elevation']" [isOpen]="errors['elevation']" tooltip-type="error" [class.border-danger]="errors['elevation']" [(ngModel)]="overrideElevation" (ngModelChange)="validateWeatherNumbers('elevation', $event)" />
+        </div>
+      </div>
+
+      <div class="weather-btns mt-3">
+        <button class="btn btn-default mr-2" (click)="cancelWeatherValues()">Cancel</button>
+        <button class="btn btn-highlighted ml-2" (click)="areWeatherNumbersValid && saveWeatherNumbers()" [disabled]="loadingWeatherNumbers"><i *ngIf="loadingWeatherNumbers" class="fal fa-spinner fa-spin"></i> Save</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

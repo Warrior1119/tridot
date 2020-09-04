@@ -1,0 +1,41 @@
+<div class="modal-header">
+  <h5 class="modal-title pull-left mr-3">Daily Metrics</h5>
+  <div class="d-block text-nowrap">
+    <button type="button" class="btn btn-outline-secondary pill btn-sm mr-2 btn-rounded px-3" [class.active]="filterType === 'All'" (click)="filterType = 'All'">
+      All
+    </button>
+    <button type="button" class="btn btn-outline-secondary pill btn-sm mr-2 btn-rounded px-3" [class.active]="filterType === 'SelectedMetrics'" (click)="filterType = 'SelectedMetrics'">
+      Selected
+    </button>
+    <button type="button" class="btn btn-outline-secondary pill btn-sm btn-rounded px-3" [class.active]="filterType === 'Favourites'" (click)="filterType = 'Favourites'">
+      Favorites
+    </button>
+  </div>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="alert alert-danger" *ngIf="error" role="alert">
+    {{error}}
+  </div>
+  <div class="row justify-content-center" *ngIf = "metrics">
+    <div class="col metric-selector ml-1 bg-light mt-2 rounded" *ngFor="let metric of (metrics| filtermetrics: selectedMetrics: filterType)" [@ngIfFadeIn] [@ngIfFadeOut]>
+      <input type="checkbox" class="tridot_toggle" (change)="editTrackableMetric(metric.metricId)" checked="selectedMetrics?.trackList?.includes(metric.metricId)"
+        #track_user_metric>
+      <a (click)="track_user_metric.click()">
+        <span class="fas fa-circle cursor-pointer float-left mt-1" style="color:#e6e6e6" *ngIf="!selectedMetrics?.trackList?.includes(metric.metricId)"></span>
+        <span class="fas fa-circle cursor-pointer float-left mt-1" style="color:#9CE34A" *ngIf="selectedMetrics?.trackList?.includes(metric.metricId)"></span>
+      </a>
+      <span class="pl-2">{{metric.metricsName}}</span>
+      <input type="checkbox" class="tridot_toggle pl-1" (change)="editFavMetric(metric.metricId)"
+        #fav_user_metric>
+      <a (click)="fav_user_metric.click()">
+        <span class="fas fa-star cursor-pointer float-right mt-1 ml-0" style="color:#e0e0e0" *ngIf="selectedMetrics?.displayList?.includes(metric.metricId) == false">
+        </span>
+        <span class="fas fa-star cursor-pointer float-right mt-1 ml-0" style="color:#FFD700" *ngIf="selectedMetrics?.displayList?.includes(metric.metricId) == true">
+        </span>
+      </a>
+    </div>
+  </div>
+</div>

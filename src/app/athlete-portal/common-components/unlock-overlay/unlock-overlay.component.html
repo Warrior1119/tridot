@@ -1,0 +1,12 @@
+<div class="d-flex flex-wrap align-items-center"
+     [class.h-100]="!height"
+     [class.justify-content-around]="!isiOSApp"
+     [class.justify-content-center]="isiOSApp"
+     [style.height.px]="height"
+>
+  <div *ngIf="!isiOSApp" class="text-white">
+    <div  [inlineSVG]="'/assets/img/svg/tridot.svg'" [autosize]="true" style="width: 35px;" height="35" class="mx-auto d-inline-block"></div> <strong>TriDot</strong> <i>Premium Feature</i>
+  </div>
+  <button *ngIf="!isiOSApp" class="btn btn-danger text-uppercase font-weight-bold px-4 py-2" (click)="upgrade()">Upgrade to Unlock</button>
+  <a *ngIf="isiOSApp" href="https://app.tridot.com" class="btn btn-danger text-uppercase font-weight-bold px-4 py-2">Visit desktop App</a>
+</div>

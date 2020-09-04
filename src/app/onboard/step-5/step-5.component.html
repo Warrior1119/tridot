@@ -1,0 +1,25 @@
+<div class="container h-100 green-borders">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-12 col-md-5 text-center">
+      <form action="/swim-profile-1.html">
+        <div class="box shadow rounded">
+          <div class="row">
+            <div class="col">
+              <h1 class="display-1 text-darker text-uppercase page-heading">Start Using TriDot!
+              </h1>
+              <p class="text-drk mb-4">It’s time to start using TriDot’s optimized training to increase performance and reduce injuries!</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <button type="submit" class="btn btn-lg btn-block btn-primary text-md" [disabled]="loading"
+                (click)="next()">Get Better Results Now!
+                <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

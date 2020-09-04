@@ -1,0 +1,82 @@
+.custom-label {
+  margin-bottom: 0;
+}
+
+.inside-label {
+  top: 10px;
+  right: 15px;
+}
+
+.dob-form {
+  width: 100%;
+  padding: 9px .5rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.disabled {
+    background: #f2f2f2;
+    border: #f2f2f2;
+
+    input {
+      background: #f2f2f2;
+    }
+  }
+  
+}
+
+.dob-selector {
+  position: absolute;
+  top: 8px;
+  right: 40px;
+  .rounded {
+    border-radius: 10px !important;
+  }
+}
+
+.profile-cal {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+}
+
+input.editable:disabled,
+textarea.editable:disabled {
+  background: transparent;
+}
+
+input:disabled,
+textarea:disabled {
+  background: #f2f2f2;
+}
+
+.info-block {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+.info-block-selected {
+  background: #bdc1c3;
+  border: solid 1px #bdc1c3;
+  h5 {
+    color:white !important;
+  }
+}
+
+.backdrop {
+  position: absolute; top: 9px;
+  &-placeholder {
+      height: 0;
+      overflow: hidden;
+      display: inline-block;
+  }
+}
+
+.athlete-item {
+  width: 10rem !important;
+}
+
+.profileImage-item {
+  font-size: 10px !important;
+}

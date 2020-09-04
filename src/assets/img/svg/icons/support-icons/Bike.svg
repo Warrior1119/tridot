@@ -1,0 +1,6 @@
+<svg id="cyclist" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <circle id="Ellipse_277" data-name="Ellipse 277" cx="4" cy="4" r="4" transform="translate(1 15)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  <circle id="Ellipse_278" data-name="Ellipse 278" cx="4" cy="4" r="4" transform="translate(15 15)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  <circle id="Ellipse_279" data-name="Ellipse 279" cx="2" cy="2" r="2" transform="translate(15 1)" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  <path id="Path_615" data-name="Path 615" d="M12,20V15L8.922,12.692a1,1,0,0,1-.107-1.507l3.478-3.478a1,1,0,0,1,1.414,0L17,11h3" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+</svg>

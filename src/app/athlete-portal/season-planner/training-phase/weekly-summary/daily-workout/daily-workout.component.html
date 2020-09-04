@@ -1,0 +1,318 @@
+<ng-template #dailyMetrics>
+  <div class="card-box rounded shadow col-sm-6 col-lg-12 px-lg-0 mb-4 mt-lg-4 px-0" [ngClass]="{'metrics-content': isMobileOrTablet}">
+    <div class="box-content px-4 py-0">
+      <div class="py-3 border-bottom">
+          Daily Metrics <div class="preferences-icon ml-1 float-right d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/cog-icon-light.svg'" [autosize]="true" style="width: 20px;" (click)="gotoMetrics()"></div>
+      </div>
+      <ng-container [ngSwitch]="profile.garminHealthConnected || !!getMetricsToDisplay(metricsToDisplay).length">
+        <ul *ngSwitchCase="true" class="m-0 p-0">
+          <li class="d-flex justify-content-between align-items-center py-3 position-relative" *ngFor="let metric of getMetricsToDisplay(metricsToDisplay)"
+            [class.border-bottom]="getBorder(metric)">
+            
+            <span class="metric-term metric-name w-50">{{metric.metricsName}}</span>
+            <button *ngIf="metric.model && metric.editable" class="btn-rounded metric-model pl-3 pr-1 pt-1 pb-1 btn btn-outline-secondary pill w-50"
+              (click)="openAddEntry(metric)">
+              <span>{{getMetricValue(metric)}}</span>
+              <div  [inlineSVG]="'../assets/img/svg/icons/edit-circle.svg'" [autosize]="true" style="width: 22px;" class="mx-auto d-inline-block"></div>
+            </button>
+            <button *ngIf="metric.model && !metric.editable" class="btn-rounded metric-model px-3  pt-1 pb-1 btn btn-outline-secondary pill w-50">
+              <span>{{getMetricValue(metric)}}</span>
+            </button>
+            <button *ngIf="!metric.model" class="btn-rounded metric-btn px-3 py-2 btn btn-outline-secondary pill w-50" (click)="openAddEntry(metric)">
+              Add Entry<span><i class="fal fa-plus ml-1"></i></span>
+            </button>
+          </li>
+        </ul>
+        <div *ngSwitchDefault class="px-2 text-center">
+          <p class="mt-3 text-sm">Connect your Garmin Health data to display your daily metrics and further optimize your training.</p>
+          <button [routerLink]="'/user/devices'" class="btn mt-1 mb-4 btn-lg btn-primary text-md text-uppercase text-nowrap">Connect health data <i class="fal fa-plus"></i></button>
+        </div>
+      </ng-container>
+    </div>
+    <button *ngIf="showMoreMetricButn && !!getMetricsToDisplay(metricsToDisplay).length" class="btn py-2 border-top btn-block " (click)="showMoreMetricClicked = !showMoreMetricClicked ">
+      <i class="fa {{showMoreMetricClicked ? 'fa-chevron-up' : 'fa-chevron-down'}}"></i>
+    </button>
+  </div>
+  <div *ngIf="!geneticsConnectionStatus">
+    <img class="w-100 cursor-pointer"
+      src="../assets/img/banners/genetics-sidebar-banner.png" alt="Upload Your Genome"
+      routerLink="/genetics">
+  </div>
+</ng-template>
+
+<ng-container *ngIf="loading; then loadingOverlay"></ng-container>
+<div class="main" *ngIf="day">
+
+  <div *ngIf="!loading" class="container daily-workout-container">
+    <app-session-complete-controls
+      *ngIf="!isMobileOrTablet"
+      [day]="day"
+      [selectedSessionId]="selectedSessionId"
+      [phaseId]="phaseId"
+      [isCoachAccess]="isCoachAccess"
+      [addNewSessionToggled]="addNewSessionToggled"
+      (sessionChange)="onSessionChange($event)"
+      (prevDay)="getPrevDay()"
+      (nextDay)="getNextDay()"
+      (action)="sessionAction($event)"
+      (metrics)="openMetrics()"
+      (metricsEdit)="metricsToDisplay && metricsToDisplay[0] && openAddEntry(metricsToDisplay[0])"
+      (moveOrCopy)="moveOrCopy($event)"
+      (add)="add($event)"
+      (newSelectedSessionType)="newSelectedSessionType($event)"
+      (restore)="restore($event)"
+    ></app-session-complete-controls>
+    <app-mobile-session-complete-controls
+      *ngIf="isMobileOrTablet"
+      [day]="day"
+      [selectedSessionId]="selectedSessionId"
+      [phaseId]="phaseId"
+      [isCoachAccess]="isCoachAccess"
+      [(addNewSessionToggled)]="addNewSessionToggled"
+      (sessionChange)="onSessionChange($event)"
+      (prevDay)="getPrevDay()"
+      (nextDay)="getNextDay()"
+      (action)="sessionAction($event)"
+      (metrics)="openMetrics()"
+      (metricsEdit)="metricsToDisplay && metricsToDisplay[0] && openAddEntry(metricsToDisplay[0])"
+      (moveOrCopy)="moveOrCopy($event)"
+      (add)="add($event)"
+      (restore)="restore($event)"
+      (newSelectedSessionType)="newSelectedSessionType($event)"
+    ></app-mobile-session-complete-controls>
+
+    <!-- Desktop -->
+    <div *ngIf="!isMobileOrTablet">
+      <div class="row">
+        <div class="col-lg-9 col-xl-9">
+          <app-coach-create-session *ngIf="isCoachAccess" [session]="session" 
+            [(newlySelectedSessionType)]="newlySelectedSessionType"
+            [day]="day"
+            [date]="date"
+            [phaseId]="phaseId"
+            [(addNewSessionToggled)]="addNewSessionToggled"
+            (sessionChange)="onSessionUpdate($event)"
+          ></app-coach-create-session>
+          <ng-container *ngIf="!session?.actualTotal; else sessionComplete">
+            <app-session-numbers
+              [hidden]="day.noData"
+              [session]="session"
+              [weather]="weather"
+              [profile]="profile"
+              (sessionChange)="onSessionNumbersUpdate()"
+            ></app-session-numbers>
+            <app-session-details
+              [day]="day"
+              [session]="session"
+              [selectedParam]="zonesSelectedParam"
+              [isCoachAccess]="isCoachAccess"
+              [resources]="resources"
+              [isMobileOrTablet]="isMobileOrTablet"
+              (action)="sessionAction($event)"
+              (sessionChange)="onSessionNumbersUpdate()"
+              (addSession)="add($event)"
+              (refresh)="refresh()"
+            ></app-session-details>
+            <div class="d-block d-sm-none mt-4"><ng-container *ngTemplateOutlet="dailyMetrics"></ng-container></div>
+            <app-session-zones
+              [day]="day"
+              [session]="session"
+              [selectedParam]="zonesSelectedParam"
+              [overlay]="!profile.assessmentChecked"
+              (action)="sessionAction($event)"
+              (updateNotes)="updateNotes($event)"
+            ></app-session-zones>
+          </ng-container>
+        </div>
+  
+        <div class="col-lg-3 col-xl-3 mt-4 mt-lg-0 d-sm-flex d-lg-block">
+          <div class="trainx-score-block d-none d-sm-block col-sm-6 col-lg-12 px-lg-0 pl-0">
+            <app-trainx-score
+              [score]="getScore()"
+              [sessionDate]="day.date"
+            ></app-trainx-score>
+          </div>
+          <div class="d-none d-sm-block"><ng-container *ngTemplateOutlet="dailyMetrics"></ng-container></div>
+        </div>
+      </div>
+  
+      <!-- session-note -->
+      <div *ngIf="session" class="card-box rounded shadow d-block d-lg-none">
+        <div class="bg-light">
+          <app-session-notes [session]="session" (updateNotes)="updateNotes($event)"></app-session-notes>
+        </div>
+      </div>
+  
+      <div *ngIf="session" class="row">
+        <div class="col-lg-9 col-xl-9">
+          <div class="mt-4 card-box rounded shadow">
+            <app-coach-session-notes [session]="session" [canEdit]="isCoachAccess"></app-coach-session-notes>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile or Tablet -->
+    <div *ngIf="isMobileOrTablet">
+      <div class="row">
+        <div class="col-lg-9 col-xl-9">
+          <app-coach-create-session *ngIf="isCoachAccess" [session]="session" 
+            [(newlySelectedSessionType)]="newlySelectedSessionType"
+            [day]="day"
+            [date]="date"
+            [phaseId]="phaseId"
+            [(addNewSessionToggled)]="addNewSessionToggled"
+            (sessionChange)="onSessionUpdate($event)"
+          ></app-coach-create-session>
+          <ng-container *ngIf="!session?.actualTotal; else sessionComplete">
+            <app-session-numbers
+              [hidden]="day.noData"
+              [session]="session"
+              [weather]="weather"
+              [profile]="profile"
+              (sessionChange)="onSessionNumbersUpdate()"
+            ></app-session-numbers>
+            <app-session-details
+              [day]="day"
+              [session]="session"
+              [selectedParam]="zonesSelectedParam"
+              [isCoachAccess]="isCoachAccess"
+              [resources]="resources"
+              [isMobileOrTablet]="isMobileOrTablet"
+              (action)="sessionAction($event)"
+              (sessionChange)="onSessionNumbersUpdate()"
+              (addSession)="add($event)"
+              (refresh)="refresh()"
+            ></app-session-details>
+            <app-session-zones
+              [day]="day"
+              [session]="session"
+              [selectedParam]="zonesSelectedParam"
+              [overlay]="!profile.assessmentChecked"
+              (action)="sessionAction($event)"
+              (updateNotes)="updateNotes($event)"
+            ></app-session-zones>
+          </ng-container>
+        </div>
+      </div>
+  
+      <!-- session-note -->
+      <div *ngIf="session" class="card-box rounded shadow d-block d-lg-none mt-4">
+        <div class="bg-light">
+          <app-session-notes [session]="session" (updateNotes)="updateNotes($event)"></app-session-notes>
+        </div>
+      </div>
+      <div *ngIf="session" class="row">
+        <div class="col-lg-9 col-xl-9">
+          <div class="mt-4 card-box rounded shadow">
+            <app-coach-session-notes [session]="session" [canEdit]="isCoachAccess"></app-coach-session-notes>
+          </div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="session?.actualTotal">
+        <app-session-stats *ngIf="displayStats"
+        [session]="session"
+        [measurementSystem]="profile.measurementSystem"
+        [selectedDataFile]="selectedDataFile"
+        (selectLinkedFile)="selectLinkedFile($event)"
+        >
+        </app-session-stats>
+      </ng-container>
+
+
+      <!-- TrainX/Metrics Block -->
+      <div class="row">
+        <div class="col-lg-3 col-xl-3 mt-4 mt-lg-0 d-sm-flex d-lg-block">
+          <div class="trainx-score-block d-sm-block col-sm-6 col-lg-12 col-md-6 px-lg-0 pl-0" [ngClass]="{'trainx-mobile' : isMobile}">
+            <app-trainx-score
+              [score]="getScore()"
+              [sessionDate]="day.date"
+            ></app-trainx-score>
+          </div>
+          <div class="d-sm-block dailyMetrics-block" [ngClass]="{'dailyMetrics-block': isMobileOrTablet}"><ng-container *ngTemplateOutlet="dailyMetrics"></ng-container></div>
+        </div>
+      </div>
+      
+    </div>
+
+    <ng-template #sessionComplete>
+      <div class="card-box rounded shadow">
+        <app-session-numbers-complete
+          [hidden]="day.noData"
+          [session]="session"
+          [weather]="weather"
+          [profile]="profile"
+          (sessionChange)="onSessionNumbersUpdate()"
+          [selectedParam]="zonesSelectedParam"
+        ></app-session-numbers-complete>
+        <div class="border-top" *ngIf="sessionCompleteExpanded"[@ngIfExpandHeight]>
+          <app-session-details
+            [day]="day"
+            [session]="session"
+            [selectedParam]="zonesSelectedParam"
+            [resources]="resources"
+            [isMobileOrTablet]="isMobileOrTablet"
+            (action)="sessionAction($event)"
+            (sessionChange)="onSessionNumbersUpdate()"
+            (addSession)="add($event)"
+            ></app-session-details>
+        </div>
+        <div class="py-2 text-center border-top cursor-pointer"
+          (click)="onSessionCompleteToggle()">
+          <i class="fa {{sessionCompleteExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}}"></i>
+        </div>
+      </div>
+
+      <div *ngIf="displayMap || mapLocation" class="map-box rounded shadow mt-4 position-relative">
+        <div *ngIf="session.linkedData?.length > 1" class="data-selector mt-3 ml-3">
+          <button *ngFor="let dataset of session.linkedData; let i = index"
+            class="btn btn-white btn-rounded shadow mr-2"
+            [class.btn-light]="selectedDataFile === i"
+            (click)="selectLinkedFile(i)"
+          >Data File {{i + 1}}
+          </button>
+        </div>
+        <div *ngIf="!displayMap" class="btn btn-lg btn-white btn-rounded shadow no-data">No data available</div>
+        <div [class.blur]="!displayMap" class="position-relative">
+          <agm-map [latitude]="+mapCoords.latitude" [longitude]="+mapCoords.longitude" [zoom]="13">
+            <ng-container *ngIf="displayMap">
+              <agm-marker [latitude]="+session.trackpoints[0].latitude" [longitude]="+session.trackpoints[0].longitude" title="Start"></agm-marker>
+              <agm-polyline strokeColor="#00b1fd">
+                <agm-polyline-point *ngFor="let tp of session.trackpoints" [latitude]="+tp.latitude" [longitude]="+tp.longitude"></agm-polyline-point>         
+                  <agm-polyline-point *ngFor="let tp of session.trackpoints" [latitude]="+tp.latitude" [longitude]="+tp.longitude"></agm-polyline-point>         
+                <agm-polyline-point *ngFor="let tp of session.trackpoints" [latitude]="+tp.latitude" [longitude]="+tp.longitude"></agm-polyline-point>         
+              </agm-polyline>
+              <agm-marker [latitude]="+session.trackpoints[session.trackpoints.length - 1].latitude" [longitude]="+session.trackpoints[session.trackpoints.length - 1].longitude" title="Finish"></agm-marker>
+            </ng-container>
+          </agm-map>
+          <div *ngIf="!displayMap" class="position-absolute" style="top: 0; left: 0; right: 0; bottom: 0;"></div>
+        </div>
+      </div>
+      <ng-container *ngIf="!isMobileOrTablet">
+        <app-session-stats *ngIf="displayStats"
+        [session]="session"
+        [measurementSystem]="profile.measurementSystem"
+        [selectedDataFile]="selectedDataFile"
+        (selectLinkedFile)="selectLinkedFile($event)"
+        >
+        </app-session-stats>
+      </ng-container>
+      <app-session-zones
+      [day]="day"
+      [session]="session"
+      [selectedParam]="zonesSelectedParam"
+      [overlay]="!profile.assessmentChecked"
+      (updateNotes)="updateNotes($event)"
+      ></app-session-zones>      
+    </ng-template>
+  </div>
+</div>
+<app-footer></app-footer>
+
+<ng-template #loadingOverlay>
+  <ng-container [ngSwitch]="isMobile">
+    <app-loading-overlay *ngSwitchCase="false" style="margin-top: 40vh;"></app-loading-overlay>
+    <app-loading-mobile *ngSwitchCase="true" [loadingText]="'Loading your session data...'"></app-loading-mobile>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,15 @@
+.btn-outline-secondary {
+    border: 1px solid !important;
+    &:not(:disabled):not(.disabled).active {
+        color: #6c757d;
+        background-color: #f2f2f2;
+        border-color: #f2f2f2;
+    }
+    &:hover {
+        background-color: #fff;
+        border-color: #f2f2f2;
+    }
+}
+.custom-select-lg {
+    height: 56px;
+}

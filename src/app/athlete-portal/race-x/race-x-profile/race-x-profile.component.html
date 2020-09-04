@@ -1,0 +1,37 @@
+
+<div *ngIf="races && race && details" class="card-box rounded shadow mb-4">
+    <div class="box-content p-4">
+      <h5 class="text-center mb-1 text-body font-weight-bold">{{race.raceName}}</h5>
+      <div class="text-center mb-3">
+        <div class="race-details text-sm">{{details.raceEventDetails?.city}} {{details.raceEventDetails?.state}}</div>
+        <div class="race-start-date text-muted font-weight-bold mb-2">{{race.raceDate | amDateFormat: prefDateFormat }}</div>
+        <div class="distance-container">
+          <div class="distance-type distance-type-pill text-sm px-3 py-1 font-weight-bold text-uppercase" >{{race.raceDistanceName}}</div>
+          <div class="race-avatar text-uppercase ml-2">
+            {{race.raceCategory}}
+          </div>
+        </div>
+      </div>
+      
+      <div class="btn-group btn-block">
+        <!--left arrow button-->
+        <button class="btn btn-default mr-2" [disabled]="!hasNextRace" (click)="onNextRace()"><div class="mx-1 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-left.svg'" [autosize]="true" style="width: 8px;"></div></button>
+        <button type="button" class="btn dropdown-toggle shadow px-3 py-2 w-100 d-flex align-items-center justify-content-between" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <span class="race-name text-sm text-body mr-1">{{race.raceName}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10 px;"  class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item d-flex justify-content-between align-items-center"  *ngFor="let race of races" (click)="updateRace(race)" type="button">
+            <span class="">{{ race.raceName }}</span>
+            <small class="btn-default btn btn-xs race-start-date text-xs d-inline-flex ml-2"> {{ race.raceDate | amDateFormat: prefDateFormat }} </small>
+          </button>
+        </div>
+        <!--right arrow button-->
+        <button class="btn btn-default ml-2" [disabled]="!hasPrevRace" (click)="onPrevRace()"><div class="mx-1 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true" style="width: 8px;"></div></button>
+        
+      </div>
+    </div>
+  </div>

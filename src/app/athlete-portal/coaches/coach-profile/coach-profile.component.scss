@@ -1,0 +1,33 @@
+.card-body .testimonial-block {
+  &:first-child {
+    padding-top: 0 !important;
+  }
+  &:last-child {
+    padding-bottom: 0 !important;
+    border-bottom: 0 !important;
+  }
+}
+.card-body .stats {
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+.profile-card {
+  max-height: 170px;
+  object-fit: contain;
+}
+
+.social-icons {
+  width: 24px;
+}
+
+.coach-social-list {
+  li {
+    svg {
+      path.facebook-profile-cls-1 {
+        fill: #3A5CA9 !important;
+      }
+    }
+  }
+}

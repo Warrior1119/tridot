@@ -1,0 +1,21 @@
+.support-nav {
+  li {
+    padding-top:10px;
+    padding-bottom:10px;
+
+    &:hover, &.active {
+      background-color:#29303C;
+      color:white !important;
+      h6 {
+        color:white;
+      }
+    }
+  }
+}
+.dropdown-menu {
+  
+  overflow: auto;
+}
+.support-nav-dropdown{
+  min-width: 100%;
+}

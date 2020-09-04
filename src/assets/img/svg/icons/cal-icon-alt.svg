@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.25 15.25">
+  <defs>
+    <style>
+      .cal-icon-alt-cls-1 {
+        fill: #c1cad0;
+      }
+    </style>
+  </defs>
+  <g id="calendar-grid-58" transform="translate(0 0)">
+    <path id="Path_90" data-name="Path 90" class="cal-icon-alt-cls-1" d="M14.615,1.271H12.073V0H10.8V1.271H8.261V0H6.99V1.271H4.448V0H3.177V1.271H.635A.636.636,0,0,0,0,1.906V14.615a.636.636,0,0,0,.635.635H14.615a.636.636,0,0,0,.635-.635V1.906A.636.636,0,0,0,14.615,1.271Zm-.635,12.709H1.271v-8.9H13.979Z"/>
+    <rect id="Rectangle_45" data-name="Rectangle 45" class="cal-icon-alt-cls-1" width="2.542" height="1.906" transform="translate(2.542 6.99)"/>
+    <rect id="Rectangle_46" data-name="Rectangle 46" class="cal-icon-alt-cls-1" width="2.542" height="1.906" transform="translate(6.354 6.99)"/>
+    <rect id="Rectangle_47" data-name="Rectangle 47" class="cal-icon-alt-cls-1" width="2.542" height="1.906" transform="translate(2.542 10.167)"/>
+    <rect id="Rectangle_48" data-name="Rectangle 48" class="cal-icon-alt-cls-1" width="2.542" height="1.906" transform="translate(6.354 10.167)"/>
+    <rect id="Rectangle_49" data-name="Rectangle 49" class="cal-icon-alt-cls-1" width="2.542" height="1.906" transform="translate(10.167 6.99)"/>
+  </g>
+</svg>

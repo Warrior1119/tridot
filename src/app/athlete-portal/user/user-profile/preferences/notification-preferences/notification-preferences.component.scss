@@ -1,0 +1,133 @@
+/deep/ .title {
+  font-size: 1rem;
+}
+
+/deep/ .description {
+  font-size: 0.875rem;
+}
+
+@media screen and (max-width:576px) {
+  /deep/ .title {
+    font-size: 13px;
+  }
+}
+
+:host ::ng-deep {
+  .selected-param {
+    // padding: 0px 10px;
+    font-size: 14px;
+    // border-radius: 50px;
+    // height: 90%;
+    background: #ffffff;
+    color: white !important;
+    box-shadow: 1px 1px #abb2b8;
+    // margin-bottom: 3px;
+  }
+
+  .garmin-param {
+    // padding: 0px 10px;
+    // font-size: 14px;
+    width: 40%;
+    height: 75%;
+    margin-bottom: 4px;
+    margin-left: 2px;
+  }
+
+  .select-container {
+    display: inline-block;
+    width: 3rem;
+    height: 1.5rem;
+    border-radius: 3px;
+    padding: 0px 0px 0px 2px;
+    background-color: #55da69;
+  }
+
+  .select-container-false {
+    display: inline-block;
+    width: 3rem;
+    height: 1.5rem;
+    border-radius: 3px;
+    padding: 0px 0px 0px 2px;
+    background-color: #abb2b8;
+  }
+  .select-container-mobile {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .email-selector {
+    margin-top: 0.8rem;
+  }
+
+  .small-text {
+    padding-top: 2px;
+  }
+
+  .paperclip-item {
+    min-width: 35px;
+    border-radius: 4px;
+    padding: 10px;
+    padding-left: 10px;
+    background-color: #f4f5f7;
+  }
+
+  .custom-select {
+    width: initial;
+    padding: 0 1.75rem 0 0.75rem !important;
+  }
+
+  .custom-select-lg {
+    height: calc(1.5rem + 1.1rem) !important;
+  }
+  .timepicker-container {
+    padding: 5px;
+    height: 35px;
+    border: 1px solid #f2f2f2 !important;
+    display: table;
+    timepicker.custom-timepicker {
+      input {
+        width: 2.3rem;
+        height: 2.3rem;
+        font-size: 15px;
+        border: none !important;
+      }
+      button {
+        width: 2.3rem;
+        height: 2.3rem;
+        font-size: 8px;
+      }
+    }
+  }
+
+  @media screen and (max-width:450px) {
+    .timepicker-container {
+      padding: 2px;
+      height: 30px;
+      border: 1px solid #f2f2f2 !important;
+      display: table;
+      timepicker.custom-timepicker {
+        input {
+          width: 2rem;
+          height: 2rem;
+          font-size: 12px;
+        }
+        button {
+          width: 2rem;
+          height: 2rem;
+          font-size: 6px;
+        }
+      }
+    }
+  }
+
+  .itme-title {
+    width: 5rem;
+    font-size: 13px !important;
+  }
+
+  .select-mobile-text {
+    font-size: 13px !important;
+  }
+
+
+}

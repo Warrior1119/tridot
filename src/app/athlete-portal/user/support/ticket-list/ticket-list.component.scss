@@ -1,0 +1,22 @@
+.ticket-item-header {
+    color:#67A4CE;
+  }
+.ticket-item-description {
+  line-height:1.75;
+  margin-bottom:20px;
+}
+
+.status {
+  padding: 5px 10px;
+  font-size: 10px;
+  border-radius: 25px;
+  
+  &.open{
+      background: #2FCB83;
+      color: white !important;
+  }
+  &.closed{
+      background: #F4F4F4;
+      color:#A6B6C1 !important;;
+  }
+}

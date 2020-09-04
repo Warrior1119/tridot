@@ -1,0 +1,244 @@
+<div class="main onboarding-process">
+  <div class="container green-borders">
+    <div class="row">
+      <div class="col-lg-6 col-xl-6 offset-lg-3">
+        <div class="box shadow-lg rounded-lg mb-4">
+          <div class="box-content">
+            <div class="logo-wrapper text-center">
+              <div class="tridot-scores-connected w-100">
+                <li>
+                  <div class="tridot-score swim score-lg" [customTooltip]="'Based on your data, this is your current SwimDot'" [isOpen]="swimdot" placement="top"><span>{{ swimdot }}</span></div>
+                </li>
+                <li class="active">
+                  <div class="tridot-score bike score-lg static active"></div>
+                </li>
+                <li>
+                  <div class="tridot-score run score-lg static"></div>
+                </li>
+                <li>
+                  <div class="tridot-score checkmark score-lg static"></div>
+                </li>
+              </div>
+            </div>
+            <div class="header-wrapper text-center">
+              <h2 class="mb-1">Complete Your
+                <span class="bike-color">Bike Fitness</span> Profile
+              </h2>
+              <div class="alert-info p-3 mb-3 rounded mt-3">
+                  Estimate your bike ability below to determine your preliminary <strong>BikeDot</strong> and provide your high-level training history. Your answers should be close, but don't need to be exact.
+              </div>
+            </div>
+            <div class="form-wrapper">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <form [formGroup]="bikeProfileForm" #form="ngForm">
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          Estimate your current best time for:
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2 mb-3">
+                        <select class="custom-select custom-select-lg text-md" formControlName="distance" [(ngModel)]="profile.bikeDistance">
+                          <option value="" disabled>Select Distance</option>
+                          <option value="15 miles">15 miles</option>
+                          <option value="25 kilometers">25 km</option>
+                        </select>
+                        <label class="select-inside-label" for="distance">
+                          <span class="custom-tooltip" *ngIf="bikeProfileForm.hasError('required', 'distance') && (form.submitted || bikeProfileForm.get('distance').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!bikeProfileForm.hasError('required', 'distance') && (form.submitted || bikeProfileForm.get('distance').touched)"></i>
+                        </label>
+                      </div>
+                      <div class="col pl-2 mb-3">
+
+                        <input type="name" 
+                          class="form-control {{form.submitted ? bikeProfileForm.get('time').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}" 
+                          [(ngModel)]="profile.bikeDistanceTime"
+                          formControlName="time"
+                          timeFormatMask includeHour="true">
+                        <label class="inside-label" for="time">
+                          <span class="custom-tooltip" *ngIf="(bikeProfileForm.hasError('required', 'time') || bikeProfileForm.hasError('minlength', 'time')) && !bikeProfileForm.hasError('incorrect', 'time') && (form.submitted || bikeProfileForm.get('time').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="bikeProfileForm.hasError('incorrect', 'time') && (form.submitted || bikeProfileForm.get('time').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              {{bikeDistanceTimeError}}
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!bikeProfileForm.hasError('required', 'time') && !bikeProfileForm.hasError('minlength', 'time') && !bikeProfileForm.hasError('incorrect', 'time') && (form.submitted || bikeProfileForm.get('time').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          How long ago did you start biking competitively or for fitness?
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2 mb-3">
+
+                        <input type="text"
+                          class="form-control {{form.submitted ? bikeProfileForm.get('years').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"  
+                          [(ngModel)]="bikeAgeYears"
+                          formControlName="years"
+                          mask="00"
+                          placeholder="years">
+
+                        <label class="inside-label" for="years">
+                          <span class="custom-tooltip" *ngIf="bikeProfileForm.hasError('required', 'years') && (form.submitted || bikeProfileForm.get('years').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="validateBikeAgeYears(bikeAgeYears)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              Please Enter a value less than 60
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!bikeProfileForm.hasError('required', 'years') && !bikeProfileForm.hasError('incorrect', 'years') && (form.submitted || bikeProfileForm.get('years').touched)"></i>
+                        </label>
+                      </div>
+                      <div class="col pl-2 mb-3">
+
+                        <input type="text"
+                          class="form-control {{form.submitted ? bikeProfileForm.get('months').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="bikeAgeMonths"
+                          formControlName="months"
+                          mask="00"
+                          placeholder="months">
+
+                        <label class="inside-label" for="months">
+                          <span class="custom-tooltip" *ngIf="bikeProfileForm.hasError('required', 'months') && (form.submitted || bikeProfileForm.get('months').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="validateBikeAgeMonths(bikeAgeMonths)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              Please Enter a value less than 12
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!bikeProfileForm.hasError('required', 'months') && !validateBikeAgeMonths(bikeAgeMonths) && (form.submitted || bikeProfileForm.get('months').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          How many training hours per week do you bike?
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? bikeProfileForm.get('hoursPerWeek').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.bikeHoursPerWeek"
+                          formControlName="hoursPerWeek"
+                          timeFormatMask includeHour="true">
+
+                        <label class="inside-label" for="hoursPerWeek">
+                          <span class="custom-tooltip" *ngIf="(bikeProfileForm.hasError('required', 'hoursPerWeek') || bikeProfileForm.hasError('minlength', 'hoursPerWeek')) && !bikeProfileForm.hasError('incorrect', 'hoursPerWeek') && (form.submitted || bikeProfileForm.get('hoursPerWeek').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="bikeProfileForm.hasError('incorrect', 'hoursPerWeek') && (form.submitted || bikeProfileForm.get('hoursPerWeek').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              {{bikeHoursPerWeekError}}
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!bikeProfileForm.hasError('required', 'hoursPerWeek') && !bikeProfileForm.hasError('minlength', 'hoursPerWeek') && !bikeProfileForm.hasError('incorrect', 'hoursPerWeek') && (form.submitted || bikeProfileForm.get('hoursPerWeek').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <label for="">
+                          What's your longest individual weekly bike training session?
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col mb-3">
+
+                        <input type="name"
+                          class="form-control {{form.submitted ? bikeProfileForm.get('longestWeeklySession').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                          [(ngModel)]="profile.bikeDurationLongestSession"
+                          formControlName="longestWeeklySession"
+                          timeFormatMask includeHour="true">
+
+                        <label class="inside-label" for="longestWeeklySession">
+                          <span class="custom-tooltip" *ngIf="(bikeProfileForm.hasError('required', 'longestWeeklySession') || bikeProfileForm.hasError('minlength', 'longestWeeklySession')) && !bikeProfileForm.hasError('incorrect', 'longestWeeklySession') && (form.submitted || bikeProfileForm.get('longestWeeklySession').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              This is a required field
+                            </span>
+                          </span>
+                          <span class="custom-tooltip" *ngIf="bikeProfileForm.hasError('incorrect', 'longestWeeklySession') && (form.submitted || bikeProfileForm.get('longestWeeklySession').touched)">
+                            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                            <span class="custom-tooltiptext">
+                              {{longestBikeSessionError}}
+                            </span>
+                          </span>
+                          <i class="far fa-check-circle text-success" *ngIf="!bikeProfileForm.hasError('required', 'longestWeeklySession') && !bikeProfileForm.hasError('minlength', 'longestWeeklySession') && !bikeProfileForm.hasError('incorrect', 'longestWeeklySession') && (form.submitted || bikeProfileForm.get('longestWeeklySession').touched)"></i>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row mb-4 mt-2">
+                      <div class="col">
+                        <div class="progress btn-rounded">
+                          <div class="progress-bar btn-rounded bike-bg" role="progressbar" style="width: 33%"
+                            aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col pr-2">
+                        <a href="/swim-profile-1.html" class="btn-default btn btn-lg text-md btn-block" [routerLink]="['/swim-profile-1']">Go
+                          Back</a>
+                      </div>
+                      <div class="col pl-2">
+
+                        <button class="btn-primary bike-bg btn btn-lg text-md btn-block"
+                          (click)="continue(profile, bikeProfileForm.valid && !loading)">
+                          Continue
+                          <i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+                        </button>
+
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-xl-3">
+        <!-- <app-dashboard-race-details></app-dashboard-race-details> -->
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

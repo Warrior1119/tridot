@@ -1,0 +1,17 @@
+<div *ngIf="profile" class="container h-100 green-borders">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-md-8 col-lg-6 col-xl-4 text-center">
+      <div  [inlineSVG]="'../../assets/img/tridot-logo.svg'" [autosize]="true"  style="width: 200px;" class="mt-4 mb-5 mx-auto d-inline-block"></div>
+      <div class="box shadow rounded mb-4 pb-5">
+        <h4 class="display-1 text-uppercase text-darker page-heading">Restart your 14-day <span class="text-danger">free</span> test drive</h4>
+        <p class="text-dark font-weight-bold">No credit card. No obligation.</p>
+        <p class="border-top border-2 text-justify text-sm text-dark pt-3">Welcome back to TriDot, {{username}}. We noticed you registered to use TriDot but never took advantage of our Optimized Triathlon Training. We've added a lot of new features since you last logged in. In order to take advantage of these new features and give you the opportunity to use the new and improved interface, we're going to restart your 14-Day Free Test Drive. There's no obligation; we just want you to experience what this new version of TriDot has to offer.</p>
+        <button (click)="onTrialRestart()" class="btn btn-lg btn-block btn-danger text-sm" 
+          [disabled]="isBusy">
+          <ng-container *ngIf="isBusy"><i class="fal fa-spin fa-spinner"></i></ng-container>
+          Restart Your Free Test Drive<i class="fa fa-chevron-right ml-2"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

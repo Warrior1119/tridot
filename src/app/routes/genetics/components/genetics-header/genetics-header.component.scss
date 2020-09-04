@@ -1,0 +1,16 @@
+.nav-tabs .nav-link {
+  cursor: pointer;
+  border: unset;
+  &:not(.active) {
+    color: inherit;
+    background-color: #F7F7F7;
+  }
+  &:hover {
+    color: inherit;
+  }
+}
+
+.scroll-h {
+  overflow-x: overlay;
+  overflow-y: hidden;
+}

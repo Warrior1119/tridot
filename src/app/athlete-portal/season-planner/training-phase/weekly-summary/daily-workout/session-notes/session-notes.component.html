@@ -1,0 +1,26 @@
+<div class="p-3 py-sm-0 pr-sm-0 pl-sm-2 bg-light">
+  <div *ngIf="session?.myNotes" class="position-relative">
+    <button *ngIf="!notesEditing" class="btn btn-default btn-sm btn-outline-secondary btn-rounded m-0 px-1 py-0" style="position: absolute; right: 8px; top: 8px;" 
+      (click)="notesEditing = true">
+      <i class="fal fa-pencil"></i>
+    </button>
+    <div class="p-3 lead">My Session Notes</div>
+    <div *ngIf="!notesEditing" class="p-3" [innerHTML]="getNotes(sessionNotes)"></div>
+    <ng-container *ngIf="notesEditing && sessionNotes">
+      <form #sessionNotesForm="ngForm">
+        <div class="p-sm-3 d-flex flex-wrap flex-row-reverse">
+          <textarea class="col-12" placeholder="Enter notes about your session..." [ngModel]="sessionNotes" name="sessionNotes"></textarea>
+          <button type="button" class="col-12 col-sm-3 col-lg-2 mt-3 btn btn-md btn-primary text-md text-nowrap" (click)="newNotes(sessionNotesForm.value.sessionNotes);sessionNotesForm.reset()">Update Note</button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+  <div *ngIf="notesEditing && !session?.myNotes" class="bg-light">
+    <form #sessionNotesForm="ngForm">
+      <div class="p-sm-3 d-flex flex-wrap flex-row-reverse">
+        <textarea class="col-12" placeholder="Enter notes about your session..." rows="2" [ngModel]="session?.myNotes" name="sessionNotes"></textarea>
+        <button type="button" class="col-12 col-sm-3 col-lg-2 mt-3 btn btn-md btn-primary text-md" (click)="newNotes(sessionNotesForm.value.sessionNotes);sessionNotesForm.reset()">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-3" *ngIf="!isMobileOrTablet">
+        <app-menus></app-menus>
+      </div>
+      <div [ngClass]="{'col-9' : !isMobileOrTablet, 'col-12' : isMobileOrTablet}">
+        <app-loading-overlay *ngIf="loaderToBeVisible" style="margin-top: 40vh;"></app-loading-overlay>
+        <div class="card" *ngIf="!loaderToBeVisible">
+          <div *ngIf="editingBike" class="card-title card-header text-left px-3 d-flex align-items-center justify-content-between">
+            <span>{{ editingBike.id ? 'Edit' : 'Add' }} Bike</span>
+            <span><button class="btn btn-default btn-xs text-sm" (click)="editingBike = null">Cancel</button></span>
+          </div>
+          <lib-bike-editor
+            *ngIf="editingBike; else list"
+            bodyClass="p-3"
+            [athleteId]="athleteProfile.athleteId"
+            [bike]="editingBike"
+            (bikeChange)="save($event)"
+            (remove)="removeBike()"
+            (cancel)="selectBike(null)"
+            [mode]="editingBike.id ? 'edit' : 'new'"
+            [measurementSystem]="athleteProfile.measurementSystem"
+            [saveLoading]="editingBikeLoading"
+          ></lib-bike-editor>
+          <ng-template #list>
+            <div class="card-title card-header text-left px-3 d-flex align-items-center justify-content-between">
+              <span>Bike Profiles</span>
+              <span><button class="btn btn-default btn-xs text-sm" (click)="addBike()">Add Bike +</button></span>
+            </div>
+            <div class="card-body px-3">
+              <div *ngFor="let bike of user_bikes">
+                <lib-bike-view
+                  *ngIf="selectedBike && selectedBike.bikeId === bike.bikeId"
+                  [bike]="bike"
+                  [athleteId]="athleteProfile.athleteId"
+                  [measurementSystem]="athleteProfile.measurementSystem"
+                  (edit)="editBike(bike)"
+                  [editDisabled]="bike.legacy"
+                  (cancel)="selectBike(null)"
+                  (activeToggleError)="onServerError($event)"
+                  inlineSvgIcon="../assets/img/svg/icons/bike-inc.svg"
+                >
+                </lib-bike-view>
+                <div *ngIf="!selectedBike || selectedBike.bikeId !== bike.bikeId" (click)="selectBike(bike)" class="bike-row d-flex justify-content-between align-items-center">
+                  <div class="cursor-pointer">
+                    <span class="bike-row__icon" [inlineSVG]="'../assets/img/svg/icons/bike-inc.svg'"></span>
+                    <span class="bike-row__name">{{ bike.bikeName }}</span>
+                    <span class="tag tag--legacy ml-3" *ngIf="bike.legacy">Legacy</span>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <span class="tag tag--racing mr-3" [customTooltip]="isMobileOrTablet ? 'Primary Racing' : null" *ngIf="bike.defaultRacingBike">{{ isMobileOrTablet ? 'PR' : 'Primary Racing' }}</span>
+                    <span class="tag tag--training mr-3" [customTooltip]="isMobileOrTablet ? 'Primary Training' : null" *ngIf="bike.defaultTrainingBike">{{ isMobileOrTablet ? 'PT' : 'Primary Training' }}</span>
+                    <lib-label-checkbox (click)="$event.stopPropagation()" [(checkboxChecked)]="bike.active" [loading]="bikeLoading === bike.bikeId" (checkboxCheckedChange)="toggleBikeActiveStatus($event, bike)" [disabled]="bikeLoading === bike.bikeId" mode="normal" size="small" baseClasses="d-block mr-2" label="Active"></lib-label-checkbox>
+                    <button class="btn btn-default btn-xs text-sm cursor-pointer edit-btn" [disabled]="bike.legacy" (click)="editBike(bike); $event.stopPropagation();">
+                      <i class="fas fa-pencil d-md-none"></i>
+                      <span class="d-none d-md-inline-block">Edit</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<app-footer></app-footer>

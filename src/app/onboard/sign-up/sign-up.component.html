@@ -1,0 +1,116 @@
+<div class="container h-100 green-borders">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-md-8 col-lg-6 col-xl-4 text-center">
+      <h1 *ngIf="!isiOSApp" class="display-1 text-darker text-uppercase page-heading">
+        <ng-container *ngIf="!trialMessage; else trialMessageExists">
+          Start your 14-day <span class="text-red">Free</span> Test Drive
+        </ng-container>
+        <ng-template #trialMessageExists>
+          <span [innerHTML]="trialMessage"></span>
+        </ng-template>
+      </h1>
+      <p *ngIf="!isiOSApp" class="text-drk mb-4">No Credit Card. No Obligation.</p>
+      <div class="box shadow rounded pb-4 pl-5 pr-5 pt-5">
+        <form #form="ngForm" [formGroup]="signUpForm" (ngSubmit)="nextStep(form.valid)">
+          <div class="row mb-3">
+            <div class="col">
+              <button type="button" class="btn btn-lg btn-block btn-facebook text-md" (click)="signInWithFB()">
+                <i class="fab fa-facebook-f fa-lg mr-1"></i> Register with Facebook</button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <h6 class="line-behind mb-0">
+                <span>OR</span>
+              </h6>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col">
+              <label for="email" class="inside-label inside-label-lg">
+                <span class="custom-tooltip" *ngIf="form.hasError('email', 'email') && (form.submitted || signUpForm.get('email').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext p-2">Please enter a valid email address </span>
+                </span>
+                <span class="custom-tooltip" *ngIf="!(form.hasError('email', 'email') && (form.submitted || signUpForm.get('email').touched)) && emailExists && (form.submitted || signUpForm.get('email').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext p-2" [routerLink]="['/login']">Email is already registered, click the link below to login</span>
+                </span>
+                <i class="far fa-check-circle text-success cursor-pointer" *ngIf="signUpForm.get('email').valid && !emailExists && (form.submitted || signUpForm.get('email').touched)"></i>
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                (ngModelChange)="busy = true;checkEmail($event)"
+                maxlength="50"
+                formControlName="email"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter your email address"
+                [class.border-danger]="emailExists"
+                [pattern]="emailPattern"
+              >
+              <span class="custom-tooltip" *ngIf="form.hasError('used', 'email') && (form.submitted || signUpForm.get('email').touched) && emailExists">
+                <div class="text-sm text-danger">This email is already registered. To restore access to your account, please use the '<a [routerLink]="'/forgot-password'"><u>forgot password</u></a>' link.</div>
+              </span>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col">
+                <label for="email" class="inside-label inside-label-lg">
+                <i class="far fa-check-circle text-success" *ngIf="!form.hasError('required', 'password') && !form.hasError('minlength', 'password') && !form.hasError('pattern', 'password') && signUpForm.get('password').touched"></i>
+              </label>
+              <input
+                type="password"
+                minlength="8"
+                maxlength=50
+                formControlName="password"
+                class="form-control"
+                aria-describedby="passwordHelp"
+                placeholder="Set a password"
+                pattern="^(?=.*[A-Z])(?=.*[0-9]).+$"
+              >
+              <span class="custom-tooltip" *ngIf="form.hasError('required', 'password') && signUpForm.get('password').touched">
+                <div class="text-sm text-danger"> This field is required</div>
+              </span>
+
+
+              <span class="custom-tooltip" *ngIf="form.hasError('minlength', 'password') && signUpForm.get('password').touched">
+                <div class="text-sm text-danger"> Your password must be at least 8 characters long</div>
+              </span>
+
+              <span class="custom-tooltip" *ngIf="form.hasError('pattern', 'password') && !form.hasError('minlength', 'password') && signUpForm.get('password').touched">
+                <div class="text-sm text-danger">Password must be alphanumeric and contain at least one number and one uppercase letter</div>
+                </span>
+            </div>
+          </div>
+          <div class="row p-2 justify-content-center text-danger" *ngIf="errorMessage">
+            {{errorMessage}}
+          </div>
+          <div class="row mb-2">
+            <div class="col mb-0">
+              <button type="submit" [disabled]="busy || emailExists" class="btn btn-lg btn-block btn-danger text-md">
+                Register for Free
+                <i class="fa fa-angle-right fa-md ml-1"></i>
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-center">
+              <hr>
+              <small class="text-drk">
+                By registering, I agree to the
+                <a href="/pages/terms-and-conditions" target="_blank" class="text-body font-weight-bold">Terms of Service</a> and
+                <a href="/pages/privacy-policy" target="_blank" class="text-body font-weight-bold">Privacy Policy</a>.
+              </small>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div  [inlineSVG]="'../../../assets/img/tridot-logo.svg'" [autosize]="true"  style="width: 200px;" class="mt-4 mb-2 mx-auto d-inline-block"></div>
+      <p>Already use TriDot?
+        <a [routerLink]="['/login']" class="font-italic text-dark">Login</a>
+      </p>
+    </div>
+  </div>
+</div>

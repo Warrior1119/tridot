@@ -1,0 +1,36 @@
+<ul class="nav support-nav py-4" *ngIf="!mobile">
+  
+  <li class="nav-item d-flex align-items-center justify-content-between px-4 w-100" 
+  *ngFor="let section of sections" 
+  [ngClass]="{'active': selectedSection == section.index}"
+  (click)="changeSection(section.index)">
+    <span>
+      <div class="mr-3 d-inline-block d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/support-icons/' + section.name + '.svg'" [autosize]="true"  style="width: 22px;" ></div>
+      <h6 class="font-weight-normal text-md d-inline-block mb-0">{{section.name}} ({{section.count}})</h6>
+    </span>
+    <span>
+      <div class="icon-fix-md mx-auto d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/arrow-right.svg'" [autosize]="true"  style="width: 7px;" ></div>
+    </span>
+  </li>
+</ul>
+<div class="support-nav  pb-4" *ngIf="mobile">
+  
+  <div class="btn-group px-3 support-nav-dropdown" dropdown>
+    
+      <button type="button" id="button-autoclose1" class="btn dropdown-toggle shadow py-2  d-flex align-items-center justify-content-between support-nav-dropdown" 
+      aria-controls="dropdown-autoclose1" dropdownToggle
+      >
+      <span class="text-sm text-body mr-1" style="width:90%">{{sections[index].name}}</span>
+      <span class="border-left align-items-center" style="width:10%">
+        <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10 px;"  class="mx-auto d-inline-block"></div>
+      </span>
+      </button>
+     
+      <ul id="dropdown-autoclose1" *dropdownMenu class="dropdown-menu"
+          role="menu" aria-labelledby="button-autoclose1">
+        <li role="menuitem" class="dropdown-item" *ngFor="let section of sections" (click)="changeSection(section.index)"> {{section.name}}</li>
+       
+      </ul>
+    </div>
+  </div>
+  

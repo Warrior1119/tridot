@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.578 15.382">
+  <defs>
+    <style>
+      .nutrition-icon-cls-1 {
+        fill: #ffffff;
+      }
+    </style>
+  </defs>
+  <g id="organic-2" transform="translate(-0.001 -1)">
+    <path id="Path_486" data-name="Path 486" class="nutrition-icon-cls-1" d="M8,9.789v6.592a8.789,8.789,0,0,0,8.789-8.789V1A8.789,8.789,0,0,0,8,9.789Z" transform="translate(0.789)"/>
+    <path id="Path_487" data-name="Path 487" class="nutrition-icon-cls-1" d="M0,6V9.3a6.592,6.592,0,0,0,6.592,6.592v-3.3A6.592,6.592,0,0,0,0,6Z" transform="translate(0 0.493)"/>
+  </g>
+</svg>

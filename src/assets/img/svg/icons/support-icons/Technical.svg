@@ -1,0 +1,6 @@
+<svg id="sensor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path id="Path_620" data-name="Path 620" d="M23,12A11,11,0,1,1,12,1" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  <path id="Path_621" data-name="Path 621" d="M6,12a6,6,0,1,1,6,6" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+  <circle id="Ellipse_281" data-name="Ellipse 281" cx="2" cy="2" r="2" transform="translate(10 10)" fill="#70868d" stroke="#70868d" stroke-width="1"/>
+  <path id="Path_622" data-name="Path 622" d="M16,1.751A11.035,11.035,0,0,1,22.25,8" fill="none" stroke="#70868d" stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+</svg>

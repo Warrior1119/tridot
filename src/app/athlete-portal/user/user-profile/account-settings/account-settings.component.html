@@ -1,0 +1,162 @@
+<!-- <div *ngFor="let alert of alerts">
+  <alert [type]="alert.type" class="global-alert" [dismissOnTimeout]="alert.timeout" [dismissible]="true">{{ alert.msg }}</alert>
+</div> -->
+
+<div class="main">
+  <div class="container green-borders">
+    <div class="row">
+      <div class="col-3" *ngIf="!isMobileOrTablet">
+        <app-menus></app-menus>
+      </div>
+
+      <div class="col-9" [ngClass]="{'col-9' : !isMobileOrTablet, 'col-12' : isMobileOrTablet}">
+        <div class="card card-box mb-4">
+          <div class="card-title card-header text-left d-flex justify-content-between align-items-center py-3">
+            <div class="text-md mb-0">User Information</div>
+            <div>
+              <button *ngIf="!editAccount" type="button" class="btn-default btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+                (click)="editAccount = true">
+                Edit
+              </button>
+              <button *ngIf="editAccount" type="button" class="btn-default btn-xs px-2 py-1 mr-2 rounded cursor-pointer text-sm text-capitalize"
+                (click)="editAccount = false;editAccountComp.formReset()">
+                Cancel
+              </button>
+              <button *ngIf="editAccount" type="button" class="btn-success btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+                [disabled]="editAccountComp?.contactLoading"
+                (click)="editAccountComp.save(editAccountComp?.showUpdateForContact && !editAccountComp?.emailUsed && editAccountComp?.formValid)">
+                Save <i *ngIf="editAccountComp?.contactLoading" class="fal fa-spinner fa-spin"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body card-body-md pb-0 pt-0">
+            <app-edit-account #editAccountComp [canEdit]="editAccount" (subscriptionChange)="onAccountEdited()" [isMobile]="isMobile"></app-edit-account>
+            <!-- update password -->
+            <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+              <div class="text-left text-mb" [ngClass]="{'item-title' : isMobile}">Password</div>
+                <button class="btn btn-light btn-sm mb-0" [routerLink]="['./change-password']" *ngIf="editAccount">Update Password</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscription -->
+        <div class="card card-box mb-4" *ngIf="!isiOSApp">
+          <div class="card-title card-header text-left d-flex justify-content-between align-items-center py-3">
+            <div class="text-md mb-0">Subscription</div>
+          </div>
+          <div class="card-body card-body-md pb-0 pt-0">
+            <div class="row">
+              <div class="col p-0">
+                <div *ngIf="subscriptionStatus === 'Trial' || subscriptionStatus === 'Trial Expired'"
+                      [class.sub-active]="subscriptionStatus === 'Trial'"
+                      [class.sub-canceled]="subscriptionStatus === 'Trial Expired'">
+                  <div class="d-flex justify-content-between align-items-center py-3 pl-3">
+                    <h6 class="text-md font-weight-normal">
+                      <span class="pricing" [ngClass]="{'item-title' : isMobile}">
+                        {{0 |currency:subscription?.currencyCode||'USD'}}
+                        <span class="per-month text-md">/mo</span>
+                      </span>
+                    </h6>
+                    <div class="col-6 offset-3 text-center d-flex justify-content-end">
+                      <div class="sub-buttons">
+                        <button (mouseover)="changeSubscription = true" *ngIf="!changeSubscription" class="btn btn-danger btn-sm mb-0">
+                          Trial Expired
+                        </button>
+                        <button (mouseleave)="changeSubscription = false" [routerLink]="['/user/subscription-options']"
+                          *ngIf="changeSubscription == true" class="btn btn-danger btn-sm mb-0">Update Subscription
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div [class.sub-active]="subscriptionStatus === 'Current'"
+                  [class.sub-canceled]="subscriptionStatus === 'Canceled'">
+                  <div class="d-flex justify-content-end align-items-center py-3">
+                    <div class="col-6 d-flex align-items-center">
+                      <h6 class="text-md font-weight-normal" [ngClass]="{'item-title' : isMobile}">
+                        <ng-container [ngSwitch]="subscription?.subscription">
+                          <ng-container *ngSwitchCase="'Premium2017'">Premium</ng-container>
+                          <ng-container *ngSwitchDefault>{{subscription?.subscription}}</ng-container>
+                        </ng-container>
+                        <span class="pricing">
+                          {{subscription?.fee |currency:subscription?.currencyCode||'USD'}}
+                          <span class="per-month text-md">/mo</span>
+                        </span>
+                      </h6>
+                    </div>
+                    <div class="col-4 offset-2 text-center justify-content-end d-flex">
+  
+                      <div class="sub-buttons">
+                        <button (mouseover)="changeSubscription = true" *ngIf="!changeSubscription" class="btn btn-success btn-sm mb-0">
+                          Active
+                        </button>
+                        <button (mouseleave)="changeSubscription = false" [routerLink]="['/user/subscription-options']"
+                          *ngIf="changeSubscription == true" class="btn btn-success btn-sm mb-0">Update Subscription
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <!-- Billing details -->
+        <div class="card card-box mb-4" *ngIf="!isiOSApp">
+            <app-payment-settings [subscription]="subscription" (subscriptionChange)="onPaymentEdited()" [isMobile]="isMobile"></app-payment-settings>
+        </div>
+
+        <!-- Billing History -->
+        <div *ngIf="!isiOSApp" class="tab-content icon-tabs-content card card-box mb-4 pb-0 pt-3" id="myTabContent">
+          <div class="card-title card-header text-left d-flex justify-content-between align-items-center py-3">
+            <div class="text-left text-md mb-0">Billing History</div>
+          </div>
+          <div aria-labelledby="billing-history" id="history"  class=" py-1 px-3">
+            <div [ngClass]="{'col' : !isMobile}">
+              <div class="row">
+                <div class="border-bottom mb-4" [ngClass]="{'col' : !isMobile}">
+                    <table class="table table-borderless" [ngClass]="{'table-mobile' : isMobile}">
+                      <thead>
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col">Description</th>
+                          <th scope="col">Comment</th>
+                          <th scope="col">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of subscription?.billingHistory?.slice().reverse() | paginate: { itemsPerPage: 10, currentPage: page } ">
+                          <td scope="row">{{row.date | amDateFormat: prefDateFormatLong || 'LL'}}</td>
+                          <td>{{row.item}}</td>
+                          <td>{{row.comment}}</td>
+                          <td>{{row.amount |currency:row.currencyCode||'USD'}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+
+              </div>
+              <div class="row pb-3">
+                <div class="col">
+                  <nav class="d-flex justify-content-center">
+                    <pagination-controls
+                      class="my-pager"
+                      previousLabel=""
+                      nextLabel=""
+                      (pageChange)="page = $event">
+                    </pagination-controls>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,43 @@
+.coach-photo {
+  $self: &;
+  height: 100%;
+  min-width: 80px;
+  min-height: 120px;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .image {
+    position: relative;
+
+    &--new {
+      flex: 1;
+      border-radius: 4px;
+      display: flex;
+      background-color: #e4ebf0;
+      justify-content: center;
+
+      img {
+        width: 33px !important;
+      }
+    }
+  }
+
+  &:hover {
+    #{$self}__delete {
+      display: inline-block;
+    }
+  }
+
+  &__delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  background-color: transparent;
+  line-height: 1;
+  }
+}

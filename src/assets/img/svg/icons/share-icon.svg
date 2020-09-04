@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 23.273">
+  <defs>
+    <style>
+      .share-icon-cls-1 {
+        fill: #a4acb2;
+      }
+    </style>
+  </defs>
+  <g id="share-66" transform="translate(-5)">
+    <path id="Path_419" data-name="Path 419" class="share-icon-cls-1" d="M20.273,12H13.727v7.273H12.273V12H5.727A.727.727,0,0,0,5,12.727V25.818a.727.727,0,0,0,.727.727H20.273A.727.727,0,0,0,21,25.818V12.727A.727.727,0,0,0,20.273,12Z" transform="translate(0 -3.273)"/>
+    <path id="Path_420" data-name="Path 420" class="share-icon-cls-1" d="M18.727,5.091,14.364,0,10,5.091h3.636V8.727h1.455V5.091Z" transform="translate(-1.364)"/>
+  </g>
+</svg>

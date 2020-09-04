@@ -1,0 +1,176 @@
+<ng-template #confirm><confirmation-overlay></confirmation-overlay></ng-template>
+
+<div class="block-1 mt-4">
+  <div *ngIf="session" class="box rounded shadow p-0">
+    <div class="pb-0 pl-5 pr-5 pt-3">
+      <div *showOverlay="overlay; overlay confirm" class="zone-table-container">
+        <div class="table-responsive" (pan)="onPan($event)" (panend)="onPanEnd($event)">
+          <table class="table zones-table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Zone</th>
+                <ng-container *ngIf="session.sessionType === 'swim'">
+                  <th scope="col-2" width="20%">Pace Range</th>
+                  <th scope="col-2" width="20%" *ngIf="selectedParam == 'metersThenPace'">Pace/100m</th>
+                  <th scope="col-2" width="20%" *ngIf="selectedParam == 'yardsThenPace'">Pace/100y</th>
+                </ng-container>
+                <ng-container *ngIf="session.sessionType === 'bike'">
+                  <th scope="col-2" width="20%" *ngIf="selectedParam == 'heartrate'">Heart Rate</th>
+                  <th scope="col-2" width="20%" *ngIf="selectedParam == 'power'">Power</th>
+                </ng-container>
+                <ng-container *ngIf="session.sessionType === 'run'">
+                  <th scope="col-2" width="20%" *ngIf="selectedParam == 'pace'">Pace Range</th>
+                  <th scope="col-2" width="20%" *ngIf="selectedParam == 'heartrate'">Heart Rate</th>
+                  <th scope="col-2" width="20%">Pace Target</th>
+                </ng-container>
+                <th scope="col">RPE</th>
+                <th scope="col-2">Planned</th>
+                <th scope="col-2">Actual</th>
+                <th scope="col-6" width="40%">
+                  <div class="table-icons-group d-flex align-items-center justify-content-end" style="max-height:30px;">
+                    <ng-container *ngIf="session.sessionType === 'swim'">
+                      <span class="selection-container text-nowrap">
+                        <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0 text-sm" (click)="setParam('yardsThenPace')"
+                          [class.selected-param]="selectedParam === 'yardsThenPace'">
+                          Y<span class="d-none d-sm-inline">ards</span></h5>
+                        <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0 text-sm" (click)="setParam('metersThenPace')"
+                          [class.selected-param]="selectedParam === 'metersThenPace'">
+                          M<span class="d-none d-sm-inline">eters</span></h5>
+                      </span>
+                    </ng-container>
+                    <ng-container *ngIf="session.sessionType === 'bike'">
+                      <div class="table-icons" (click)="setParam('power')" [class.table-icon-active]="selectedParam === 'power'">
+                        <i inlineSVG="../assets/img/svg/icons/power.svg"></i>
+                      </div>
+                      <div class="table-icons" (click)="setParam('heartrate')" [class.table-icon-active]="selectedParam === 'heartrate'">
+                        <i inlineSVG="../assets/img/svg/icons/heartrate.svg"></i>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="session.sessionType === 'run'">
+                      <div class="table-icons" (click)="setParam('pace')" [class.table-icon-active]="selectedParam === 'pace'">
+                        <i inlineSVG="../assets/img/svg/icons/clock.svg"></i>
+                      </div>
+                      <div class="table-icons" (click)="setParam('heartrate')" [class.table-icon-active]="selectedParam === 'heartrate'">
+                        <i inlineSVG="../assets/img/svg/icons/heartrate.svg"></i>
+                      </div>
+                    </ng-container>
+                    <div class="table-icons" *ngIf="session.sessionType !== 'strength'">
+                      <i *ngIf="!shouldUploadBeEnabled(session)" inlineSVG="../assets/img/svg/icons/data-file-default.svg"></i>
+                      <i *ngIf="shouldUploadBeEnabled(session)" [inlineSVG]="day.unlinkedFiles?.length ? '../assets/img/svg/icons/data-file.svg' : '../assets/img/svg/icons/data-file-default.svg'" customTooltip="Upload Data File" (click)="sessionAction('upload')"></i>
+                    </div>
+                    <div class="table-icons" *ngIf="session.linkedFiles?.length" customTooltip="Data File Linked">
+                      <i inlineSVG="../assets/img/svg/icons/data-file-success.svg"></i>
+                    </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let zone of session.zones">
+              <!-- Z1-Z6 -->
+              <td scope="col font-weight-bold zone-type">{{zone.zoneType|uppercase}}</td>
+              <!-- Zone -->
+              <td scope="col" class="bordered">
+                <div class="zone-label justify-content-left">
+                  <p class="text-nowrap">{{getZoneName(zone)}}</p>
+                </div>
+              </td>
+              <ng-container *ngIf="session.sessionType === 'swim'">
+                <!-- Pace Range Meters -->
+                <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'metersThenPace'">
+                  <div>
+                    <p class="text-nowrap">{{ (zone.meterPaceRange | timeFormat) || '0' }}</p>
+                  </div>
+                </td>
+                <!-- Pace Range Yards -->
+                <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'yardsThenPace'">
+                  <div>
+                    <p class="text-nowrap">{{ (zone.yardsPaceRange | timeFormat) || '0' }}</p>
+                  </div>
+                </td>
+                <!-- Pace/100m -->
+                <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'metersThenPace'">
+                  <div>
+                    <p class="text-nowrap">{{ (zone.metersThenPace | timeFormat) || '0' }}</p>
+                  </div>
+                </td>
+                <!-- Pace/100y -->
+                <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'yardsThenPace'">
+                  <div>
+                    <p class="text-nowrap">{{ (zone.yardsThenPace | timeFormat) || '0' }}</p>
+                  </div>
+                </td>
+                </ng-container>
+                <ng-container *ngIf="session.sessionType === 'bike'">
+                  <!-- Power -->
+                  <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'power'">
+                    <div>
+                      <p class="text-nowrap">{{ zone.power || '00' }}</p>
+                    </div>
+                  </td>
+                  <!-- Heart Rate -->
+                  <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'heartrate'">
+                    <div>
+                      <p class="text-nowrap">{{ zone.hr || '00' }}</p>
+                    </div>
+                  </td>
+              </ng-container>
+              <ng-container *ngIf="session.sessionType === 'run'">
+                <!-- Pace Range -->
+                <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'pace'">
+                  <div>
+                    <p [ngSwitch]="!!zone.paceRange" class="text-nowrap">
+                      <ng-container *ngSwitchCase="true">
+                        {{ getRangeStart(zone.paceRange) | timeFormat }}
+                        -
+                        {{ getRangeEnd(zone.paceRange) | timeFormat }}
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>00</ng-container>
+                    </p>
+                  </div>
+                </td>
+                <!-- Heart Rate -->
+                <td scope="col-2" class="bordered" width="20%" *ngIf="selectedParam == 'heartrate'">
+                  <div>
+                    <p class="text-nowrap">{{ zone.hr || '00' }}</p>
+                  </div>
+                </td>
+                <!-- Pace Target -->
+                <td scope="col-2" class="bordered" width="20%">
+                  <div>
+                    <p class="text-nowrap">{{ (zone.paceThen | timeFormat) || '0' }}</p>
+                  </div>
+                </td>
+              </ng-container>
+              <!-- RPE -->
+              <td scope="col">{{zone.rpe}}</td>
+              <!-- Planned -->
+              <td scope="col" class="col-planned text-center">
+                {{ (convertToHHMM(zone.planned, true) | timeFormat) || '0:00' }}
+              </td>             
+                <ng-container [ngSwitch]="shouldZoneValuesBeDisplayed(zone)">
+                  <ng-container *ngSwitchCase="true">
+                    <!-- Actual -->
+                    <td *ngIf="selectedParam=='heartrate'" scope="col" [ngClass]="zone.zoneType">{{ convertToHHMM(zone.actualHr) | timeFormat }}</td>
+                    <td *ngIf="selectedParam=='power'" scope="col" [ngClass]="zone.zoneType">{{ convertToHHMM(zone.actualPower) | timeFormat }}</td>
+                    <td *ngIf="selectedParam!='power' && selectedParam!='heartrate'" scope="col" [ngClass]="zone.zoneType">{{ convertToHHMM(zone.actual) | timeFormat }}</td>
+                    <td scope="col-6" width="40%">
+                      <div [ngClass]="zone.zoneType" [ngStyle]="{'width' : getZoneWidth(zone)}"></div>
+                    </td>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <!-- Actual -->
+                    <td scope="col">0:00</td>
+                    <td scope="col-6" width="40%"></td>
+                  </ng-container>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <app-session-notes class="d-none d-lg-block" [session]="session" (updateNotes)="updateNotesCall($event)"></app-session-notes>
+  </div>
+</div>

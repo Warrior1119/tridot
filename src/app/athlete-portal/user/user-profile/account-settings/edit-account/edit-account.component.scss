@@ -1,0 +1,44 @@
+.edit-account-card {
+    min-height: 460px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.3rem 0.3rem !important;
+}
+
+.email-input {
+    width: initial !important;
+}
+
+.custom-width {
+    width: 30%;
+    option{
+        width: 30%;
+    }
+}
+
+.custom-select-lg {
+    padding: 0 1.75rem 0 0.75rem !important;
+    height: calc(1.5rem + 1.1rem) !important;
+    @media all and (max-width: 576px) {
+        height: calc(1.5rem + 0.5rem) !important;
+    }
+}
+
+.edit-account-item {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    input {
+        flex: 0 0 auto;
+        width:100% !important;
+    }
+    select {
+        flex: 0 0 auto;
+        width:100% !important;
+    }
+}
+
+.item-title {
+    font-size: 13px !important;
+}

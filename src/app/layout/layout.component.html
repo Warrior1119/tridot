@@ -1,0 +1,12 @@
+<div class="page-wrapper" [class.toggled]="getSideBarState()">
+  <app-sidebar *ngIf="isNavigationVisible && !isCoachLogin"></app-sidebar>
+  <app-coach-sidebar *ngIf="isNavigationVisible && isCoachLogin"></app-coach-sidebar>
+  <div canvas="canvas-wrap">
+    <app-header *ngIf="isNavigationVisible"></app-header>
+    <div class="page-content h-100" [class.nosidebar]="nosidebar">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<app-mobile-sidebar *ngIf="isNavigationVisible && !isCoachLogin"></app-mobile-sidebar>
+<!-- <app-coach-mobile-sidebar *ngIf="isNavigationVisible && isCoachLogin"></app-coach-mobile-sidebar> -->

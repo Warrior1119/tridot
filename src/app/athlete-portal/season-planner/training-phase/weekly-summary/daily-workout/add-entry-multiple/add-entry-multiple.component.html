@@ -1,0 +1,38 @@
+<div class="modal-header pl-4 pr-4 pt-4 mb-2">
+  <ng-container *ngIf="metrics?.length">
+    <h5 class="modal-title pull-left mr-3 text-nowrap">Update Your Metrics</h5>
+    <ul class="nav nav-pills" role="tablist">
+      <li class="nav-item" *ngFor="let metric of metrics">
+        <a *ngIf="metric.editable " class="btn btn-outline-secondary pill py-0 mt-1 mr-2" [class.active]="activeTab === metric.metricId" role="tab"
+          (click)="activeTab = metric.metricId" >
+          {{ metric.metricsName }}
+        </a>
+        <a *ngIf="!metric.editable" class="btn bg-default btn-outline-secondary pill py-0 mt-1 mr-2" [class.active]="activeTab === metric.metricId" role="tab">
+          {{ metric.metricsName }}
+        </a>
+      </li>
+    </ul>
+  </ng-container>
+  <button type="button" class="close pull-right pt-3" aria-label="Close" (click)="closeModal()">
+    <i class="fal fa-times"></i>
+  </button>
+</div>
+<div class="modal-body pl-4 pr-4 pb-4">
+  <div class="text-center" *ngIf="!metrics?.length">To select metrics to track, please click "View Metrics"</div>
+  <div class="form-row">
+    <ng-container *ngFor="let metric of metrics">
+      <ng-container *ngIf="activeTab === metric.metricId">
+        <input *ngIf="!metric.metricOptions?.length" [@ngIfFadeIn] type="text" class="col form-control" placeholder="{{metric.metricsName}}?"
+          [(ngModel)]="metric.model">
+        <select *ngIf="metric.metricOptions?.length" [@ngIfFadeIn] class="col custom-select text-md pl-3"
+          [(ngModel)]="metric.model">
+          <option value="" type="button" disabled>{{metric.metricsName}}?</option>
+          <option *ngFor="let value of metric.metricOptions" [value]="value.optionKey" type="button">{{value.optionValue}}</option>
+        </select>
+      </ng-container>
+    </ng-container>
+    <div class="ml-3">
+      <button *ngIf="metrics?.length" type="button" class="btn btn-success btn-block text-md mt-0 px-4" (click)="save()">Submit</button>
+    </div>
+  </div>
+</div>

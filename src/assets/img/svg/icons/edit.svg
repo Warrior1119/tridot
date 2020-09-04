@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20.525 21.188">
+  <defs>
+    <style>
+      .edit-cls-1 {
+        fill: #a4acb2;
+      }
+    </style>
+  </defs>
+  <g id="a-edit" transform="translate(-1)">
+    <path id="Path_244" data-name="Path 244" class="edit-cls-1" d="M12.3,11.256c3.032,0,5.3-3.146,5.3-5.959A5.3,5.3,0,0,0,7,5.3C7,8.11,9.265,11.256,12.3,11.256Z" transform="translate(-2.027)"/>
+    <path id="Path_245" data-name="Path 245" class="edit-cls-1" d="M12.384,24.282l4.346-4.346A20.534,20.534,0,0,0,10.27,19a18.958,18.958,0,0,0-7.7,1.41A2.646,2.646,0,0,0,1,22.829v3.454a.662.662,0,0,0,.662.662H11.718Z" transform="translate(0 -6.42)"/>
+    <path id="Path_246" data-name="Path 246" class="edit-cls-1" d="M25.21,19.411l-5.548,5.548L19,27.607l2.648-.662L27.2,21.4a1.4,1.4,0,0,0-1.986-1.986Z" transform="translate(-6.082 -6.42)"/>
+  </g>
+</svg>

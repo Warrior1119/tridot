@@ -1,0 +1,102 @@
+.time {
+  background-color: #f5f5f5;
+
+  &.active {
+    background-color: #71d855;
+    color: white;
+  }
+}
+
+.session-inc {
+  background: #f9f9f9;
+  margin-top: -24px;
+  margin-left: -24px;
+  margin-right: -24px;
+
+  .border-right {
+    border-color: #efebeb;
+    
+  }
+}
+
+@media (max-width: 575.98px) {
+  .location-dropdown {
+    height: 42px !important;
+    margin-right: -15px !important;
+  }
+}
+
+.has-location {
+  button.location-dropdown {
+    span.text-sm {
+      margin-right:0 !important;
+    }
+    img {
+      display:none;
+    }
+  }
+}
+
+.temp-nums {
+  font-size:27px;
+}
+
+.actual-total-input,
+.session-time-input {
+  text-align: center;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.75rem;
+}
+
+.actual-total-input {
+  color: #C6CBD0;
+
+  ::placeholder {
+    color: #C6CBD0;
+  }
+}
+
+.session-time-input {
+  font-weight: 700;
+
+  ::placeholder {
+    color: #a4acb3;
+  }
+}
+
+.workout-zones {
+  height: 15px;
+  border-radius:30px;
+  overflow:hidden;
+  background: #f2f2f2;
+}
+
+@media (max-width: 575.98px) { 
+  .session-inc {
+    padding-top:15px !important;
+    margin-top:-9px;
+    margin-left: -9px;
+    margin-right: -9px;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+    overflow:hidden;
+  }
+  .session-numbers-container {
+    > .col-3 {
+      padding-left:5px;
+      padding-right:5px;
+    }
+  }
+  .actual-total-input {
+    font-size:1rem;
+  }
+}
+
+.score-box {
+  font-size: 32px;
+}

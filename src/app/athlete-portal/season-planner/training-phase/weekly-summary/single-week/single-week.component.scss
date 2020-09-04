@@ -1,0 +1,271 @@
+.single-week-metrics-tooltip {
+  text-align: left;
+  width: 140px;
+}
+
+app-single-week {
+  .daily-workut-burger-button {
+    border-color: #e0e2e2;
+    border-radius: 4px;
+    background-color: #e0e2e2;
+    height: 38px;
+  }
+
+  .card-tooltips {
+  }
+
+  .metrics-container {
+    .custom-tooltiptext {
+      font-size: 13px;
+      margin: 0;
+      left: 0;
+
+      &::after {
+        content: "";
+        // position: absolute;
+        // top: 100%;
+        // left: 10%;
+        // margin-left: -20px;
+        // transform: rotate(45deg);
+        // margin-top: -8px;
+        // border-width: 8px;
+        // border-style: solid;
+        // border-color: #555 transparent transparent transparent;
+      }
+    }
+  }
+
+  .data-file-container {
+    z-index: 2;
+
+    .custom-tooltiptext {
+      font-size: 13px;
+      left: -230%;
+      width: 160px;
+      bottom: 55%;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: rotate(-45deg);
+        margin-left: 55px;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+      }
+    }
+  }
+
+  .burger-wrap {
+    right: -10px;
+    top: -20px;
+    min-width: 120px; // Too wide for closed menu state. User won't be able to click "Day" in Safari!
+    
+    // Safari Fix for 'too wide burger menu' issue mentioned above
+    &:not(.open) {
+      width: 32px !important;
+      min-width: 32px !important;
+    }
+  }
+
+  .burger-icon {
+    height: 16px;
+    width: 16px;
+  }
+
+  .ellipsis-wrap {
+    top: -23px;
+    right: -5px;
+  }
+
+  .workout-summary.showDetails {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .workout-summary {
+    top: 40px;
+    right: 0px;
+    cursor: pointer;
+
+    .ps__rail-y {
+      top: 0px !important;
+      opacity: 1 !important;
+      width: 6px;
+      right: 16px !important;
+      margin-top: 16px;
+      margin-bottom: 16px;
+      background-color: #d5dbdb;
+      border-radius: 4px;
+      .ps__thumb-y {
+        right: 0;
+        background-color: #777 !important;
+        border-radius: 4px !important;
+      }
+
+      // perfect scrollbar: compensate error in height calculation
+      transform: scale(1, 1.35);
+      transform-origin: 0 0;
+    }
+  }
+
+  .no-session-available {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+    text-align: center;
+    margin-top: 32px;
+    min-height:65px;
+    padding: 10px;
+    border-radius: 3px;
+    background: #f2f2f2;
+  }
+
+  .progressbar-tooltiptext {
+    position: absolute;
+    z-index: 1;
+    top: -59px;
+    height: fit-content;
+  }
+
+  .trainx-title {
+    line-height: 30px;
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .progress-score {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    float: right;
+    border: 3px solid white;
+
+    span {
+      font-size: 16px;
+      border-radius: 50%;
+    }
+  }
+
+  .weekly-summary {
+    .weekStats {
+      flex:0.5;
+      display: grid;
+      .time-card-block {
+        .blank-time-block {
+          height: 20%;
+        }
+        div{
+          font-size: 0.75rem !important;
+          text-align: center !important;
+        }
+      }
+    }
+    /deep/ .custom-menu__list {
+      font-size: 14px;
+      li {
+        margin: 0px;
+      }
+    }
+  }
+
+  .trainx-progress {
+    position: relative;
+    transition: all 200ms ease-in-out;
+    padding-right: 0.5rem !important;
+    .trainx-summary {
+      border: 3px solid #e4e5e6;
+      border-radius: 6px;
+      width: 60px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      top: -15px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+  }
+
+  .custom-menu-wrap {
+    min-height: 50px;
+    &.open {
+      .custom-menu__list {
+        display: block;
+      }
+    }
+  }
+
+  .custom-menu__list {
+    display: none;
+  }
+
+  .drag-handle {
+    cursor: move;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+  }
+
+  .trainx-score-wrapper {
+    height: 35px;
+    width: 35px;
+    border: rgba(0, 0, 0, 0.2) solid;
+    border-radius: 4px;
+    .trainx-score {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      font-weight: bold;
+    }
+  }
+  .trainx-bg-50 {
+    background-color: #ff8817 !important;
+  }
+  .trainx-bg-60 {
+    background-color: #c8eb36 !important;
+  }
+  .trainx-bg-70 {
+    background-color: #95eb30 !important;
+  }
+  .trainx-bg-80 {
+    background-color: #7ed535 !important;
+  }
+  .trainx-bg-100 {
+    background-color: #60c123 !important;
+  }
+
+  @media screen and (max-width: 575.98px) {
+    .progress {
+      height: 40px !important;
+      padding: 8px;
+    }
+
+    .rounded-progress {
+      border-radius: 5px !important;
+    }
+  }
+}
+
+.data-file-header {
+  cursor: pointer;
+}
+
+.workout-menu {
+  z-index: 4;
+}
+
+.workout-block.gu-mirror {
+  /* while dragged (parent=body) */
+  background: #f2f2f2;
+  padding: 20px;
+  .workout-menu, .workout-summary { display: none; }
+  .workout-icon {
+    width: 32px;
+    height: 32px;
+  }
+}

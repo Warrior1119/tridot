@@ -1,0 +1,80 @@
+<div class="d-none d-sm-block card-box rounded p-4 phase-block text-center {{getPhaseClass(phaseType)}}">
+  <ng-container [ngSwitch]="mode">
+    <div *ngSwitchCase="'past'" class="d-flex justify-content-end align-items-center">
+    
+        <div class="position-absolute text-center" style="left: 0; right: 0;">
+            <app-phase-details
+              [duration]="duration"
+              [phaseType]="phaseType"
+              [phaseStart]="phaseStart"
+              [phaseEnd]="phaseEnd"
+            ></app-phase-details>
+          </div>
+          
+          <button class="rounded-button {{getPhaseClass(phaseNext.phaseType)}}"
+            (mouseover)="states.currentNext = true"
+            (mouseleave)="states.currentNext = false"
+            (click)="next.emit()">
+            <span [@expandWidth]="states.currentNext ? 'expanded' : 'collapsed'" class="d-inline-block {{states.currentNext ? 'ml-2 mr-4' : ''}}">
+              <app-phase-details prefix="Next:" [phaseType]="phaseNext.phaseType"></app-phase-details>
+            </span>
+            <i class="fa fa-arrow-right" style="right: 0;"></i>
+          </button>
+    
+    </div>
+    <div *ngSwitchCase="'current'" class="d-flex justify-content-end align-items-center">
+
+      <div class="position-absolute text-center" style="left: 0; right: 0;">
+        <app-phase-details
+          [duration]="duration"
+          [phaseType]="phaseType"
+          [phaseStart]="phaseStart"
+          [phaseEnd]="phaseEnd"
+        ></app-phase-details>
+      </div>
+      
+      <button class="rounded-button {{getPhaseClass(phaseNext.phaseType)}}"
+        (mouseover)="states.currentNext = true"
+        (mouseleave)="states.currentNext = false"
+        (click)="next.emit()">
+        <span [@expandWidth]="states.currentNext ? 'expanded' : 'collapsed'" class="d-inline-block {{states.currentNext ? 'ml-2 mr-4' : ''}}">
+          <app-phase-details prefix="Next:" [phaseType]="phaseNext.phaseType"></app-phase-details>
+        </span>
+        <i class="fa fa-arrow-right" style="right: 0;"></i>
+      </button>
+
+    </div>
+    <div *ngSwitchCase="'future'" class="d-flex justify-content-between align-items-center">
+      
+      <div class="position-absolute text-center" style="left: 0; right: 0;">
+        <app-phase-details
+          [duration]="duration"
+          [phaseType]="phaseType"
+          [phaseStart]="phaseStart"
+          [phaseEnd]="phaseEnd"
+        ></app-phase-details>
+      </div>
+
+      <button class="rounded-button {{getPhaseClass(phasePrior.phaseType)}}"
+        (mouseover)="states.futureCurrent = true"
+        (mouseleave)="states.futureCurrent = false"
+        (click)="current.emit()">
+        <span [@expandWidth]="states.futureCurrent ? 'expanded' : 'collapsed'" class="d-inline-block {{states.futureCurrent ? 'ml-4 mr-2' : ''}}">
+          <app-phase-details prefix="Current:" [phaseType]="phasePrior.phaseType"></app-phase-details>
+        </span>
+        <i class="fa fa-arrow-left" style="left: 0;"></i>
+      </button>
+      
+      <button class="rounded-button {{getPhaseClass(phaseNext.phaseType)}}"
+        (mouseover)="states.futureNext = true"
+        (mouseleave)="states.futureNext = false"
+        (click)="next.emit()">
+        <span [@expandWidth]="states.futureNext ? 'expanded' : 'collapsed'" class="d-inline-block {{states.futureNext ? 'ml-2 mr-4' : ''}}">
+          <app-phase-details prefix="Next:" [phaseType]="phaseNext.phaseType"></app-phase-details>
+        </span>
+        <i class="fa fa-arrow-right" style="right: 0;"></i>
+      </button>
+
+    </div>
+  </ng-container>
+</div>

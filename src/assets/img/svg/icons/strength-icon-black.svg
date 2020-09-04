@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22.428" height="16.821" viewBox="0 0 22.428 16.821">
+<defs>
+    <style>
+      .strength-icon {
+        fill: black;
+        
+      }
+    </style>
+  </defs>
+  <g id="dumbbell" transform="translate(0 -4)">
+    <path id="Path_830" data-name="Path 830" d="M18.616,4a1.4,1.4,0,0,0-1.4,1.4v5.607H8.8V5.4A1.4,1.4,0,1,0,6,5.4V19.419a1.4,1.4,0,0,0,2.8,0V13.812h8.41v5.607a1.4,1.4,0,1,0,2.8,0V5.4A1.4,1.4,0,0,0,18.616,4Z" transform="translate(-1.795)" class="strength-icon"/>
+    <path id="Path_831" data-name="Path 831" d="M2.1,8a.7.7,0,0,0-.7.7v4.205H.7a.7.7,0,0,0,0,1.4h.7v4.205a.7.7,0,0,0,1.4,0V8.7A.7.7,0,0,0,2.1,8Z" transform="translate(0 -1.197)" class="strength-icon"/>
+    <path id="Path_832" data-name="Path 832" d="M30.1,12.906h-.7V8.7a.7.7,0,1,0-1.4,0v9.812a.7.7,0,0,0,1.4,0V14.308h.7a.7.7,0,0,0,0-1.4Z" transform="translate(-8.376 -1.197)" class="strength-icon"/>
+  </g>
+</svg>

@@ -1,0 +1,18 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "android.keystore",
+            "storePassword": "TriDot2017",
+            "alias": "tridot",
+            "password" : "TriDot2017",
+            "keystoreType": ""
+        },
+        "release": {
+            "keystore": "android.keystore",
+            "storePassword": "TriDot2017",
+            "alias": "tridot",
+            "password" : "TriDot2017",
+            "keystoreType": ""
+        }
+    }
+}

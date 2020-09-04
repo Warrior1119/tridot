@@ -1,0 +1,18 @@
+app-race-x {
+  .racex-menu-wrap,
+  .racex-menu-wrap.open {
+    right: 0;
+    top: -9px;
+    .racex-header .custom-menu__list {
+      padding: 12px 50px 10px 0px;
+    }
+  }
+
+  .racex-alert {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+  }
+}

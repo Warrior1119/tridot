@@ -1,0 +1,45 @@
+{
+  "name": "com.dvlathlete.tridot",
+  "displayName": "TriDot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "precordova:browser:start": "chmod +x hooks/before_prepare/*.js",
+    "precordova:android:start": "chmod +x hooks/before_prepare/*.js",
+    "precordova:ios:start": "chmod +x hooks/before_prepare/*.js",
+    "cordova:browser:start": "cordova prepare browser && cordova-res && cordova run browser --port=4200",
+    "cordova:android:start": "cordova prepare android && npm run cordova:generate-images:android && cordova run android",
+    "cordova:android:build": "cordova prepare android && npm run cordova:generate-images:android && cordova build android --release --buildConfig=platforms/android/build.json",
+    "cordova:ios:start": "cordova prepare ios && npm run cordova:generate-images:ios && echo \"[DONE] iOS project has been successfully prepared. Please manually launch XCode, open the project and run the app from there.\"",
+    "cordova:ios:build": "cordova prepare ios && npm run cordova:generate-images:ios && cordova build ios && echo \"[DONE] iOS project has been successfully prepared. Please manually launch XCode, open the project and run the app from there.\"",
+    "cordova:generate-images:android": "cordova-res android --icon-source ./resources/icon.png",
+    "cordova:generate-images:ios": "cordova-res ios --icon-source ./resources/icon-ios.png"
+  },
+  "dependencies": {
+    "cordova-android": "^8.1.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-httpd": "git+https://github.com/floatinghotpot/cordova-httpd.git",
+    "cordova-ios": "^5.1.1",
+    "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-inappbrowser": "^3.2.0"
+  },
+  "devDependencies": {
+    "cordova": "^9.0.0",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-res": "^0.9.0"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-inappbrowser": {},
+      "com.rjfun.cordova.httpd": {},
+      "cordova-plugin-geolocation": {}
+    },
+    "platforms": [
+      "browser",
+      "android",
+      "ios"
+    ]
+  }
+}

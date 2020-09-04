@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.984 27.411">
+  <defs>
+    <style>
+      .clock-cls-1 {
+        fill: #e2e2e3;
+      }
+    </style>
+  </defs>
+  <g id="time-countdown" transform="translate(-2)">
+    <path id="Path_254" data-name="Path 254" class="clock-cls-1" d="M15.706,3.572V1.713h2.57V0H9.709V1.713h2.57V3.572a11.992,11.992,0,1,0,3.426,0Zm4.283,12.7H13.136V9.423h1.713v5.14h5.14Z"/>
+  </g>
+</svg>

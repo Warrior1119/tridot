@@ -1,0 +1,79 @@
+<div class="main">
+  <div *ngIf="multipleWeeks; else loadingOverlay" class="container weekly-workout-container pt-2">
+    <div class="row">
+      <div class="col-sm-12 col-md-3">
+        <h4 class="page-title mt-2 mb-3 text-center text-md-left">
+          Calendar
+        </h4>
+      </div>
+      <div class="col-sm-12 col-lg-6 mb-3">
+        <div class="row calendar-container">
+          <div class="col-12 text-center d-flex align-items-center justify-content-center">
+            <div class="calendar-nav d-flex v-100">
+              <i class="fal fa-angle-left bg-gray cursor-pointer d-inline-flex justify-content-center align-items-center"
+                (click)="previousWeek(minDate)"></i>
+            </div>
+            <div class="calendar-dropdown position-relative d-inline-flex">
+              <i class="fal fa-calendar-alt cal-icon"></i>
+              <input class="form-control week-range bg-white text-uppercase shadow" #drp="bsDatepicker" (ngModelChange)="dayChange($event)"
+                placeholder="Select Week" [(ngModel)]="minDate" bsDatepicker [bsConfig]="bsConfig"
+                iosDatepickerExtra #iosdpe="iosDatepickerExtra" (onShown)="iosdpe.onShowPicker($event)"
+                autocomplete="off">
+            </div>
+            <div class="calendar-nav d-flex v-100">
+              <i class="fal fa-angle-right bg-gray cursor-pointer d-inline-flex justify-content-center align-items-center"
+                (click)="nextWeek(minDate)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-lg-3 mb-3 text-center text-md-right d-none d-sm-block">
+        <div class="btn-group shadow weekly-selector">
+          <label class="btn btn-white mb-0 px-3 py-2 weekly-add-minus" btnCheckbox tabindex="2" role="button" (click)="decreaseNoOfWeeks()">
+            <i class="fal fa-minus"></i>
+          </label>
+          <label class="btn btn-white mb-0 border-left px-3 py-2 d-flex align-items-center weekly-label text-center" btnCheckbox tabindex="1">
+            <span class="week-selector">
+              {{(noOfWeeks == 1)? '1 Week':noOfWeeks + ' Weeks'}}
+            </span>
+          </label>
+          <label class="btn btn-white mb-0 px-3 py-2 border-left weekly-add-minus" btnCheckbox tabindex="0" role="button" (click)="increaseNoOfWeeks()">
+            <i class="fal fa-plus"></i>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="showData">
+      <ng-container *ngFor="let singleWeek of multipleWeeks.slice(0, noOfWeeks)">
+        <app-single-week [week]="singleWeek" [selectedDay]="minDate" [phaseId]="raceDetails?.phaseId" (alerts)="updateAlerts($event)" (updateWeek)="updateWeek($event)" >
+        </app-single-week>
+      </ng-container>
+    </ng-container>
+
+    <div *ngIf="loading" style="margin-top: 100px;margin-bottom: 100px;">
+      <app-loading-mobile [small]="true" [loadingText]="'Loading next week...'"></app-loading-mobile>
+    </div>
+
+    <app-weekly-phase-footer
+      [mode]="footerMode"
+      [duration]="raceDetails?.duration"
+      [phaseStart]="currentPhaseStart"
+      [phaseEnd]="currentPhaseEnd"
+      [phaseType]="raceDetails?.phaseType"
+      [raceType]="raceDetails?.raceType"
+      [phasePrior]="phasePrior"
+      [phaseNext]="phaseNext"
+      (current)="goToCurrentPhase()"
+      (next)="goToNextPhase()"
+    ></app-weekly-phase-footer>
+  </div>
+</div>
+<app-footer></app-footer>
+
+<ng-template #loadingOverlay>
+  <ng-container [ngSwitch]="isMobile">
+    <app-loading-overlay *ngSwitchCase="false"></app-loading-overlay>
+    <app-loading-mobile *ngSwitchCase="true" [loadingText]="'Loading your current calendar...'"></app-loading-mobile>
+  </ng-container>
+</ng-template>

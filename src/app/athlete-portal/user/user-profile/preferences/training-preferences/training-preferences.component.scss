@@ -1,0 +1,52 @@
+.long-session-day {
+  background: #f2f2f2;
+  border: none;
+}
+
+@media screen and (max-width:576px) {
+  /deep/ .title {
+    font-size: 13px;
+  }
+}
+
+.training-preference {
+  .training-item {
+    width: 10rem;
+  }
+  @media screen and (max-width:420px) {
+    .training-item {
+      width: 8rem;
+    }
+  }
+
+  .itme-title {
+    width: 7rem;
+    font-size: 13px !important;
+  }
+  .itme-text {
+    font-size: 13px !important;
+  }
+
+  .dropdown-toggle {
+    // min-width: 150px;
+  }
+  .row {
+    margin-top: 15px;
+  }
+  .col-divider {
+    padding: 0;
+    height: 100%;
+    border-right: 1px solid #d0d5d9;
+  }
+  .info-block {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+  }
+  .info-block-selected {
+    background: #bdc1c3;
+    border: solid 1px #bdc1c3;
+    h5 {
+      color:white !important;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<div class="container pl-0" *ngIf="progressItems">
+  <div class="row" *ngIf="progressTitle">
+    <div class="col-4"></div>
+    <div class="col-8 p-0 mb-1">
+      {{progressTitle}}
+    </div>
+  </div>
+  <div class="row align-items-center" style="margin-bottom:2px;" *ngFor="let item of progressItems">
+      <div class="col-4 pl-0 pr-2 text-right text-sm">{{item.title}}</div>
+      <div class="col-6 p-0 progress" style="height:15px;">
+          <div class="progress-bar bike-bg" style="border-radius:3px;" [ngClass]="progressDefColor" role="progressbar" [style.width.%]="item.perc"
+            title="{{item.perc | number}} %" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div class="col-2 text-sm">{{item.perc | number:'1.0-0'}}%</div>
+  </div>
+</div>
+<div class="container" *ngIf="!progressItems">
+  No Data Available
+</div>

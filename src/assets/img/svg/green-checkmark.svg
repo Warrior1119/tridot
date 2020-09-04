@@ -1,0 +1,10 @@
+<svg id="check-circle-08" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.353 19.352">
+  <defs>
+    <style>
+      .green-checkmark-cls-1 {
+        fill: #57d875;
+      }
+    </style>
+  </defs>
+  <path id="Path_571" data-name="Path 571" class="green-checkmark-cls-1" d="M9.676,0a9.676,9.676,0,1,0,9.676,9.676A9.676,9.676,0,0,0,9.676,0ZM8.064,14.042,3.7,9.676l1.14-1.14,3.225,3.225,6.451-6.451,1.14,1.14Z"/>
+</svg>

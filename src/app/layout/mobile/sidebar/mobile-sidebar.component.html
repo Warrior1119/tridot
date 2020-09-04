@@ -1,0 +1,97 @@
+<div off-canvas="slidebar-1 left reveal" id="slidebar1">
+  <button class="js-close-left-slidebar btn-icon">
+    <div   [inlineSVG]="'../assets/img/svg/icons/small-remove.svg'" [autosize]="true" style="width: 24px;" class="mx-auto d-inline-block"></div>
+  </button>
+  <div class="slidebar-header text-center mb-3">
+    <img *ngIf="profilePicture" alt="" class="profile-img mb-2 d-block mx-auto" [src]="profilePicture" width="80">
+    <span class="profile-name d-block font-weight-bold">{{profile.firstName | ucwords}}
+        {{profile.lastName | ucwords}}</span>
+  </div>
+  <div class="score-container d-flex align-items-center justify-content-between pt-0">
+    <div class="tridot-score swim">
+      <span>{{profile.swimdot}}</span>
+    </div>
+    <div class="tridot-score bike">
+      <span>{{profile.bikedot}}</span>
+    </div>
+    <div class="tridot-score run">
+      <span>{{profile.rundot}}</span>
+    </div>
+  </div>
+  <ul class="list-unstyled mobile-nav-slidebar-menu pl-2">
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/season-planner/training-phase/weekly-summary/daily-workout"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/cal-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Today</a></li>
+    <li [class.font-weight-bold]="isLinkActive('/season-planner/training-phase/weekly-summary')"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/season-planner/training-phase/weekly-summary"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/cal-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Calendar</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/training-intensities"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/graph-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Intensities</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/assessments"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/assessment-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Assessments</a></li>
+    <li routerLinkActive="font-weight-bold" [routerLinkActiveOptions]="{exact: true}"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/season-planner"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/planner-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Season Planner</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/racex"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/race-icon.svg'" [autosize]="true"  style="width: 18px;"></div>RaceX</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/support"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/support-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Support</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/coaches"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/coach-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Coaches</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/genetics"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/dna-icon.svg'" [autosize]="true"  style="width: 18px;"></div>PhysiogenomiX</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/swimform"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/swimform-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Swim Form</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/user/user-profile/tsp"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/tsp-icon.svg'" [autosize]="true"  style="width: 18px;"></div>Training Stress Profile</a></li>
+    <li routerLinkActive="font-weight-bold"><a class="d-flex align-items-center pt-2 pb-2 js-close-left-slidebar" routerLink="/user/user-profile/b2r"><div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/b2r-icon.svg'" [autosize]="true"  style="width: 18px;"></div>B2R Factor</a></li>
+  </ul>
+  <div class="">
+    <form class="form-search form-inline mr-2 input-group-sm ng-untouched ng-pristine ng-valid visible align-self-end"
+      novalidate="" ng-reflect-klass="form-search form-inline mr-2 i" ng-reflect-ng-class="[object Object]">
+      <input aria-label="Search" class="form-control input-group-sm mr-sm-2 ng-pristine ng-valid ng-touched"
+        [(ngModel)]="query"
+        (ngModelChange)="search()"
+        [ngModelOptions]="{standalone: true}" placeholder="Search" type="search" ng-reflect-options="[object Object]">
+    </form>
+  </div>
+</div>
+
+<div off-canvas="slidebar-2 right shift" id="slidebar2">
+  <button class="js-close-right-slidebar btn-icon mb-3">
+    <div   [inlineSVG]="'../assets/img/svg/icons/small-remove.svg'" [autosize]="true" style="width: 24px;" class="mx-auto d-inline-block"></div>
+  </button>
+  <div class="slidebar-header mb-2">
+    <span class="profile-name d-block font-weight-bold pl-2">My Profile</span>
+  </div> 
+  <ul class="list-unstyled mobile-nav-slidebar-menu pl-2">
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/user-profile/athlete-profile-settings">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/profile-icon-alt.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Profile
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/user-profile/account-settings">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/account-settings-icon.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Account
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/user-profile/preferences">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/training-settings.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Preferences
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/user-profile/permissions/health-related-data">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/unlocked.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Permissions
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/user-profile/my-bikes">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/cycling-track.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Gear
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/user/devices">
+        <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/my-devices-icon.svg'" [autosize]="true"  style="width: 18px;"></div>
+        Connections
+      </a>
+    </li>
+    <li routerLinkActive="font-weight-bold">
+      <a class="d-flex align-items-center pt-2 pb-2 js-close-right-slidebar" routerLink="/login">
+        <!-- <div class="mr-3 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/my-devices-icon.svg'" [autosize]="true"  style="width: 18px;"></div> -->
+        Logout
+      </a>
+    </li>
+  </ul>
+</div>

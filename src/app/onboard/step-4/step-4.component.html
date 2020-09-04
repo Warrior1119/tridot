@@ -1,0 +1,43 @@
+
+  <div class="container h-100 green-borders">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-lg-8 col-xl-6 text-center">
+        <form action="/onboarding-step-5.html">
+          <div class="box shadow rounded">
+            <div class="row">
+              <div class="col">
+                <h1 class="display-1 text-darker text-uppercase page-heading">Primary Race Distance
+                </h1>
+                <p class="text-drk mb-4">What is your primary race distance? (Don't worry, you can change this later.)</p>
+                <p *ngIf="error" class="text-danger mt-4">{{error}}</p>
+              </div>
+            </div>
+            <div class="row mb-md-3">
+              <div class="col col-md-6 pr-md-2 mb-3 mb-sm-3 mb-md-0">
+                <button type="submit" (click)="nextStep(1)" class="btn btn-lg btn-block btn-info text-md" [disabled] = "loading">Sprint
+                  <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading && primaryRaceDistance === 1"></i>
+                </button>
+              </div>
+              <div class="col-md-6 pl-md-2 mb-3 mb-sm-3 mb-md-0">
+                <button type="submit" (click)="nextStep(2)" class="btn btn-lg btn-block btn-info text-md" [disabled] = "loading">Olympic
+                  <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading && primaryRaceDistance === 2"></i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 pr-md-2 mb-3 mb-sm-3 mb-md-0">
+                <button type="submit" (click)="nextStep(3)" class="btn btn-lg btn-block btn-info text-md" [disabled] = "loading">Half
+                  <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading && primaryRaceDistance === 3"></i>
+                </button>
+              </div>
+              <div class="col-md-6 pl-md-2">
+                <button type="submit" (click)="nextStep(4)" class="btn btn-lg btn-block btn-info text-md" [disabled] = "loading">Full
+                  <i class="fal fa-spinner fa-spin pl-1" *ngIf="loading && primaryRaceDistance === 4"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

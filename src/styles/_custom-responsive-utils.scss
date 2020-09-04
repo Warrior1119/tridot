@@ -1,0 +1,121 @@
+// Borders
+@each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    
+        .border#{$infix}-top {      border-top: $border-width solid $border-color !important; }
+        .border#{$infix}-right {    border-right: $border-width solid $border-color !important; }
+        .border#{$infix}-bottom {   border-bottom: $border-width solid $border-color !important; }
+        .border#{$infix}-left {     border-left: $border-width solid $border-color !important; }
+    
+        .border#{$infix}-top-0 {    border-top: 0 !important; }
+        .border#{$infix}-right-0 {  border-right: 0 !important; }
+        .border#{$infix}-bottom-0 { border-bottom: 0 !important; }
+        .border#{$infix}-left-0 {   border-left: 0 !important; }
+    
+        .border#{$infix}-x {
+            border-left: $border-width solid $border-color !important;
+            border-right: $border-width solid $border-color !important;
+        }
+    
+        .border#{$infix}-y {
+            border-top: $border-width solid $border-color !important;
+            border-bottom: $border-width solid $border-color !important;
+        }
+    }
+}
+
+// Colors
+@each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    
+        // example -- "bg-light"
+        .bg#{$infix}-light { background: #f8f9fa !important; }
+        
+        // more colors
+        .bg#{$infix}-drk { background-color: $bg-drk !important; color: white !important; }
+        
+        .bg#{$infix}-orange { background: #e0810a !important; }
+        
+        .bg#{$infix}-success { background-color: $bg-success !important; color: white !important; }
+        
+        .bg#{$infix}-assess {
+            background-color: $bg-assess !important;
+            border-color: $bg-assess !important;
+            color: white !important;
+            
+            &:hover {
+                background-color: darken($bg-assess, 10%) !important;
+                border-color: darken($bg-assess, 10%) !important;
+            }
+        }
+        
+        .bg#{$infix}-device {
+            background-color: $bg-device !important;
+            border-color: $bg-device !important;
+            color: white !important;
+            
+            &:hover {
+                background-color: darken($bg-device, 10%) !important;
+                border-color: darken($bg-device, 10%) !important;
+            }
+        }
+        
+        .bg#{$infix}-app {
+            background-color: $bg-app !important;
+            border-color: $bg-app !important;
+            color: white !important;
+            
+            &:hover {
+                background-color: darken($bg-app, 10%) !important;
+                border-color: darken($bg-app, 10%) !important;
+            }
+        }
+
+    }
+}
+
+// Shadow
+@each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    
+        .shadow#{$infix} { box-shadow: 0 0.3rem 1.25rem rgba(68, 89, 115, 0.1) !important; }
+    }
+}
+
+// Text
+@each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-up($breakpoint) {
+        $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    
+        .text#{$infix}-xxs {
+                font-size: rem-calc(10) !important;
+        }
+        
+        .text#{$infix}-xs {
+            font-size: rem-calc(12) !important;
+        }
+        
+        .text#{$infix}-sm {
+            font-size: rem-calc(14) !important;
+        }
+        
+        .text#{$infix}-md {
+            font-size: rem-calc(16) !important;
+        }
+        
+        .text#{$infix}-lg {
+            font-size: rem-calc(18) !important;
+        }
+        
+        .text#{$infix}-xl {
+            font-size: rem-calc(22) !important;
+        }
+
+        .text#{$infix}-muted {
+            color: #aaafb3 !important;
+        }
+    }
+}

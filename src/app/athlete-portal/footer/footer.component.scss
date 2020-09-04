@@ -1,0 +1,36 @@
+.footer {
+  background-color: #ecedf0;
+  height:90px;
+  h5 {
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    color: #8d959b;
+  }
+  ul.footer-nav {
+    li {
+      padding: 2.5px 0;
+      a {
+        font-size: 14px;
+        color: #8d959b;
+        &:hover {
+          color: #727a80;
+        }
+      }
+    }
+  }
+  .footer-upper {
+    .footer-upper-inner {
+      padding-top: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid #d9dde8;
+    }
+  }
+  .footer-lower {
+    .footer-lower-inner {
+      padding-top: 30px;
+      padding-bottom: 30px;
+      text-align: center;
+    }
+  }
+}

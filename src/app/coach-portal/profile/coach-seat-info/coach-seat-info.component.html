@@ -1,0 +1,56 @@
+<div class="card mb-4">
+  <div class="card-header bg-white d-flex justify-content-between">
+    <div>Reports Summary</div>
+  </div>
+  <div class="card-body text-uppercase report-summary">
+    <div class="row text-center">
+      <div class="col-4 px-0">
+        Assigned
+      </div>
+      <div class="col-4 px-0">
+        Linked
+      </div>
+      <div class="col-4 px-0">
+        Available Seats
+      </div>
+    </div>
+    <div class="row mb-4 values text-center">
+      <div class="col-4 px-0">
+        {{coachProfile.assignedToSeatCount}}
+      </div>
+      <div class="col-4 px-0">
+        {{coachProfile.linkedCount}}
+      </div>
+      <div class="col-4 px-0">
+        <span *ngIf = "availableSeatsInfo">{{availableSeatsInfo}}</span>
+        <span *ngIf = "!availableSeatsInfo">&#8734;</span>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-6 px-0">
+        Monthly Revenue 
+      </div>
+      <div class="col-6 px-0">
+        Default Billing
+      </div>
+    </div>
+    <div class="row mb-2 values text-center">
+        <div class="col-6 px-0">
+          {{getMonthlyRevenue()}}
+        </div>
+        <div class="col-6 px-0">
+          {{getDefaultBillingAmount()}}
+        </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-4">
+  <div class="card-header bg-white d-flex justify-content-between">
+    <div class="p-1">Billing Details</div>
+    <div class="text-right billing-mode text-uppercase p-1">
+        {{coachProfile.tridotBilling ? 'TriDot Billing' : 'Coach Billing'}}
+    </div>
+  </div>
+</div>
+
+

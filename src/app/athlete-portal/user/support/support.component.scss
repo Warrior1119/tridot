@@ -1,0 +1,17 @@
+.support-search-form {
+  border-radius:50px;
+  background-position:right 20px center;
+  background-repeat:no-repeat;
+  background-image:url(../../../../assets/img/svg/icons/search-icon-alt.svg);
+  &::placeholder {
+    color:#BFC8CE;
+  }
+}
+
+ul.pop-topic-list {
+  li {
+    > span {
+      color:#BFC8CE;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+<svg id="user-run" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 148.333 148.333">
+  <defs>
+    <style>
+      .run-logo-lg-cls-1 {
+        fill: #55da6a;
+      }
+
+      .run-logo-lg-cls-2 {
+        fill: #fff;
+      }
+
+      .run-logo-lg-cls-3 {
+        fill: #42ac53;
+      }
+    </style>
+  </defs>
+  <rect id="Rectangle_16" data-name="Rectangle 16" class="run-logo-lg-cls-1" width="148.333" height="148.333" rx="74.167" transform="translate(0 0)"/>
+  <g id="sport" transform="translate(35.308 35.154)">
+    <circle id="Ellipse_162" data-name="Ellipse 162" class="run-logo-lg-cls-2" cx="10.131" cy="10.131" r="10.131" transform="translate(53.92 4)"/>
+    <path id="Path_276" data-name="Path 276" class="run-logo-lg-cls-3" d="M19.907,26.558l9.5-6.332,4.439,2.824c1.283-1.382,2.172-2.329,2.49-2.647a11.314,11.314,0,0,1,5.287-2.986L31,12.454a3.8,3.8,0,0,0-3.908.185l-11.4,7.6a3.8,3.8,0,1,0,4.216,6.32Z" transform="translate(3.196 2.131)"/>
+    <path id="Path_277" data-name="Path 277" class="run-logo-lg-cls-3" d="M40.484,36.75c-2.331,1.769-5.224,4-8.424,6.486l5.4,6.494-14.363,8a3.8,3.8,0,1,0,3.4,6.8L46.76,54.394a3.8,3.8,0,0,0,1.312-5.715Z" transform="translate(5.06 8.723)"/>
+    <path id="Path_278" data-name="Path 278" class="run-logo-lg-cls-2" d="M76.444,34.318A3.8,3.8,0,0,0,71.5,32.2L61.29,36.289S56.463,23.2,53.857,20.6a8.863,8.863,0,0,0-12.536,0C38.928,22.991,3.245,62.045,3.245,62.045a3.8,3.8,0,1,0,5.11,5.621s39.865-31.731,41.81-32.32l7.276,8a3.8,3.8,0,0,0,4.222.973l12.664-5.065A3.8,3.8,0,0,0,76.444,34.318Z" transform="translate(0 3.729)"/>
+  </g>
+</svg>

@@ -1,0 +1,171 @@
+.time {
+  background-color: #f5f5f5;
+
+  &.active {
+    background-color: #71d855;
+    color: white;
+  }
+}
+
+.session-inc {
+  background: #f9f9f9;
+  margin-top: -24px;
+  margin-left: -24px;
+  margin-right: -24px;
+
+  .border-right {
+    border-color: #efebeb;
+
+  }
+}
+
+.has-location {
+  button.location-dropdown {
+    span.text-sm {
+      margin-right:0 !important;
+    }
+    img {
+      display:none;
+    }
+  }
+}
+
+.weather-nums {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.weather-icons {
+  position: relative;
+  top: -2px;
+  margin-right: 0;
+}
+
+.actual-total-input,
+.session-time-input {
+  text-align: center;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.75rem;
+}
+
+.actual-total-input {
+  color: #C6CBD0;
+
+  ::placeholder {
+    color: #C6CBD0;
+  }
+}
+
+.session-time-input {
+  font-weight: 700;
+
+  ::placeholder {
+    color: #a4acb3;
+  }
+}
+
+.workout-zones {
+  height: 15px;
+  border-radius:30px;
+  overflow:hidden;
+  background: #f2f2f2;
+}
+
+.custom-tooltip-bottom {
+  .custom-tooltiptext {
+    top: 95%;
+    bottom: unset;
+    padding: 0;
+    width: unset;
+    margin-left: 0;
+    color: unset;
+    box-shadow: 0 0 10px -1px rgba(158,158,158,0.3);
+    background-color: #ffffff;
+    transform: translateX(-50%);
+    z-index: 10;
+
+    @media all and (min-width: 768px) {
+      top: 100%;
+    }
+
+    &::after {
+      top: -100%;
+      bottom: 100%;
+      border-color: transparent transparent #ffffff transparent;
+    }
+  }
+}
+
+.weather-panel {
+  .weather-input {
+    width: 80px;
+
+    label {
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  &__body {
+    padding: 1rem;
+  }
+
+  .weather-btns {
+    display: flex;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
+.btn-highlighted {
+  color:white;
+  background-color: #ff00fd !important;
+  //box-shadow:0 3px 12px rgba(255, 0, 253,0.5);
+
+  &:hover {
+    background-color: darken(#ff00fd, 5%) !important;
+  }
+
+  &:focus:active {
+    box-shadow: 0 0 0 0.2rem rgba(255, 0, 253,0.5);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .session-inc {
+    padding-top:15px !important;
+    margin-top:-9px;
+    margin-left: -9px;
+    margin-right: -9px;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+    overflow:hidden;
+  }
+  .session-numbers-container {
+    > .col-3 {
+      padding-left:5px;
+      padding-right:5px;
+    }
+  }
+  .actual-total-input {
+    font-size:1rem;
+  }
+}
+
+.score-box {
+  font-size: 32px;
+}
+
+.time-at {
+  font-size: 1.75rem;
+  font-weight: 900;
+  position: relative;
+  top: -0.2rem;
+}

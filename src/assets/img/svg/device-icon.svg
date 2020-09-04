@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 133 133">
+  <defs>
+    <style>
+      .device-icon-cls-1 {
+        fill: #cf824b;
+      }
+
+      .device-icon-cls-2 {
+        fill: #8d5a35;
+      }
+
+      .device-icon-cls-3 {
+        fill: #6a4326;
+      }
+
+      .device-icon-cls-4 {
+        fill: #eba97a;
+      }
+
+      .device-icon-cls-5 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="mobile-dev" transform="translate(1 1)">
+    <rect id="Rectangle_20" data-name="Rectangle 20" class="device-icon-cls-1" width="133" height="133" rx="66" transform="translate(-1 -1)"/>
+    <g id="Group_23" data-name="Group 23" transform="translate(40.221 26.738)">
+      <path id="Path_56" data-name="Path 56" class="device-icon-cls-2" d="M48.318,78.023H11.241A6.741,6.741,0,0,1,4.5,71.282V7.241A6.741,6.741,0,0,1,11.241.5H48.318a6.741,6.741,0,0,1,6.741,6.741V71.282A6.741,6.741,0,0,1,48.318,78.023Z" transform="translate(-4.5 -0.5)"/>
+      <path id="Path_60" data-name="Path 60" class="device-icon-cls-3" d="M3.371,0A3.371,3.371,0,1,1,0,3.371,3.371,3.371,0,0,1,3.371,0Z" transform="translate(21.909 65.726)"/>
+      <path id="Path_57" data-name="Path 57" class="device-icon-cls-4" d="M44.762,54.059H7.685A1.686,1.686,0,0,1,6,52.373V5.185A1.686,1.686,0,0,1,7.685,3.5H44.762a1.686,1.686,0,0,1,1.685,1.685V52.373A1.686,1.686,0,0,1,44.762,54.059Z" transform="translate(-0.944 6.612)"/>
+      <path id="Path_58" data-name="Path 58" class="device-icon-cls-5" d="M15.927,26.541,7.994,18.609a1.683,1.683,0,0,1,0-2.383l7.933-7.933,2.383,2.383-6.741,6.741,6.741,6.741Z" transform="translate(2.611 17.974)"/>
+      <path id="Path_59" data-name="Path 59" class="device-icon-cls-5" d="M15.676,26.541l-2.383-2.383,6.741-6.741-6.741-6.741,2.383-2.383,7.933,7.933a1.683,1.683,0,0,1,0,2.383Z" transform="translate(16.345 17.974)"/>
+    </g>
+  </g>
+</svg>

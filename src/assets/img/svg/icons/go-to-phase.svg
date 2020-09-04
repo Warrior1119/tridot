@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.117" height="19.248" viewBox="0 0 20.117 19.248">
+  <g id="check-in" transform="translate(-0.5 -0.5)">
+    <line id="Line_792" data-name="Line 792" x2="10.428" transform="translate(8.821 14.903)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1"/>
+    <path id="Path_693" data-name="Path 693" d="M18,13l3.476,3.476L18,19.952" transform="translate(-2.228 -1.572)" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1"/>
+    <path id="Path_694" data-name="Path 694" d="M12.3,19.641H1V4H20.117v6.952" transform="translate(0 -0.393)" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1"/>
+    <line id="Line_793" data-name="Line 793" y2="2.607" transform="translate(6.214 1)" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1"/>
+    <line id="Line_794" data-name="Line 794" y2="2.607" transform="translate(14.903 1)" fill="none" stroke="#fff" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1"/>
+    <line id="Line_795" data-name="Line 795" x2="19.117" transform="translate(1 7.083)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1"/>
+  </g>
+</svg>

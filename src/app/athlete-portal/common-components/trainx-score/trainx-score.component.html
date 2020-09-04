@@ -1,0 +1,61 @@
+<div class="card-box rounded-lg shadow mb-4">
+  <div class="box-content">
+    <div class="col text-center">
+        <h5 _ngcontent-c5="" class="text-md text-muted mb-3 font-weight-bold">TrainX Score</h5>
+    </div>
+    <div class="col-12 d-flex p-0 justify-content-between mb-4">
+      <div class="d-flex flex-grow-1">
+        <div class="week-option ml-1 flex-grow-1 text-nowrap" [ngClass]="{'selected': weekSelection === 1}" (click)="changeWeeks(WEEK.ONE)">Weekly</div>
+        <div class="week-option ml-1 flex-grow-1 text-nowrap" [ngClass]="{'selected': weekSelection === 2}" (click)="changeWeeks(WEEK.FOUR)">4 Week</div>
+        <div class="week-option ml-1 flex-grow-1 text-nowrap" [ngClass]="{'selected': weekSelection === 3}" (click)="changeWeeks(WEEK.EIGHT)">8 Week</div>
+      </div>
+    </div>
+    <div *ngIf="weekSelection === WEEK.ONE" class="col-12 text-center p-0">
+      <div class="score-box mb-4"><span>{{weeklyScore}}</span></div>
+      <div class="progress rounded-progress progress-tooltip">
+        <div [ngClass]="getType(weeklyScore)"
+          class="rounded-progress" role="progressbar" [ngStyle]="{'width': weeklyScore + '%' }"
+          aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+    <div *ngIf="weekSelection === WEEK.FOUR || weekSelection === WEEK.EIGHT" class="col-12 p-0">
+      <div class="row">
+        <div class="col-9">
+          <canvas baseChart
+            [chartType]="'line'" [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="false" [colors]="colors"
+            >
+          </canvas>
+        </div>
+        <div class="col-3 d-flex align-items-center justify-content-center">
+          <div class="score-box small text-center" style="min-width:55px"><span>{{rightScore}}</span></div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="weekSelection === WEEK.FOUR || weekSelection === WEEK.EIGHT" class="col-12 p-0">
+      <div class="calendar-container">
+        <div class="row">
+          <div class="col-12 text-center d-flex align-items-center justify-content-center">
+            <div class="calendar-nav d-flex v-100 w-100">
+              <i class="fal fa-angle-left bg-gray cursor-pointer d-inline-flex justify-content-center align-items-center w-100"
+                (click)="previousWeek(minDate)"></i>
+            </div>
+            <div class="calendar-dropdown position-relative d-inline-flex">
+              <span class="form-control week-range bg-white text-uppercase shadow text-center"
+                #drp="bsDatepicker" (bsValueChange)="dayChange($event)"
+                placeholder="Select Week" [(bsValue)]="minDate" bsDatepicker [bsConfig]="bsConfig"
+                iosDatepickerExtra #iosdpe="iosDatepickerExtra" (onShown)="iosdpe.onShowPicker($event)"
+                autocomplete="off">
+                {{getDateRange()}}
+              </span>
+            </div>
+            <div class="calendar-nav d-flex v-100 w-100">
+              <i class="fal fa-angle-right bg-gray d-inline-flex justify-content-center align-items-center w-100"
+                (click)="nextWeek(minDate)"  [ngClass]="{'cursor-pointer': !isNextWeekDisabled()}"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" version="1.1" viewBox="0 0 24 24" xml:space="preserve">
+    <title>
+        chart bar 32
+    </title>
+    <g fill="#808e98" stroke="#808e98" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" class="nc-icon-wrapper">
+        <rect class="chart-bar-cls-1" width="4" height="18" x="10" y="3" fill="none" stroke-miterlimit="10" data-color="color-2"/>
+        <rect class="chart-bar-cls-1" width="4" height="7" x="1" y="14" fill="none" stroke="#808e98" stroke-miterlimit="10"/>
+        <rect class="chart-bar-cls-1" width="4" height="12" x="19" y="9" fill="none" stroke="#808e98" stroke-miterlimit="10"/>
+    </g>
+</svg>

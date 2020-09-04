@@ -1,0 +1,102 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">Add Session</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-6 mb-3">
+      <div class="btn-group w-100" dropdown>
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-secondary w-100 dropdown-toggle" aria-controls="dropdown-basic">
+          <ng-container [ngSwitch]="newSession.sessionType">
+            <ng-container *ngSwitchCase="'swim'">Swim</ng-container>
+            <ng-container *ngSwitchCase="'bike'">Bike</ng-container>
+            <ng-container *ngSwitchCase="'run'">Run</ng-container>
+            <ng-container *ngSwitchCase="'strength'">Strength</ng-container>
+            <ng-container *ngSwitchDefault>Select Session Type</ng-container>
+          </ng-container>
+          <span class="caret"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu w-100" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem">
+            <a class="dropdown-item text-secondary" (click)="newSession.sessionType = 'swim'; validate()">Swim</a>
+          </li>
+          <li role="menuitem">
+              <a class="dropdown-item text-secondary" (click)="newSession.sessionType = 'bike'; validate()">Bike</a>
+            </li>
+          <li role="menuitem">
+            <a class="dropdown-item text-secondary" (click)="newSession.sessionType = 'run'; validate()">Run</a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item text-secondary" (click)="newSession.sessionType = 'strength'; validate()">Strength</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-6 mb-3">
+      <div class="btn-group w-100" dropdown>
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-secondary w-100 dropdown-toggle" aria-controls="dropdown-basic">
+          {{ (newSession.location)? newSession.location : 'Location' }}
+          <span class="caret"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu w-100" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem">
+            <a class="dropdown-item text-secondary" (click)="newSession.location = 'Current'; validate()">Current</a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item text-secondary" (click)="newSession.location = 'Home'; validate()">Home</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+      <div class="col text-left">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" (change)="updateIndoor($event)" id="customCheck1">
+          <label class="custom-control-label" for="customCheck1">Indoor Session</label>
+        </div>
+      </div>
+    </div>
+
+  <div class="row">
+    <div class="col mb-3">
+      <label for="sessionTime">Time of Day</label>
+      <timepicker class="form-control" id="sessionTime" [showSpinners]="false" [(ngModel)]="newSession.sessionTime" (ngModelChange)="validate()"></timepicker>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <label>Session Details</label>
+      <textarea class="form-control" cols="30" [(ngModel)]="newSession.sessionDetail.warmUp" (ngModelChange)="validate()" placeholder="Warm Up" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <textarea class="form-control" cols="30" [(ngModel)]="newSession.sessionDetail.mainSet" (ngModelChange)="validate()" placeholder="Main Set" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <textarea class="form-control" cols="30" [(ngModel)]="newSession.sessionDetail.coolDown" (ngModelChange)="validate()" placeholder="Cool Down" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mb-3">
+      <input type="text" class="form-control" #plannedTotalModel="ngModel" timeFormatMask id="plannedTotal" placeholder="Planned Total (hh:mm)" [(ngModel)]="newSession.plannedTotal" (ngModelChange)="validate()"
+        aria-describedby="nameHelp" >
+      <div *ngIf="plannedTotalModel.dirty && errorPlannedTotal" class="position-absolute text-danger pl-1">{{ errorPlannedTotal }}</div>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-block btn-default mt-0" (click)="closeModal()">Cancel</button>
+  <button type="button" class="btn btn-block btn-success mt-0 btn-disablable" [disabled]="!isValid" (click)="save()">Confirm</button>
+  
+</div>

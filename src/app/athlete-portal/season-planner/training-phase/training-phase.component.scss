@@ -1,0 +1,220 @@
+app-training-phase {
+  .stacked-number-container-col-1 {
+    padding: 30px 24px !important;
+  }
+
+  .selected {
+    background: #cccccc;
+
+    .stacked-number-inner {
+      span {
+        color: white !important;
+      }
+    }
+  }
+
+  .preferences-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    transition: all 200ms ease-in-out;
+  }
+
+  .highlighted-phase.prep-phase {
+    .preferences-btn {
+      right:10px;
+    }
+  }
+
+  .highlighted-phase.prep-phase:hover {
+    .preferences-btn {
+      opacity: 1;
+      top: 20px;
+    }
+  }
+
+  .highlighted-phase.dev-phase {
+    .preferences-btn {
+      right: 35px;
+    }
+  }
+
+  .highlighted-phase.dev-phase:hover {
+    .preferences-btn {
+      opacity:1;
+      top: 20px;
+    }
+  }
+
+  .highlighted-phase {
+    .week-span {
+      height: inherit;
+    }
+  }
+
+  .custom-menu-wrap {
+    min-height: 50px;
+
+    &.open {
+      .custom-menu__list {
+        display: block;
+      }
+    }
+  }
+
+  .custom-menu__list {
+    display: none;
+  }
+
+  .custom-menu__button {
+    top: -7px;
+  }
+
+  .season-menu-wrap {
+    top: -6px;
+    right: -56px;
+
+    &.open {
+      top: -7px;
+      right: -57px;
+    }
+  }
+
+  .race-menu-wrap {
+    top: 5px;
+    right: -20px;
+    .custom-menu {
+      transition: all 100ms ease-in-out;
+    }
+
+    .custom-menu__button {
+      transition: none;
+      top: -12px;
+    }
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    &.open {
+      top: 0px;
+      right: -2px;
+      box-shadow: 0 8px 21px 3px rgba(0, 0, 0, 0.2);
+      .custom-menu__button {
+        transition: none;
+        right: -10px;
+        top: -7px;
+      }
+    }
+  }
+
+  .week-span.phase-last-week {
+    width: 100%;
+    height: 100%;
+
+    .race-block {
+      max-width: 120px;
+      height: 100%;
+      max-width: inherit;
+      padding: 20px 10px 15px;
+
+      .race-priority {
+        position: relative;
+        left: 0;
+        margin-top: 25px;
+        font-size: 24px;
+        width: 45px;
+        height: 45px;
+        border-radius: 100%;
+        line-height: 45px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .stacked-number-container {
+    .race-type {
+      position: relative;
+      top: 25px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      border: 1px solid #ccc;
+      font-size: 0.75rem;
+      display: block;
+      border-radius: 50px;
+    }
+  }
+
+  .rounded-left {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  .season-menu-btn {
+    height: 40px;
+    width: 40px;
+  }
+
+  .season-menu-wrap {
+    top: -6px;
+    left: 0;
+  }
+
+  .season-menu-wrap.open {
+    top: -7px;
+    left: -160px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .phase-calendar {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr);
+    justify-content: space-around;
+    margin: auto 1rem;
+  }
+
+  .info-box {
+    grid-column-start: 1;
+    grid-column-end: span 6;
+  }
+
+  .arrow-dev:after {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: relative;
+    bottom: 28px;
+    pointer-events: none;
+    border-width: 6px;
+    border-bottom-color: #9528cf;
+  }
+
+  .arrow-prep:after {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: relative;
+    bottom: 28px;
+    pointer-events: none;
+    border-width: 6px;
+    border-bottom-color: #e339f1;
+  }
+
+  .phase-block .week-span:not(.phase-last-week) {
+    width: auto;
+    min-width: 45px;
+    max-width: 70px;
+    height: 90px;
+    .number-lg-sub {
+      margin-bottom: auto !important;
+    }
+  }
+  .race-priority {
+    margin: 0;
+  }
+}

@@ -1,0 +1,34 @@
+.btn-save{
+  background: #e741f3;
+  border-color: #e741f3;
+  color: white;
+ 
+  
+ 
+  box-shadow: 0 3px 12px rgba(231, 65, 243, .6);
+  &:disabled {
+    background: #ecedf0;
+    border-color: #ecedf0;
+    color: #aaa;
+    box-shadow: none;
+  }
+}
+.btn-create-session{
+  box-shadow: 0 3px 12px rgba(137, 130, 226, 0.6);
+  &:disabled {
+    background: #ecedf0;
+    border-color: #ecedf0;
+    color: #aaa;
+    box-shadow: none;
+  }
+}
+
+.border-right {
+  @media screen and (max-width: 575.98px) {
+    border: none !important;
+  }
+}
+.force-scroll {
+  overflow-y: scroll;
+  max-height: 200px;
+  }

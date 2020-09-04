@@ -1,0 +1,59 @@
+<div class="card profile-setting-card">
+  <div class="card-title card-header">
+    <h5>Performance Level</h5>
+  </div>
+  <div class="card-body card-body-md">
+    <div class="card-deck performance-cards">
+      <div class="card text-center beginner cross-pointer" (click)="profile.performanceLevel = 1;profile.performanceLevelName = 'Beginner';update(profile);"
+        [ngClass]="{'active': profile.performanceLevel == 1}">
+        <div  [inlineSVG]="'../assets/img/beginner-logo.svg'" [autosize]="true"  style="width: 70px;" class="mx-auto d-inline-block"></div>
+        <div class="performance-level-title">
+          Beginner
+        </div>
+        <div class="performance-level-descriptor">
+          Figuring it out
+        </div>
+      </div>
+      <div class="card text-center intermediate cross-pointer" (click)="profile.performanceLevel = 2;profile.performanceLevelName = 'Intermediate';update(profile);"
+        [ngClass]="{'active': profile.performanceLevel == 2}">
+        <div  [inlineSVG]="'../assets/img/intermediate-logo.svg'" [autosize]="true"  style="width: 70px;" class="mx-auto d-inline-block"></div>
+        <div class="performance-level-title">
+          Intermediate
+        </div>
+        <div class="performance-level-descriptor">
+          Mid-packer
+        </div>
+      </div>
+      <div class="card text-center competitive cross-pointer" (click)="profile.performanceLevel = 3;profile.performanceLevelName = 'Competetive';update(profile);"
+        [ngClass]="{'active': profile.performanceLevel == 3}">
+        <div  [inlineSVG]="'../assets/img/competitive-logo.svg'" [autosize]="true"  style="width: 70px;" class="mx-auto d-inline-block"></div>
+        <div class="performance-level-title">
+          Competitive
+        </div>
+        <div class="performance-level-descriptor">
+          In the mix
+        </div>
+      </div>
+      <div class="card text-center highly-competitive cross-pointer"  (click)="profile.performanceLevel = 4;profile.performanceLevelName = 'Highly-Competetive';update(profile);"
+        [ngClass]="{'active': profile.performanceLevel == 4}">
+        <div  [inlineSVG]="'../assets/img/highly-competitive-logo.svg'" [autosize]="true"  style="width: 70px;" class="mx-auto d-inline-block"></div>
+        <div class="performance-level-title">
+          Highly Competitive
+        </div>
+        <div class="performance-level-descriptor">
+          On the podium
+        </div>
+      </div>
+      <div class="card text-center elite cross-pointer" (click)="profile.performanceLevel = 5;profile.performanceLevelName = 'Elite';update(profile);"
+        [ngClass]="{'active': profile.performanceLevel == 5}">
+        <div  [inlineSVG]="'../assets/img/elite-logo.svg'" [autosize]="true"  style="width: 70px;" class="mx-auto d-inline-block"></div>
+        <div class="performance-level-title">
+          Elite
+        </div>
+        <div class="performance-level-descriptor">
+          In the money
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

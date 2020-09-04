@@ -1,0 +1,176 @@
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">B2R Factor (Bike-to-Run)</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>B2R Factor™ is a set of metrics that are used to assess your relative bike and run ability and potential for improvement. These metrics are used within the nSight Engine to optimize your training to deliver the maximum benefit. They determine what discipline needs focus, what type of focus (volume, intensity, frequency), and how much.</p>
+        <h6>Calculation of B2R Factor</h6>
+        <p>Your overall B2R Factor ranges from -10 (strongest bike focus) to +10 (strongest run focus). The higher of your BikeDot or RunDot scores as -1 or +1, respectively. The three B2R Factor components score from -3 to +3, again with - being most bike focus and + being most run focus. The sum of all values can range from -10 to +10.</p>
+        <h5 class="mb-3">B2R Factor Components</h5>
+        <hr>
+        <h6>1. BikeDot versus RunDot Differential (-3 to +3)</h6>
+        <p>The difference between your BikeDot and RunDot is evaluated with the context of your individual PhysiFactors (such as age, body composition, gender, sport age) to determine how much of the differential results from these factors and how much is near-term fitness related.</p>
+        <h6>2. Sport Age Differential (-3 to +3)</h6>
+        <p>The difference between your bike and run sport age is evaluated to gain insight on durability, body wear, and prior adaptation.</p>
+        <h6>3. FTHR Differential (-3 to +3)</h6>
+        <p>The difference between your bike and run functional threshold heart rate is evaluated to gain insight on relative development of your discipline-specific aerobic capacities. Most athletes' bike FTHR is 10 beats per minute lower than their run FTHR.</p>
+        <p>These differentials used independently and in combination, allow us to determine the optimal shift of volume, intensity, and frequency, if any, between the bike and run. For example, you may benefit from shift in volume only or in a shift of more than one training variable. Your optimal bike-to-run focus will change over time.</p>
+        <h6>Notes:</h6>
+        <ul>
+        <li>Minimal B2R optimization is possible for athletes who set their bike and/or run volume preference to Low Volume.</li>
+        <li>You can turn off B2R Factor optimization in your user settings. (Example: Based on your data, your B2R Factor would put significant emphasis on your run training, but you don't like running, have run-related limitations, or don't want your bike training reduced in any way.)</li>
+        <li>B2R Factor is a trademark of Predictive Fitness, LLC.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-12 col-md-12">
+        <div class="card card-box">
+          <div class="card-title card-header text-left">
+            <div class="row align-items-center">
+              <div class="col text-left d-flex align-items-center">
+                My B2R Factor <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 20px;" class="ml-2 d-inline-block" data-toggle="modal"
+                data-target="#infoModal"></div>
+              </div>
+              <div class="col text-nowrap text-right">
+                <span class="selection-container">
+                  <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="updateB2R(true)"
+                    [ngClass]="{'selected-param': b2RFactor == true }">
+                    <span class="d-none d-sm-inline">B2R</span> On </h5>
+                  <h5 class="align-middle d-inline-block param-size cursor-pointer mb-0" (click)="updateB2R(false)"
+                    [ngClass]="{'selected-param': b2RFactor == false }">
+                    <span class="d-none d-sm-inline">B2R</span> Off </h5>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="card-body card-body-md">
+            <div class="row">
+              <div class="col">
+                <div class="row py-1">
+                  <div class="d-none d-sm-block col-3"></div>
+                  <div class="col-12 col-sm-9">
+                    <div class="row">
+                      <div class="col-6 col-sm-5 text-center">Bike Emphasis</div>
+                      <div class="d-none d-sm-block col-2"></div>
+                      <div class="col-6 col-sm-5 text-center">Run Emphasis</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-12 col-sm-3 w-100 mb-2 mb-sm-0">
+                    <div class="text-center border border-2 rounded py-2">B2R Factor</div>
+                  </div>
+                  <div class="col-12 col-sm-9">
+                    <div class="row">
+                      <div class="col-5 total-runbike">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2,3,4,5,6,7,8,9]" class="col-1 brick-bike total" [class.empty]="isEmptyForBike(10, index, getTotalScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="col-2 score">
+                        <div class="text-center h-100 font-weight-bold rounded w-100 py-2">
+                          {{getTotalScore()}}
+                        </div>
+                      </div>
+                      <div class="col-5 total-runbike">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2,3,4,5,6,7,8,9]" class="col-1 brick-run total" [class.empty]="isEmptyForRun(index, getTotalScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="extra-light thick my-3">
+                <div class="row py-1">
+                  <div class="col-12 col-sm-3 w-100 mb-2 mb-sm-2">
+                    <div class="text-center border border-2 rounded py-2">TriDots</div>
+                  </div>
+                  <div class="col-12 col-sm-9">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2]" class="col-4 brick-bike" [class.empty]="isEmptyForBike(3, index, getTridotsScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="col-2 score">
+                        <div class="text-center h-100 font-weight-bold rounded w-100 py-2">
+                          {{getTridotsScore()}}
+                        </div>
+                      </div>
+                      <div class="col-5">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2]" class="col-4 brick-run" [class.empty]="isEmptyForRun(index, getTridotsScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-12 col-sm-3 w-100 mb-2 mb-sm-2">
+                    <div class="text-center border border-2 rounded py-2">Sport Age</div>
+                  </div>
+                  <div class="col-12 col-sm-9">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2]" class="col-4 brick-bike" [class.empty]="isEmptyForBike(3, index, getSportsAgeScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="col-2 score">
+                        <div class="text-center h-100 font-weight-bold rounded w-100 py-2">
+                          {{getSportsAgeScore()}}
+                        </div>
+                      </div>
+                      <div class="col-5">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2]" class="col-4 brick-run" [class.empty]="isEmptyForRun(index, getSportsAgeScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row py-1">
+                  <div class="col-12 col-sm-3 w-100 mb-2 mb-sm-0">
+                    <div class="text-center border border-2 rounded py-2">FTHR</div>
+                  </div>
+                  <div class="col-12 col-sm-9">
+                    <div class="row">
+                      <div class="col-5">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2]" class="col-4 brick-bike" [class.empty]="isEmptyForBike(3, index, getFTHRScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="col-2 score">
+                        <div class="text-center h-100 font-weight-bold rounded w-100 py-2">
+                          {{getFTHRScore()}}
+                        </div>
+                      </div>
+                      <div class="col-5">
+                        <div class="h-100 row justify-content-between">
+                          <div *ngFor="let index of [0,1,2]" class="col-4 brick-run" [class.empty]="isEmptyForRun(index, getFTHRScore())">&nbsp;</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

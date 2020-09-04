@@ -1,0 +1,104 @@
+app-add-a-race {
+  .race-form-wrap {
+    position: absolute;
+    z-index: 4;
+    width: calc(100% - 30px);
+  }
+
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+  }
+
+  .distance-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-row-gap: 12px;
+    grid-column-gap: 4px;
+
+    .week-circle-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 100px;
+    }
+  }
+
+  .close-icon {
+    width: 15px;
+  }
+
+  .stacked-number-container-col-1 {
+    padding: 30px 24px !important;
+  }
+
+  .selected {
+    background: #3c383626;
+
+    .stacked-number-inner {
+      span {
+        color: white !important;
+      }
+    }
+  }
+
+  .close-selectedRace {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    background: #f2f2f2;
+  }
+
+  .close-racepriority {
+    background: #f2f2f2;
+    position: relative;
+    right: 5px;
+    top: -22px;
+    cursor: pointer;
+  }
+
+  .close-unlisted {
+    background: #f2f2f2;
+    position: relative;
+    right: 25px;
+    top: 6px;
+  }
+
+  .race-a-selected {
+    background-color: #71d855;
+    color: white;
+  }
+
+  .cal-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 17px;
+    border-left: 1px solid #eeeeee;
+    padding: 10px 14px;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  button .dismiss {
+    height: 45px;
+    min-width: 200px;
+  }
+  
+  .dropdown-menu {
+    max-height: 450px;
+    overflow: auto;
+  }
+}

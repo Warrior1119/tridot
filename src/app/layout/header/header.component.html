@@ -1,0 +1,54 @@
+<div id="mobile-nav" class="mobile-nav d-flex d-sm-none shadow align-items-center justify-content-between">
+  <div class="left-offcanvas-menu">
+    <button class="js-toggle-left-slidebar btn-icon">
+      <div id="burger" class="burger-icon" [inlineSVG]="'../assets/img/svg/icons/menu-icon.svg'" style="width: 24px;"></div>
+    </button>
+  </div>
+  <a href="/">
+    <div class="mx-auto" [inlineSVG]="'../assets/img/tridot-logo.svg'" style="width: 115px;"></div>
+  </a>
+  <div class="right-offcanvas-menu">
+    <button class="js-toggle-right-slidebar btn-icon">
+      <div [inlineSVG]="'../assets/img/svg/icons/profile-icon.svg'" style="width: 24px;"></div>
+    </button>
+  </div>
+</div>
+<div class="btn btn-success w-100 d-block d-sm-none rounded-0"
+    *ngIf="!isCoachLogin && (profile.inTrialPeriod == 'true' || profile.trialPeriodExpired == 'true')"
+    (click)="router.navigate(['user/subscription-options'])">Activate</div>
+<nav class="navbar navbar-expand-lg navbar-light shadow d-none d-sm-flex justify-content-end p-0" *ngIf = "!isCoachLogin">
+  <button
+    type="button"
+    class="btn btn-sm btn-success mx-3 px-3"
+    *ngIf="!isiOSApp && (profile.inTrialPeriod == 'true' || profile.trialPeriodExpired == 'true')"
+    (click)="router.navigate(['user/subscription-options'])">
+    {{profile.activateMessage ? profile.activateMessage : 'Activate'}}
+  </button>
+  <button
+    type="button"
+    class="btn btn-sm btn-success mx-3 px-3"
+    *ngIf="isCoachAccess"
+    title = "Return to Coach Dashboard"
+    (click)="returnToCoachPortal()">
+    <div  [inlineSVG]="'../assets/img/svg/return-to-dashboard.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+    Return to Coach Dashboard
+  </button>
+  <button type="button" class="btn-sm text-xs btn-dev-phase btn" *ngIf="profile.nextVersionUrl && profile.nextVersionUrl != null && profile.nextVersionUrl != undefined && !isCoachAccess"
+    (click)="switchUX()">{{profile.currentVersionLabel}}</button>
+  <button *ngIf="!profile.isEmailConfirmed" (click)="onVerifyEmail()" type="button" class="btn btn-danger btn-sm text-xs ml-2">Verify Email</button>
+  <form class="form-search form-inline mr-2 ml-2 input-group-sm py-2" [ngClass]="{'visible': showSearchBar == true,'invisible': showSearchBar != true  }">
+    <div class="mr-2 search-icon" [inlineSVG]="'../assets/img/svg/icons/search-icon.svg'" style="width: 15px;"></div>
+    <input class="form-control search-field input-group-sm mr-sm-2" type="search" #debounceSearch [(ngModel)]="query"
+      [ngModelOptions]="{standalone: true}" placeholder="Search" aria-label="Search">
+  </form>
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light shadow d-none d-sm-flex justify-content-end p-0" *ngIf = "isCoachLogin">
+  <button type="button" (click)="logout()" class="btn btn-link mr-2">Logout</button>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="offset-3 col-9">
+      <div class="toast-container" toastContainer></div>
+    </div>
+  </div>
+</div>

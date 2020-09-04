@@ -1,0 +1,140 @@
+<div class="card-box session-numbers-block rounded shadow mb-4" 
+  [class.has-location]="hasLocation"
+  >
+  <div *ngIf="session" class="box-content p-2 p-sm-4">
+    <div class="row d-flex">
+      <div *ngIf="session.plannedTotal" class="order-1 col col-sm mb-2 mb-sm-0 pr-0 border-right border-sm-right-0">
+        <div class="stacked-number-container py-2">
+          <div class="stacked-number-inner">
+            <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Planned</h5>
+            <span class="number-sm font-weight-bold text-xl text-nowrap">{{convertToHHMM(session.plannedTotal) |timeFormat}}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="session.actualTotal" class="order-0 order-sm-1 col-sm mb-2 mb-sm-0 border-right border-sm-right-0">
+        <div class="info-block bg-sm-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Actual</h5>
+              <span class="number-sm font-weight-bold text-xl text-nowrap" style="text-transform:lowercase;">{{session.actualTotal ? (convertToHHMM(session.actualTotal) |timeFormat) : '--:--'}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!session.actualTotal" class="order-0 order-sm-1 col-sm mb-2 mb-sm-0 border-right border-sm-right-0 border-left d-flex align-items-center">
+        <div class="inner-session-container w-100 row m-0">
+          <div class="col-6 col-sm-12 indoor-session-button mb-3 border rounded py-2 pl-2">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" [ngModel]="session.indoor == 'true'" (ngModelChange)="session.indoor = $event ? 'true' : 'false'" (change)="updateIndoor(session.indoor)"
+                class="custom-control-input" name="indoorsession" id="indoorcheck" [disabled]="session.actualTotal">
+              <label class="custom-control-label text-sm" for="indoorcheck">Indoor Session</label>
+            </div>
+          </div>
+          <div class="col-6 col-sm-12 btn-group w-100 pr-sm-0 pl-sm-0">
+            <button type="button" class="location-dropdown btn d-flex align-items-center dropdown-toggle shadow-md border border-md-0 px-3 py-2 justify-content-between" [attr.data-toggle]="session.actualTotal ? 'disabled' : 'dropdown'" aria-haspopup="true"
+              aria-expanded="false">
+              <span class="text-sm text-body mr-3">{{ session.location || 'Location' }}</span>
+              <span>
+                <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+              </span>
+            </button>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" type="button" (click)="updateLocation('HOME')">Home</button>
+              <button class="dropdown-item" type="button" (click)="updateLocation('CURRENT')">Current</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="order-2 col col-sm mb-2 mb-sm-0 p-0 border-right border-sm-right-0">
+        <div class="h-100">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">
+                Start time
+              </h5>
+              <ng-template #enterSessionTime>
+                <span class="text-nowrap">Enter session time</span>
+              </ng-template>
+              <span *ngIf="!sessionTimeEdit">
+                <span class="session-time-input text-nowrap text-xl"
+                  [customTooltip]="enterSessionTime" 
+                  (click)="editTime()">
+                  {{ getSessionTime(session.sessionTime) | timeFormat }}
+                </span>
+                <div *ngIf="session.actualTotal" class="mt-3 d-flex">
+                  <span *ngIf="session.location && locationAddress" class="d-inline mx-1 py-1 px-2 bg-sm-light btn-rounded text-xs text-truncate">{{ getLocationText() }}</span>
+                  <span *ngIf="session.indoor == 'true'" class="d-inline mx-1 py-1 px-2 bg-sm-light btn-rounded text-xs text-truncate">Indoor</span>
+                  <span *ngIf="session.indoor != 'true'" class="d-inline mx-1 py-1 px-2 bg-sm-light btn-rounded text-xs text-truncate">Outdoor</span>
+                  <span *ngIf="currentBike && session.sessionType === 'bike'" class="d-inline mx-1 py-1 px-2 bg-sm-light btn-rounded text-xs text-truncate">{{ currentBike.nickName }}</span>
+                </div>
+              </span>
+              <span *ngIf="sessionTimeEdit">
+                <input type="text" class="session-time-input"
+                  [customTooltip]="sessionTimeError" [isOpen]="sessionTimeError" tooltip-type="error"
+                  #sessionTimeInput
+                  [class.border]="sessionTimeError"
+                  [class.border-1]="sessionTimeError"
+                  [class.border-danger]="sessionTimeError"
+                  mask="00:00 aa" [dropSpecialCharacters]="false" [patterns]="sessionTimePatterns"
+                  placeholder="--:-- am"
+                  autofocus blurOnEnter
+                  [ngModel]="getSessionTime(session.sessionTime)"
+                  (ngModelChange)="updateSessionTime($event)"
+                  (blur)="sessionTimeEdit = false;sessionChange.emit()">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="weather">
+        <div class="order-3 col col-sm mb-2 mb-sm-0 px-1 border-right border-sm-right-0">
+          <div class="info-block bg-sm-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Temp</h5>
+                <span *ngIf="profile.measurementSystem === 'standard'" class="temp-nums number-sm font-weight-bold text-xl text-nowrap d-inline">
+                  {{session.indoor == 'true' ? 70 : weather.tempF}}&deg;</span>
+                <span *ngIf="profile.measurementSystem === 'metric'" class="temp-nums number-sm font-weight-bold text-xl text-nowrap d-inline">
+                  {{session.indoor == 'true' ? 20 : weather.tempC}}&deg;</span>
+                <div *ngIf="session.indoor != 'true'" class="weather-icons inline-svg d-inline-flex align-items-center" [inlineSVG]="getWeatherIcon(weather.desc)"></div>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="order-4 col col-sm mb-2 mb-sm-0 px-1 border-right border-sm-right-0">
+          <div class="info-block bg-sm-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="d-block d-sm-none text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Elev</h5>
+              <h5 class="d-none d-sm-block text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Elevation</h5>
+              <span class="number-sm font-weight-bold text-xl text-nowrap" style="text-transform:lowercase;">{{getElevation()}}</span>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="order-5 col col-sm mb-2 mb-sm-0 pl-1 border-right border-sm-right-0">
+          <div class="info-block bg-sm-light h-100 rounded">
+          <div class="stacked-number-container py-2">
+            <div class="stacked-number-inner">
+              <h5 class="text-xxs text-sm-sm text-sm-muted mb-2 text-uppercase font-weight-bold">Humidity</h5>
+              <span class="number-sm font-weight-bold text-xl text-nowrap">{{session.indoor == 'true' ? 30 : weather.humidity}}&#37;</span>
+            </div>
+          </div>
+          </div>
+        </div>
+      </ng-container>
+      <div *ngIf="session.actualTotal" class="col-sm mb-2 mb-sm-0 text-center border-right border-sm-right-0 border-left border-1 ml-1 pl-2">
+        <h5 class="text-md text-sm-muted mb-3 font-weight-bold">TrainX</h5>
+        <div class="score-box mx-2 font-weight-bold" [title]="trainXTitleMessage">{{getScore()}}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="workout-zones d-flex mt-1 mb-1 mt-lg-4 mb-lg-0" [ngClass]="[session.actualTotal > 0 || session.sessionType === 'strength' ? 'workout-'+session.sessionType : '']">
+          <div *ngFor="let zone of session.zones" [ngClass]="getZoneClass(zone)"
+            [ngStyle]="getZoneStyle(session, zone)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

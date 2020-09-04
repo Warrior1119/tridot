@@ -1,0 +1,160 @@
+<div class="card-box session-numbers-block rounded border-bottom shadow mb-4">
+  <div class="box-content p-2 p-sm-4">
+    <div class="row">
+      <div class="row  stacked-number-container mb-2  col-lg-4 m-auto then-box px-0">
+      
+          
+            <div class="py-2 pr-4 border-right stacked-number-inner">
+              <h5 class="text-md  text-muted mb-2 text-uppercase font-weight-bold">
+                Start Time
+              </h5>
+              <ng-template #startTimeTooltip>
+                <span *ngIf="startTimeError">{{startTimeError}}</span>
+                <span *ngIf="!startTimeError" class="text-nowrap">Enter start time</span>
+              </ng-template>
+              <span [customTooltip]="startTimeTooltip" [isOpen]="startTimeError" [tooltip-type]="startTimeError ? 'error' : 'normal'" (click)="startTimeEdit = true">
+                <div *ngIf="!startTimeEdit" class="start-time-input text-nowrap">{{ getStartTime(details.uiRaceDetails.myStartTime) | timeFormat }}</div>
+                <input *ngIf="startTimeEdit" type="text" class="start-time-input" 
+                  mask="00:00 aa" [dropSpecialCharacters]="false" [patterns]="startTimePatterns"
+                  placeholder="--:-- am"
+                  autofocus blurOnEnter
+                  #startTimeInput
+                  [class.border]="startTimeError"
+                  [class.border-1]="startTimeError"
+                  [class.border-danger]="startTimeError"
+                  [ngModel]="getStartTime(details.uiRaceDetails.myStartTime)"
+                  (ngModelChange)="updateStartTime($event)"
+                  maxlength="8">
+              </span>
+            </div>
+            <div class="py-2 pl-4 stacked-number-inner">
+              <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold">
+                Run Start
+              </h5>
+              <span class="font-weight-bold text-nowrap start-time-input">
+                <ng-container *ngIf="race.daysTillRace != 0" >{{ details.raceDetails.projectedTimeAtRunStart |timeFormat |lowercase }}</ng-container>
+                <ng-container *ngIf="race.daysTillRace == 0" >{{ details.uiRaceDetails.actualTimeAtRunStart |timeFormat |lowercase }}</ng-container>
+              </span>
+            </div>
+            <div  class="w-100 d-flex my-2 btn-rounded bg-light p-2 justify-content-between align-items-center mx-2">
+            <div class="mx-2 d-inline-flex align-items-center">
+              <div class="weather-icons inline-svg" [inlineSVG]="'../assets/img/svg/icons/temp-icon.svg'"></div>
+              <span class="weather-nums d-inline font-weight-bold">
+                {{ details.raceEventDetails.weather.tempF }}&deg;</span>
+            </div>
+            <div class="mx-2 d-inline-flex align-items-center">
+              <div class="weather-icons inline-svg" [inlineSVG]="'../assets/img/svg/icons/elevation-icon.svg'"></div>
+              <span class="weather-nums font-weight-bold text-lowercase">{{ getElevation() }}</span>
+            </div>
+            <div class="mx-2 d-inline-flex align-items-center">
+              <div class="weather-icons inline-svg" [inlineSVG]="'../assets/img/svg/icons/humidity-icon.svg'"></div>
+              <span class="weather-nums font-weight-bold">{{ details.raceEventDetails.weather.humidity }}&#37;</span>
+            </div>
+          </div>
+      </div>
+  
+      <div class=" border-right col-md-4 col-lg mb-2 mb-lg-0 then-box px-2">
+        <div class="h-100 info-block bg-light rounded">
+          <div class="stacked-number-container py-2 d-flex flex-column">
+            <div class="stacked-number-inner">
+              <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold">
+                Actual En Time
+              </h5>
+            </div>
+            <div class="stacked-number-inner">
+              <span *ngIf="race.daysTillRace == 0" class="number-sm font-weight-bold text-nowrap">{{details.uiRaceDetails.actualTotalTimeEn |timeFormat}}</span>
+              <hr class="mt-2 mb-1 border-2">
+              <div class="number-sm-sub font-weight-bold text-muted mt-1">
+                {{details.uiRaceDetails.projectedTotalTimeEn |timeFormat}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 col-lg mb-2 mb-lg-0 then-box px-2 border-right">
+        <div class="h-100 info-block bg-light rounded">
+          <div class="stacked-number-container py-2 d-flex flex-column">
+            <div class="stacked-number-inner ">
+              <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold">
+                Actual Time
+              </h5>
+            </div>
+            <div class="stacked-number-inner">
+              <span class="number-sm font-weight-bold text-nowrap">
+                <ng-container *ngIf="race.daysTillRace == 0">{{details.uiRaceDetails.actualTotalTime |timeFormat}}</ng-container>
+              </span>
+              <hr class="mt-2 mb-1 border-2">
+              <div class="number-sm-sub font-weight-bold text-muted mt-1">
+                {{details.uiRaceDetails.projectedTotalTime |timeFormat}} 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-4 col-lg mb-2 mb-lg-0 then-box px-2">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-2 d-flex flex-column">
+            <div class="stacked-number-inner">
+              <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold">
+                Overall
+              </h5>
+            </div>
+            <div class="stacked-number-inner">
+              <span class="number-sm font-weight-bold">
+             {{details.uiRaceDetails.overallRank || '-'}}/{{details.uiRaceDetails.totalParticipants || '-'}}
+              </span>
+              <hr class="mt-2 mb-1 border-2">
+               <div class="number-sm-sub font-weight-bold text-muted mt-1">
+                Top {{ details.uiRaceDetails.overallRank/details.uiRaceDetails.totalParticipants |percent:'0.0' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-4 col-lg mb-2 mb-lg-0 then-box px-2">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-2 d-flex flex-column">
+            <div class="stacked-number-inner">
+              <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold">
+                Gender
+              </h5>
+            </div>
+            <div class="stacked-number-inner">
+              <span class="number-sm font-weight-bold">
+               {{details.uiRaceDetails.genderRank || '-'}} /{{details.uiRaceDetails.totalParticipantsInGender || '-'}}
+              </span>   
+              <hr class="mt-2 mb-1 border-2">
+              <div class="number-sm-sub font-weight-bold text-muted mt-1">
+                Top {{ details.uiRaceDetails.genderRank/details.uiRaceDetails.totalParticipantsInGender |percent:'0.0' }}
+              </div>   
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-4 col-lg mb-2 mb-sm-0 then-box px-2">
+        <div class="info-block bg-light h-100 rounded">
+          <div class="stacked-number-container py-2 d-flex flex-column">
+            <div class="stacked-number-inner">
+              <h5 class="text-md text-muted mb-2 text-uppercase font-weight-bold">
+                In Division
+              </h5>
+            </div>
+            <div class="stacked-number-inner">
+              <span class="number-sm font-weight-bold">
+                {{details.uiRaceDetails.divisionRank || '-'}}/{{details.uiRaceDetails.totalInDivision || '-'}}
+              </span>      
+              <hr class="mt-2 mb-1 border-2">
+              <div class="number-sm-sub font-weight-bold text-muted mt-1">
+                Top {{ details.uiRaceDetails.divisionRank/details.uiRaceDetails.totalInDivision |percent:'0.0' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

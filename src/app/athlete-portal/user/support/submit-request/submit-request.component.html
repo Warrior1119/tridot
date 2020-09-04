@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Submit a request
+  </h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <div class="mt-4">
+    <label for="subject">
+      Subject*
+    </label>
+    <input type="text" class="form-control" name="subject" required [(ngModel)]="data.subject" />
+  </div>
+
+  <div class="mt-4">
+    <label for="description">
+      Description*
+    </label>
+    <textarea placeholder="" required name="description" class="form-control" [(ngModel)]="data.description"></textarea>
+  </div>
+  <div class="alerts row p-2">
+    <div class="col text-center">
+      <span *ngFor="let alert of alerts" class="text-{{alert.type}}"> {{alert.msg}}</span>
+    </div>
+  </div>
+  <div class="modal-footer mt-4">
+    <button type="button" [disabled]="!data.subject || !data.description" class="btn btn-lg btn-primary btn-block text-md mt-0"
+      (click)="save()">Submit</button>
+    <button type="button" class="btn btn-lg btn-block btn-info text-md mt-0" (click)="closeModal()">Cancel</button>
+  </div>

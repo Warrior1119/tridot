@@ -1,0 +1,79 @@
+@import "./../../../../styles/variables";
+
+.add-a-race-plus {
+  width: 20px;
+  margin-left: 10px;
+  margin-top: 0px;
+  display: inline-block;
+}
+
+.race-avatar {
+  background-color: #d3d8db;
+  border-radius: 3rem;
+  width: 3rem;
+  height: 3rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  h3 {
+    background-color: transparent;
+    margin-bottom: 0;
+    padding-top: 0.45rem;
+    margin-top: 1rem;
+  }
+}
+
+.season-planner-btn {
+  transition: all 300ms ease-in-out;
+  &:hover {
+    span {
+      left:0px;
+    }
+    img {
+      opacity:1;
+    }
+  }
+  span {
+    transition: all 300ms ease-in-out;
+    position:relative;
+    left:15px;
+  }
+  img {
+    opacity:0;
+    transition: all 300ms ease-in-out;
+  }
+}
+
+.race-start-date {
+  color: #bcc1c4;
+}
+
+.race-name {
+  color: #929ea8;
+}
+
+.distance-type {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 44px;
+}
+
+.card-footer.border {
+  padding: 0.9375rem 1.875rem;
+}
+
+.race-card {
+  background-color: #f4f4f4;
+}
+
+.schedule-button {
+  color: #a2a7aa;
+  background-color: #ebedee;
+}
+
+@media (max-width: 575.98px) {
+  .add-a-race-block {
+    margin-left:0 !important;
+    background-color: $widget-block-background;
+  }
+}

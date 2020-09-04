@@ -1,0 +1,1869 @@
+<div *ngIf="race && details && nutrition">
+  <div *ngIf="details">
+    <div class="card-box p-3 mb-4 rounded shadow d-none justify-content-between align-items-center">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="race-title">
+          <h5 class="font-weight-bold mb-0 text-md">{{race.raceName | ucwords}}</h5>
+          <h6 class="font-weight-normal text-md">{{details.raceEventDetails.listLocation}}</h6>
+        </div>
+        <custom-menu menuClass="racex-menu-wrap">
+          <h5 class="custom-menu__title pt-2">Import Nutrition Data From</h5>
+          <ul class="custom-menu__list text-left">
+            <li class="dropdown-item" *ngFor="let race of nutritionImportSources" (click)="nutritionData(race.raceId)">{{race.raceName}}</li>
+          </ul>
+        </custom-menu>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="race-priority">
+          <div class="priority cursor-pointer priority-{{details.raceEventDetails.priority.toLowerCase()}} d-inline-flex align-items-center justify-content-center"
+            data-toggle="tooltip" data-placement="top" title="Select a Priority">{{details.raceEventDetails.priority}}</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <button class="btn btn-outline-secondary btn-rounded text-uppercase text-body px-4 text-md">{{details.raceEventDetails.shortDistanceName}}</button>
+        <div class="date">
+          <h5 class="font-weight-bold mb-0">{{details.raceEventDetails.raceDateInStandard}}</h5>
+        </div>
+      </div>
+
+      <button class="btn btn-tertiary btn-md text-md">Race Phase: {{race.raceType}}</button>
+    </div>
+
+    <app-race-x-time [details]="details" [race]="race"></app-race-x-time>
+    <app-race-x-environment *ngIf="!surveyFilled" [race]="race" [details]="details" (updateRaceX)="updateRaceX.emit($event)"></app-race-x-environment>
+
+    <ng-container *ngIf="details.raceEventDetails.swimDistance">
+      <div class="card-box swim-box rounded shadow justify-content-between align-items-center border-left border-4 mb-4"
+        *ngIf="nutrition">
+        <div class="row">
+          <div class="col-12 col-lg-4 pr-lg-0">
+            <div class="row h-100">
+                <div class="col-12 col-lg-6 pr-lg-0">
+                  <div class="h-100 d-flex flex-column align-items-center justify-content-center py-5 py-sm-3">
+                    <div class="tridot-score swim score-lg">
+                      <span *ngIf="race.daysTillRace != 0">{{details.swimPlanned.dotScore}}</span>
+                      <span *ngIf="race.daysTillRace == 0">{{details.swimActual.dotScore}}</span>
+                    </div>
+                    <div class="d-none d-lg-block btn-container mt-3">
+                      <div [ngClass]="{'btn-primary': comments.swim, 'btn-default': !comments.swim }" class="btn border rounded" style="padding: 6px 12px;"
+                        (click)="showComments('swim')">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/pace-icon.svg'"></div>
+                      </div>
+                      <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                          <div *ngSwitchCase="true" class="btn btn-default border rounded" style="padding: 6px 12px;" [customTooltip]="upgradeTemplate" [hide-delay]="1000">
+                            <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                          </div>
+                          <div *ngSwitchCase="false" [ngClass]="{'btn-primary': displayNutrition == 'swim', 'btn-default': displayNutrition != 'swim' }"
+                            class="btn border rounded" style="padding: 6px 12px;" (click)="showNutrition('swim')">
+                            <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                          </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6 pl-lg-0">
+                  <div class="info-block bg-light h-100">
+                    <div class="stacked-number-container py-4" (mouseenter)="toggleDistanceInput('swim')" (mouseleave)="toggleDistanceInput()">
+                      <div class="stacked-number-inner">
+                        <h5 class="text-sm text-body-accent text-uppercase font-weight-bold">Distance</h5>
+                        <ng-container *ngTemplateOutlet="distanceControls; context: {$implicit: 'swim'}"></ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row pt-4 pr-4 pb-4 pl-4 pl-lg-0">
+              
+              <div class="col-12 col-sm-4 mb-3 mb-sm-0 pr-3 pr-lg-3 pl-lg-4">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected Split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.swimPlanned.split |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualSwim || '00:00:00' |timeFormat }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 mt-3 text-uppercase text-xs font-weight-bold">Split</h5>
+                        <input
+                          type="text"
+                          class="actual-split font-weight-bold text-center text-muted shadow rounded {{actualSwimError?'border-1 border border-danger':'border-0'}} p-2"
+                          timeFormatMask includeHour="true"
+                          [timePattern]="timePattern"
+                          [(ngModel)]="details.uiRaceDetails.actualSwim"
+                          (ngModelChange)="updateActualSwim($event)"
+                          [customTooltip]="actualSwimError" tooltip-type="error"
+                        >
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.swimPlanned.split |timeFormat }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <h5 *ngIf="race.daysTillRace != 0" class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected Pace (100m)</h5>
+                      <h5 *ngIf="race.daysTillRace == 0" class="text-body-accent mb-2 mt-3 text-uppercase text-xs font-weight-bold">Pace (100m)</h5>
+                      <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                        <span *ngSwitchCase="true" class="number-md-sm font-weight-bold" [customTooltip]="upgradeTemplate" [hide-delay]="1000">--</span>
+                        <ng-container *ngSwitchCase="false">
+                          <ng-container *ngIf="race.daysTillRace != 0">
+                            <span class="number-sm font-weight-bold">{{ details.swimPlanned.pace |timeFormat }}</span>
+                            <hr class="mt-2 mb-1">
+                            <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualPace100 || '00:00:00' |timeFormat }}</span>
+                          </ng-container>
+                          <ng-container *ngIf="race.daysTillRace == 0">
+                            <span class="number-sm font-weight-bold">{{ details.uiRaceDetails.actualPace100 |timeFormat }}</span>
+                            <hr class="mt-2 mb-1">
+                            <span class="number-sm-sub font-weight-bold">{{ details.swimPlanned.pace |timeFormat }}</span>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected EN split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.swimPlanned.ensSplit |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualSwimEn || '00:00:00' |timeFormat }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">EN split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.uiRaceDetails.actualSwimEn |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.swimPlanned.ensSplit |timeFormat }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 d-flex d-lg-none align-items-center justify-content-center">
+                <div class="btn-container mt-3">
+                  <div [ngClass]="{'btn-primary': comments.swim, 'btn-default': !comments.swim }" class="btn border rounded" style="padding: 6px 12px;"
+                    (click)="showComments('swim')">
+                    <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/pace-icon.svg'"></div>
+                  </div>
+                  <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                      <div *ngSwitchCase="true" class="btn btn-default border rounded" style="padding: 6px 12px;" [customTooltip]="upgradeTemplate" [hide-delay]="1000">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                      </div>
+                      <div *ngSwitchCase="false" [ngClass]="{'btn-primary': displayNutrition == 'swim', 'btn-default': displayNutrition != 'swim' }"
+                        class="btn border rounded" style="padding: 6px 12px;" (click)="showNutrition('swim')">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                      </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Displays when the pace icon is clicked -->
+      <div class="card-box swim-box rounded shadow border-left border-4 mb-4 py-4" *ngIf="comments.swim && race.daysTillRace == 0">
+        <div class="row">
+          <div class="col-1 d-none d-sm-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/swim-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-11 d-flex flex-wrap align-items-center justify-content-between pr-5 pl-5 pl-sm-0">
+            <div class="position-relative">
+                <label for="swim-overall-rank" class="inside-label">Overall Rank</label>
+                <input id="swim-overall-rank" type="text" [class.border-danger]="swimOverallRankError"
+                  [ngModel]="details.uiRaceDetails.swimOverallRank || ''" (ngModelChange)="details.uiRaceDetails.swimOverallRank = $event || 0; updateSwimOverallRank($event)"
+                  [customTooltip]="swimOverallRankError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.swimOverallRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalParticipants}} TOP {{ details.uiRaceDetails.swimOverallRank/details.uiRaceDetails.totalParticipants |percent:'0.0' }}</small>
+              <div class="position-relative">
+                <label for="swim-gender-rank" class="inside-label">Gender Rank</label>
+                <input id="swim-gender-rank" type="text" [class.border-danger]="swimGenderRankError"
+                  [ngModel]="details.uiRaceDetails.swimGenderRank || ''" (ngModelChange)="details.uiRaceDetails.swimGenderRank = $event || 0; updateSwimGenderRank($event)"
+                  [customTooltip]="swimGenderRankError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.swimGenderRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalParticipantsInGender}} TOP {{ details.uiRaceDetails.swimGenderRank/details.uiRaceDetails.totalParticipantsInGender |percent:'0.0' }}</small>
+              <div class="position-relative">
+                <label for="swim-division-rank" class="inside-label">Division Rank</label>
+                <input id="swim-division-rank" type="text" [class.border-danger]="swimDivisionRankError"
+                  [ngModel]="details.uiRaceDetails.swimDivisionRank || ''" (ngModelChange)="details.uiRaceDetails.swimDivisionRank = $event || 0; updateSwimDivisionRank($event)"
+                  [customTooltip]="swimDivisionRankError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.swimDivisionRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalInDivision}} TOP {{ details.uiRaceDetails.swimDivisionRank/details.uiRaceDetails.totalInDivision |percent:'0.0' }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="card-box swim-box rounded shadow border-left border-4 mb-4" *ngIf="comments.swim">
+        <div class="row">
+          <div class="col-1 d-none d-sm-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/swim-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-sm-11 pt-sm-5 pb-sm-5 pr-sm-5 pl-sm-1">
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" id="planned-comment" (change)="update('commentsPlanned', nutrition.commentsPlanned,'nutrition')"
+                [(ngModel)]="nutrition.commentsPlanned" class="styled-textarea" placeholder="Notes..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Displays when the nutrition icon is clicked -->
+      <div class="card-box swim-box rounded shadow border-left border-4 mb-4" *ngIf="displayNutrition == 'swim'">
+        <div class="row mx-md-0">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/swim-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-4 border-right py-sm-3 pr-sm-4 pl-sm-4 pl-lg-0">
+            <div class="comment-header m-3 m-sm-0">
+              <h5 class="mb-3 text-center text-md-left text-body font-weight-bold">Planned</h5>
+            </div>
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" id="planned-comment" (change)="update('nutritionNotesPlanned', nutrition.nutritionNotesPlanned,'nutrition')"
+                class="styled-textarea" [(ngModel)]="nutrition.nutritionNotesPlanned" placeholder="Nutrition Plan"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-4 col-lg-2 col-sm-3">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="caloriesPlannedSwimError"
+                  type="text" [ngModel]="nutrition.caloriesPlanned || ''" (ngModelChange)="nutrition.caloriesPlanned = $event || 0; updateCalories('caloriesPlanned', $event, 0, 2000, 'caloriesPlannedSwimError')" placeholder="0"
+                  [customTooltip]="caloriesPlannedSwimError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace== 0">
+              </div>
+              <div class="col-8 col-lg-3 col-sm-3">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-12 col-lg-7 col-sm-6 mt-3 mt-sm-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="text-sm text-body mr-3" *ngIf="local.primaryCalorieSourcePlanned">
+                      {{local.primaryCalorieSourcePlanned}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieSourcePlanned" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieSourcePlanned)?
+                      getSource(nutrition.primaryCalorieSourcePlanned) : 'Primary Calories Source' }} </span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieSourcePlanned', calorie.value,'nutrition');local.primaryCalorieSourcePlanned = calorie.name"
+                      *ngFor="let calorie of calorie_source" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-4 col-lg-2 col-sm-3">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="fluidsPlannedSwimError"
+                  [ngModel]="nutrition.fluidsPlanned || ''" (ngModelChange)="nutrition.fluidsPlanned = $event || 0; updateFluids('fluidsPlanned', $event, 'fluidsPlannedSwimError', 0)" type="text" placeholder="0 {{details.athleteProfile.measurementSystem == 'standard' ? 'oz' : 'l'}}"
+                  [customTooltip]="fluidsPlannedSwimError" tooltip-type="error"
+                  maxlength="3" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-8 col-lg-3 col-sm-3">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-12 col-lg-7 col-sm-6 mt-3 mt-sm-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieFormPlanned" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieFormPlanned}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieFormPlanned" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieFormPlanned)?
+                      getForm(nutrition.primaryCalorieFormPlanned) : 'Primary Calorie Form' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieFormPlanned', calorie.value,'nutrition');local.primaryCalorieFormPlanned = calorie.name"
+                      *ngFor="let calorie of calorie_form" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-4 col-lg-2 col-sm-3">
+                <input id="calories" [class.border-danger]="sodiumPlannedSwimError"
+                  [ngModel]="nutrition.sodiumPlanned || ''" (ngModelChange)="nutrition.sodiumPlanned = $event || 0; updateSodium('sodiumPlanned', $event, 0, 1000, 'sodiumPlannedSwimError')"
+                  class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" type="text" placeholder="0 mg"
+                  [customTooltip]="sodiumPlannedSwimError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-8 col-lg-3 col-sm-3">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-12 col-lg-7 col-sm-6 mt-3 mt-sm-0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box swim-box rounded shadow border-left border-4 mb-4" *ngIf="displayNutrition == 'swim' && race.daysTillRace == 0">
+        <div class="row mx-md-0">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/swim-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-4 border-right py-sm-3 pr-sm-4 pl-sm-4 pl-lg-0">
+            <div class="comment-header m-3 m-sm-0">
+              <h5 class="mb-3 text-center text-md-left text-body font-weight-bold">Actual</h5>
+            </div>
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" id="planned-comment" (change)="update('nutritionNotesActual', nutrition.nutritionNotesActual,'nutrition')"
+                [(ngModel)]="nutrition.nutritionNotesActual" class="styled-textarea" placeholder="Pre-race Nutrition Plan"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-4 col-lg-2 col-sm-3">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="caloriesActualSwimError"
+                  [ngModel]="nutrition.caloriesActual || ''" (ngModelChange)="nutrition.caloriesActual = $event || 0; updateCalories('caloriesActual', $event, 0, 2000, 'caloriesActualSwimError')" type="text" placeholder="0"
+                  [customTooltip]="caloriesActualSwimError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-8 col-lg-3 col-sm-3">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-12 col-lg-7 col-sm-6 mt-3 mt-sm-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block btn-primary px-3 py-2" (click)="moveActualSwim()">Copy from Planned</button>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-4 col-lg-2 col-sm-3">
+                <input id="calories" [class.border-danger]="fluidsActualSwimError"
+                  [ngModel]="nutrition.fluidsActual || ''" (ngModelChange)="nutrition.fluidsActual = $event || 0; updateFluids('fluidsActual', $event, 'fluidsActualSwimError', 0)"
+                  class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" type="text" placeholder="0 {{details.athleteProfile.measurementSystem == 'standard' ? 'oz' : 'l'}}"
+                  [customTooltip]="fluidsActualSwimError" tooltip-type="error"
+                  maxlength="3" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-8 col-lg-3 col-sm-3">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-12 col-lg-7 col-sm-6 mt-3 mt-sm-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieSourceActual" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieSourceActual}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieSourceActual" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieSourceActual)?
+                      getSource(nutrition.primaryCalorieSourceActual) : 'Primary Calorie Source' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieSourceActual', calorie.value,'nutrition');local.primaryCalorieSourceActual = calorie.name"
+                      *ngFor="let calorie of calorie_source" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-4 col-lg-2 col-sm-3">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="sodiumActualSwimError"
+                  [ngModel]="nutrition.sodiumActual || ''" (ngModelChange)="nutrition.sodiumActual = $event || 0; updateSodium('sodiumActual', $event, 0, 1000, 'sodiumActualSwimError')" type="text" placeholder="0 mg"
+                  [customTooltip]="sodiumActualSwimError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-8 col-lg-3 col-sm-3">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-12 col-lg-7 col-sm-6 mt-3 mt-sm-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieFormActual" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieFormActual}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieFormActual" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieFormActual)?
+                      getForm(nutrition.primaryCalorieFormActual) : 'Primary Calorie Form' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieFormActual', calorie.value,'nutrition');local.primaryCalorieFormActual = calorie.name"
+                      *ngFor="let calorie of calorie_form" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box swim-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="displayNutrition == 'swim' && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/swim-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-11 row align-items-center justify-content-between pl-5 pl-lg-0">
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="swimExternalFactors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">Significant External Factors {{ details.uiRaceDetails.swimExternalFactors ? '(YES)' : '(NO)' }}</span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="swimExternalFactors">
+                <button class="dropdown-item" (click)="update('swimExternalFactors', 1); details.uiRaceDetails.swimExternalFactors = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('swimExternalFactors', 0); details.uiRaceDetails.swimExternalFactors = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="swimNutritionalFactors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">Significant Nutritional Factors {{ details.uiRaceDetails.swimNutritionalFactors ? '(YES)' : '(NO)' }}</span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="swimNutritionalFactors">
+                <button class="dropdown-item" (click)="update('swimNutritionalFactors', 1); details.uiRaceDetails.swimNutritionalFactors = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('swimNutritionalFactors', 0); details.uiRaceDetails.swimNutritionalFactors = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="swimResultValidForAnalysis" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">
+                  Is result valid for Analysis?
+                  <ng-container [ngSwitch]="details.uiRaceDetails.swimResultValidForAnalysis">
+                    <ng-container *ngSwitchCase="0">(NO)</ng-container>
+                    <ng-container *ngSwitchCase="1">(YES)</ng-container>
+                  </ng-container>
+                </span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="swimResultValidForAnalysis">
+                <button class="dropdown-item" (click)="update('swimResultValidForAnalysis', 1); details.uiRaceDetails.swimResultValidForAnalysis = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('swimResultValidForAnalysis', 0); details.uiRaceDetails.swimResultValidForAnalysis = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <button class="col-12 col-lg-2 btn btn-primary text-body text-xs px-3" (click)="showComments('swim')">Comments</button>
+          </div>
+        </div>
+      </div>
+      <div class="sep mb-3">
+        <div class="line-behind section-divider">
+          <span class="position-relative time-input-wrap" [class.filled]="actualSBTransitionTime.value">
+            <span class="time-input-label" *ngIf="actualSBTransitionTime.value">T1 |&nbsp;</span>
+            <input id="t1" placeholder="Enter T1 Time" class="btn btn-outline-secondary px-3 time-input"
+              timeFormatMask includeHour="true"
+              [timePattern]="timePattern"
+              #actualSBTransitionTime="ngModel"
+              [ngModel]="details.uiRaceDetails.actualSBTransitionTime"
+              (ngModelChange)="updateActualSBTransitionTime($event)"
+              [customTooltip]="isActualSBTransitionTimeError === 'format' ? 'Please provide value in the format 00:00:00' : isActualSBTransitionTimeError === 'required' ? 'This field is required' : isActualSBTransitionTimeError" tooltip-class="tooltip-danger">
+          </span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="details.raceEventDetails.bikeDistance">
+      <div class="card-box bike-box rounded shadow justify-content-between align-items-center border-left border-4 mb-4">
+        <div class="row">
+          <div class="col-12 col-lg-4 pr-lg-0">
+            <div class="row h-100">
+              <div class="col-12 col-lg-6 pr-lg-0">
+                <div class="h-100 d-flex flex-column align-items-center justify-content-center py-5 py-sm-3">
+                  <div class="tridot-score bike score-lg">
+                    <span *ngIf="race.daysTillRace != 0">{{details.bikePlanned.dotScore}}</span>
+                    <span *ngIf="race.daysTillRace == 0">{{details.bikeActual.dotScore}}</span>
+                  </div>
+                  <div class="d-none d-lg-block btn-container mt-3">
+                    <div [ngClass]="{'btn-primary': comments.bike, 'btn-default': !comments.bike }" class="btn border rounded" style="padding: 6px 12px;"
+                      (click)="showComments('bike')">
+                      <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/pace-icon.svg'"></div>
+                    </div>
+                    <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                      <div *ngSwitchCase="true" class="btn btn-default border rounded" style="padding: 6px 12px;" [customTooltip]="upgradeTemplate" [hide-delay]="1000">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                      </div>
+                      <div *ngSwitchCase="false" [ngClass]="{'btn-primary': displayNutrition == 'bike', 'btn-default': displayNutrition != 'bike' }"
+                        class="btn border rounded" style="padding: 6px 12px;" (click)="showNutrition('bike')">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6 pl-lg-0">
+                <div class="info-block bg-light h-100">
+                  <div class="stacked-number-container py-4" (mouseenter)="toggleDistanceInput('bike')" (mouseleave)="toggleDistanceInput()">
+                    <div class="stacked-number-inner">
+                      <h5 class="text-sm text-body-accent text-uppercase font-weight-bold">Distance</h5>
+                      <ng-container *ngTemplateOutlet="distanceControls; context: {$implicit: 'bike'}"></ng-container>
+                      <button aria-expanded="false" aria-haspopup="true" class="btn btn-sm btn-block dropdown-toggle shadow px-3 py-2 mt-3"
+                        data-toggle="dropdown" type="button">
+
+                        <span class="text-sm text-body mr-3 pull-left mt-2" *ngIf="local.selectedBikeName">
+                          {{local.selectedBikeName}}
+                        </span>
+                        <span *ngIf="!local.selectedBikeName" class="text-sm text-body mr-3 pull-left d-inline">
+                          {{ details.uiRaceDetails.raceBikeId ? getBikeName(details.uiRaceDetails.raceBikeId) : getDefaultBikeName() }}</span>
+                        <span class="pull-right d-inline">
+                          <div   [inlineSVG]="'../../../assets/img/svg/icons/arrow-down.svg'" [autosize]="true" style="width: 10px;" class="mx-auto d-inline-block"></div>
+                        </span>
+                      </button>
+                      <div class="dropdown-menu w-100">
+                        <button class="dropdown-item" *ngFor="let bike of details.athleteProfile.bikes" (click)="update('raceBikeId', bike.bikeId,'');local.selectedBikeName = bike.nickName"
+                          type="button">{{bike.nickName | ucwords}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row pt-4 pr-4 pb-4 pl-4 pl-lg-0">
+              <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100">
+                  <div class="stacked-number-container py-3">
+                    <div class="stacked-number-inner py-4" (mouseenter)="toggleElevationInput('bike')" (mouseleave)="toggleElevationInput()">
+                      <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Elev Change</h5>
+                      <ng-container *ngTemplateOutlet="elevationControls; context: {$implicit: 'bike'}"></ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected Split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.bikePlanned.split |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualBike || '00:00:00' |timeFormat }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 mt-3 text-uppercase text-xs font-weight-bold">Split</h5>
+                        <input
+                          type="text"
+                          class="actual-split font-weight-bold text-center text-muted shadow rounded {{actualBikeError?'border-1 border border-danger':'border-0'}} p-2"
+                          timeFormatMask includeHour="true"
+                          [timePattern]="timePattern"
+                          [(ngModel)]="details.uiRaceDetails.actualBike"
+                          (ngModelChange)="updateActualBike($event)"
+                          [customTooltip]="actualBikeError" tooltip-type="error"
+                        >
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.bikePlanned.split |timeFormat }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-3 mb-2 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected Speed</h5>
+                        <span class="number-sm font-weight-bold">
+                          {{details.bikePlanned.speed}}
+                        <span class="unit text-lowercase d-inline">{{details.athleteProfile.measurementSystem == 'standard' ? 'MPH' : 'KPH'}}</span>
+                        </span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">
+                          {{details.bikeActual.speed || 0}}
+                        <span class="unit-sm text-lowercase d-inline">{{details.athleteProfile.measurementSystem == 'standard' ? 'MPH' : 'KPH'}}</span>
+                        </span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Speed</h5>
+                        <span class="number-sm font-weight-bold">
+                          {{details.bikeActual.speed}}
+                          <span class="unit text-lowercase d-inline">{{details.athleteProfile.measurementSystem == 'standard' ? 'MPH' : 'KPH'}}</span>
+                        </span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">
+                          {{details.bikePlanned.speed}}
+                        <span class="unit-sm text-lowercase d-inline">{{details.athleteProfile.measurementSystem == 'standard' ? 'MPH' : 'KPH'}}</span>
+                        </span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected EN split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.bikePlanned.ensSplit |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualBikeEn || '00:00:00' |timeFormat }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">EN split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.uiRaceDetails.actualBikeEn |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.bikePlanned.ensSplit |timeFormat }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 d-flex d-lg-none align-items-center justify-content-center">
+                <div class="btn-container mt-3">
+                  <div [ngClass]="{'btn-primary': comments.bike, 'btn-default': !comments.bike }" class="btn border rounded" style="padding: 6px 12px;"
+                    (click)="showComments('bike')">
+                    <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/pace-icon.svg'"></div>
+                  </div>
+                  <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                    <div *ngSwitchCase="true" class="btn btn-default border rounded" style="padding: 6px 12px;" [customTooltip]="upgradeTemplate" [hide-delay]="1000">
+                      <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                    </div>
+                    <div *ngSwitchCase="false" [ngClass]="{'btn-primary': displayNutrition == 'bike', 'btn-default': displayNutrition != 'bike' }"
+                      class="btn border rounded" style="padding: 6px 12px;" (click)="showNutrition('bike')">
+                      <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box bike-box rounded shadow border-left border-4 mb-4" *ngIf="displayNutrition == 'bike'">
+        <div class="row mx-md-0">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-4 border-right py-sm-3 pr-sm-4 pl-sm-4 pl-lg-0">
+            <div class="comment-header m-3 m-sm-0">
+              <h5 class="mt-1 mb-3 text-center text-md-left text-body font-weight-bold">Planned</h5>
+            </div>
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" (change)="update('nutritionNotesPlannedBike', nutrition.nutritionNotesPlannedBike,'nutrition')"
+                [(ngModel)]="nutrition.nutritionNotesPlannedBike" id="planned-comment" class="styled-textarea" placeholder="Nutrition Plan"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-12 col-lg-6 pl-0">
+                <div class="row pb-2 border-bottom text-sm px-0 ml-3 ml-sm-0">
+                  <div class="col-6 pl-lg-0">Total</div>
+                  <div class="col-6 pl-lg-0">Rate/Hour</div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0" [class.border-danger]="caloriesPlannedBikeError"
+                  [ngModel]="nutrition.caloriesPlannedBike || ''" (ngModelChange)="nutrition.caloriesPlannedBike = $event || 0; updateCalories('caloriesPlannedBike', $event, 0, 2500, 'caloriesPlannedBikeError')" type="text" placeholder="0"
+                  [customTooltip]="caloriesPlannedBikeError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled"
+                  [ngModel]="getRatePerHour('calories', 'bike', 'planned') || ''" type="text" placeholder="00" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="text-sm text-body mr-3" *ngIf="local.primaryCalorieSourcePlannedBike">
+                      {{local.primaryCalorieSourcePlannedBike}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieSourcePlannedBike" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieSourcePlannedBike)?
+                      getSource(nutrition.primaryCalorieSourcePlannedBike) : 'Primary Calories Source' }} </span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieSourcePlannedBike', calorie.value,'nutrition');local.primaryCalorieSourcePlannedBike = calorie.name"
+                      *ngFor="let calorie of calorie_source" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="fluidsPlannedBikeError"
+                  [ngModel]="nutrition.fluidsPlannedBike || ''" (ngModelChange)="nutrition.fluidsPlannedBike = $event || 0; updateFluids('fluidsPlannedBike', $event, 'fluidsPlannedBikeError', 1)" type="text" placeholder="0 {{details.athleteProfile.measurementSystem == 'standard' ? 'oz' : 'l'}}"
+                  [customTooltip]="fluidsPlannedBikeError" tooltip-type="error"
+                  maxlength="3" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled px-0" 
+                  [ngModel]="getRatePerHour('fluids', 'bike', 'planned') || ''" type="text" placeholder="0 oz" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieFormPlannedBike" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieFormPlannedBike}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieFormPlannedBike" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieFormPlannedBike)?
+                      getForm(nutrition.primaryCalorieFormPlannedBike) : 'Primary Calorie Form' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieFormPlannedBike', calorie.value,'nutrition');local.primaryCalorieFormPlannedBike = calorie.name"
+                      *ngFor="let calorie of calorie_form" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="sodiumPlannedBikeError"
+                  [ngModel]="nutrition.sodiumPlannedBike || ''" (ngModelChange)="nutrition.sodiumPlannedBike = $event || 0; updateSodium('sodiumPlannedBike', $event, 0, 3500, 'sodiumPlannedBikeError')" type="text" placeholder="0 mg"
+                  [customTooltip]="sodiumPlannedBikeError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled px-0"
+                  [ngModel]="getRatePerHour('sodium', 'bike', 'planned') || ''" type="text" placeholder="0 mg" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box bike-box rounded shadow border-left border-4 mb-4" *ngIf="displayNutrition == 'bike' && race.daysTillRace == 0">
+        <div class="row mx-md-0">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-4 border-right py-sm-3 pr-sm-4 pl-sm-4 pl-lg-0">
+            <div class="comment-header m-3 m-sm-0">
+              <h5 class="mb-3 text-center text-md-left text-body font-weight-bold">Actual</h5>
+            </div>
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" id="planned-comment" (change)="update('nutritionNotesActualBike', nutrition.nutritionNotesActualBike,'nutrition')"
+                [(ngModel)]="nutrition.nutritionNotesActualBike" class="styled-textarea" placeholder="Nutrition Plan"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-12 col-lg-6 pl-0">
+                <div class="row pb-2 border-bottom text-sm px-0 ml-3 ml-sm-0">
+                  <div class="col-6 pl-lg-0">Total</div>
+                  <div class="col-6 pl-lg-0">Rate/Hour</div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="caloriesActualBikeError"
+                  [ngModel]="nutrition.caloriesActualBike || ''" (ngModelChange)="nutrition.caloriesActualBike = $event || 0; updateCalories('caloriesActualBike', $event, 0, 2500, 'caloriesActualBikeError')" type="text" placeholder="0"
+                  [customTooltip]="caloriesActualBikeError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                  <input id="calories" class="w-100 text-center disabled px-0"
+                  [ngModel]="getRatePerHour('calories', 'bike', 'actual') || ''" type="text" placeholder="00" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                  <div class="mx-3 mx-sm-0">
+                    <button type="button" class="btn btn-block btn-primary px-3 py-2" (click)="moveActualBike()">Copy from Planned</button>
+                  </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" [class.border-danger]="fluidsActualBikeError"
+                  [ngModel]="nutrition.fluidsActualBike || ''" (ngModelChange)="nutrition.fluidsActualBike = $event || 0; updateFluids('fluidsActualBike', $event, 'fluidsActualBikeError', 1)"
+                  class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" type="text" placeholder="0 oz"
+                  [customTooltip]="fluidsActualBikeError" tooltip-type="error"
+                  maxlength="3" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>  
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled" 
+                  [ngModel]="getRatePerHour('fluids', 'bike', 'actual') || ''" type="text" placeholder="0 oz" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieSourceActualBike" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieSourceActualBike}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieSourceActualBike" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieSourceActualBike)?
+                      getSource(nutrition.primaryCalorieSourceActualBike) : 'Primary Calorie Source' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieSourceActualBike', calorie.value,'nutrition');local.primaryCalorieSourceActualBike = calorie.name"
+                      *ngFor="let calorie of calorie_source" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="sodiumActualBikeError"
+                  [ngModel]="nutrition.sodiumActualBike || ''" (ngModelChange)="nutrition.sodiumActualBike = $event || 0; updateSodium('sodiumActualBike', $event, 0, 3500, 'sodiumActualBikeError')" type="text" placeholder="0 mg"
+                  [customTooltip]="sodiumActualBikeError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled px-0"
+                  [ngModel]="getRatePerHour('sodium', 'bike', 'actual') || ''" type="text" placeholder="0 mg" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieFormActualBike" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieFormActualBike}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieFormActualBike" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieFormActualBike)?
+                      getForm(nutrition.primaryCalorieFormActualBike) : 'Primary Calorie Form' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieFormActualBike', calorie.value,'nutrition');local.primaryCalorieFormActualBike = calorie.name"
+                      *ngFor="let calorie of calorie_form" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box bike-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="displayNutrition == 'bike' && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-11 d-flex flex-wrap align-items-center">
+            <div class="border-right mr-3 pr-1">
+              <div class="form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeBloating"
+                    (change)="update('bikeBloating', nutrition.bikeBloating, 'nutrition')"
+                    [ngModel]="nutrition.bikeBloating" (ngModelChange)="nutrition.bikeBloating = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bikeBloating">Bloating</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeNausea"
+                    (change)="update('bikeNausea', nutrition.bikeNausea, 'nutrition')"
+                    [ngModel]="nutrition.bikeNausea" (ngModelChange)="nutrition.bikeNausea = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bikeNausea">Nausea</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeDiarrhea"
+                    (change)="update('bikeDiarrhea', nutrition.bikeDiarrhea, 'nutrition')"
+                    [ngModel]="nutrition.bikeDiarrhea" (ngModelChange)="nutrition.bikeDiarrhea = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bikeDiarrhea">Diarrhea</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeFlatulence"
+                    (change)="update('bikeFlatulence', nutrition.bikeFlatulence, 'nutrition')"
+                    [ngModel]="nutrition.bikeFlatulence" (ngModelChange)="nutrition.bikeFlatulence = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bikeFlatulence">Flatulance</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeCramping"
+                    (change)="update('bikeCramping', nutrition.bikeCramping, 'nutrition')"
+                    [ngModel]="nutrition.bikeCramping" (ngModelChange)="nutrition.bikeCramping = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bikeCramping">Cramping</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeBonk"
+                    (change)="update('bikeBonk', nutrition.bikeBonk, 'nutrition')"
+                    [ngModel]="nutrition.bikeBonk" (ngModelChange)="nutrition.bikeBonk = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bikeBonk">Bonk</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bikeOther"
+                    (change)="update('bikeOther', nutrition.bikeOther, 'nutrition')"
+                    [ngModel]="nutrition.bikeOther" (ngModelChange)="nutrition.bikeOther = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-0 text-xs" for="bikeOther">Other</label>
+                </div>
+              </div>
+            </div>
+            <div class="text-nowrap">
+              <label for="" class="text-xs mb-0 mr-3">Was your bike nutrition successful?</label>
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">{{ nutrition.bikeNutritionSuccess ? 'Yes' : 'No' }}</span>
+                <span>
+                  <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" (click)="update('bikeNutritionSuccess', 1, 'nutrition'); nutrition.bikeNutritionSuccess = 1" type="button">Yes</button>
+              <button class="dropdown-item" (click)="update('bikeNutritionSuccess', 0, 'nutrition'); nutrition.bikeNutritionSuccess = 0" type="button">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box bike-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="displayNutrition == 'bike' && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-11 row align-items-center justify-content-between pl-5 pl-lg-0">
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="bikeExternalFactors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">Significant External Factors {{ details.uiRaceDetails.bikeExternalFactors ? '(YES)' : '(NO)' }}</span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="bikeExternalFactors">
+                <button class="dropdown-item" (click)="update('bikeExternalFactors', 1); details.uiRaceDetails.bikeExternalFactors = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('bikeExternalFactors', 0); details.uiRaceDetails.bikeExternalFactors = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="bikeNutritionalFactors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">Significant Nutritional Factors {{ details.uiRaceDetails.bikeNutritionalFactors ? '(YES)' : '(NO)' }}</span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="bikeNutritionalFactors">
+                <button class="dropdown-item" (click)="update('bikeNutritionalFactors', 1); details.uiRaceDetails.bikeNutritionalFactors = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('bikeNutritionalFactors', 0); details.uiRaceDetails.bikeNutritionalFactors = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="bikeResultValidForAnalysis" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">
+                  Is result valid for analysis?
+                  <ng-container [ngSwitch]="details.uiRaceDetails.bikeResultValidForAnalysis">
+                    <ng-container *ngSwitchCase="1">(YES)</ng-container>
+                    <ng-container *ngSwitchCase="0">(NO)</ng-container>
+                  </ng-container>
+                </span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="bikeResultValidForAnalysis">
+                <button class="dropdown-item" (click)="update('bikeResultValidForAnalysis', 1); details.uiRaceDetails.bikeResultValidForAnalysis = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('bikeResultValidForAnalysis', 0); details.uiRaceDetails.bikeResultValidForAnalysis = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <button class="col-12 col-lg-2 btn btn-primary text-body text-xs px-3" (click)="showComments('bike'); commentsPlannedBikeVisible = true;">Comments</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-box bike-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="comments.bike && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-11 d-flex flex-wrap align-items-center justify-content-between pr-5 pl-5 pl-sm-0">
+            <div class="position-relative">
+              <label for="bike-overall-rank" class="inside-label">Overall Rank</label>
+              <input id="bike-overall-rank" type="text" [class.border-danger]="bikeOverallRankError"
+                [ngModel]="details.uiRaceDetails.bikeOverallRank || ''" (ngModelChange)="details.uiRaceDetails.bikeOverallRank = $event || 0; updateBikeOverallRank($event)"
+                [customTooltip]="bikeOverallRankError" tooltip-type="error"
+                maxlength="4" patternInput pattern="^\d+$">
+            </div>
+            <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.bikeOverallRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalParticipants}} TOP {{ details.uiRaceDetails.bikeOverallRank/details.uiRaceDetails.totalParticipants |percent:'0.0' }}</small>
+            <div class="position-relative">
+              <label for="bike-gender-rank" class="inside-label">Gender Rank</label>
+              <input id="bike-gender-rank" type="text" [class.border-danger]="bikeGenderRankError"
+                [ngModel]="details.uiRaceDetails.bikeGenderRank || ''" (ngModelChange)="details.uiRaceDetails.bikeGenderRank = $event || 0; updateBikeGenderRank($event)"
+                [customTooltip]="bikeGenderRankError" tooltip-type="error"
+                maxlength="4" patternInput pattern="^\d+$">
+            </div>
+            <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.bikeGenderRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalParticipantsInGender}} TOP {{ details.uiRaceDetails.bikeGenderRank/details.uiRaceDetails.totalParticipantsInGender |percent:'0.0' }}</small>
+            <div class="position-relative">
+              <label for="bike-division-rank" class="inside-label">Division Rank</label>
+              <input id="bike-division-rank" type="text" [class.border-danger]="bikeDivisionRankError"
+                [ngModel]="details.uiRaceDetails.bikeDivisionRank || ''" (ngModelChange)="details.uiRaceDetails.bikeDivisionRank = $event || 0; updateBikeDivisionRank($event)"
+                [customTooltip]="bikeDivisionRankError" tooltip-type="error"
+                maxlength="4" patternInput pattern="^\d+$">
+            </div>
+            <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.bikeDivisionRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalInDivision}} TOP {{ details.uiRaceDetails.bikeDivisionRank/details.uiRaceDetails.totalInDivision |percent:'0.0' }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="card-box bike-box rounded shadow border-left border-4 mb-4" *ngIf="comments.bike">
+        <div class="row mx-0 align-items-center">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/bike-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-9 border-right py-3 pr-4">
+            <div class="table-responsive" (pan)="onPan($event)" (panend)="onPanEnd($event)">
+              <table class="table border-top-0 mb-0 text-sm">
+                <thead class="border-top-0">
+                  <tr>
+                    <th scope="col" class="text-small border-top-0">Gears</th>
+                    <th scope="col" class="text-small border-top-0">Usage</th>
+                    <th scope="col" class="text-small border-top-0">Watts</th>
+                    <th scope="col" class="text-small border-top-0">HR</th>
+                    <th scope="col" class="text-small border-top-0">HR Cap</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let bike of bikeSiteSwitched?this.details.bikePlanned.currentBikeUsage : details.bikePlanned.bikeUsage">
+                    <th scope="row"> {{bike.gear}} </th>
+                    <td>{{bike.usage}}</td>
+                    <td>{{bike.watts}}</td>
+                    <td>{{bike.hr}}</td>
+                    <td>{{bike.hrCap}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-12 col-lg-2 py-3 px-4">
+            <div class="row mx-0 justify-content-between">
+              <div class="col-12 col-sm-4 col-lg-12 info-block bg-light mb-3">
+                <div class="stacked-number-container py-3">
+                  <div class="stacked-number-inner">
+                    <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">FTP</h5>
+                    <span class="number-md-sm font-weight-bold">{{bikeSiteSwitched ? details.bikePlanned.currentFtp : details.bikePlanned.ftp}}</span>
+                    <span class="mt-2">
+                      <button class="btn btn-rounded btn-sm btn-outline-secondary border-1 p-1 px-2 text-xs"
+                        [class.disabled]="!isSiteSwitchAllowed()"
+                        [customTooltip]="isSiteSwitchAllowed() ? null : race.daysTillRace == 0 ? null : 'Race is too close'"
+                        [tooltip-class]="'tooltip-danger'"
+                        (click)="switchBikeSite()">{{bikeSiteSwitched ? 'Current' : 'Race Site'}}
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="align-self-stretch col-12 col-sm-4 col-lg-12 info-block bg-light mb-3">
+                <div class="stacked-number-container py-3">
+                  <div class="stacked-number-inner">
+                    <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">LTHR</h5>
+                    <span class="number-md-sm font-weight-bold">{{details.bikePlanned.lthr}}</span>
+                  </div>
+                </div>
+              </div>
+              <button class="align-self-center col-12 col-sm-3 col-lg-12 btn btn-block text-sm"
+                [class.btn-primary]="commentsPlannedBikeVisible"
+                [class.btn-default]="!commentsPlannedBikeVisible"
+                (click)="commentsPlannedBikeVisible = !commentsPlannedBikeVisible">Notes</button>
+              <!-- <div class="col">
+                <div class="info-block bg-light h-100">
+                  <div class="stacked-number-container py-3">
+                    <div class="stacked-number-inner">
+                      <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">HR</h5>
+                      <span class="number-md-sm font-weight-bold">{{details.bikePlanned.hr}}</span>
+                      <h5 *ngIf="race.daysTillRace == 0" class="text-body-accent mb-2 mt-2 text-uppercase text-xs font-weight-bold">HR
+                        Actual</h5>
+                      <input type="text" *ngIf="race.daysTillRace == 0" class=" actual-split font-weight-bold text-center text-muted"
+                        placeholder="00:00:00" [dropSpecialCharacters]="false" mask="00:00:00" [(ngModel)]="details.uiRaceDetails.bikeHrActual"
+                        (change)="update('bikeHrActual', details.uiRaceDetails.bikeHrActual,'')">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="info-block bg-light h-100">
+                  <div class="stacked-number-container py-3">
+                    <div class="stacked-number-inner">
+                      <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Pace Per Mile</h5>
+                      <span class="number-md-sm font-weight-bold">{{details.bikePlanned.power}}</span>
+                      <h5 *ngIf="race.daysTillRace == 0" class="text-body-accent mb-2 mt-2 text-uppercase text-xs font-weight-bold">Power
+                        Actual</h5>
+                      <input type="text" *ngIf="race.daysTillRace == 0" class=" actual-split font-weight-bold text-center text-muted"
+                        placeholder="00:00:00" [dropSpecialCharacters]="false" mask="00:00:00" [(ngModel)]="details.uiRaceDetails.bikePowerActual"
+                        (change)="update('bikePowerActual', details.uiRaceDetails.bikePowerActual,'')">
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <div *ngIf="commentsPlannedBikeVisible" [@ngIfExpandHeight] class="card-footer py-4 border-0 overflow-hidden">
+          <div class="comment-block">
+            <textarea name="planned-comment" (change)="update('commentsPlannedBike', nutrition.commentsPlannedBike,'nutrition')"
+              [(ngModel)]="nutrition.commentsPlannedBike" id="planned-comment" class="styled-textarea" placeholder="Notes..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="sep mb-3">
+        <div class="line-behind section-divider">
+          <span class="position-relative time-input-wrap" [class.filled]="actualBRTransitionTime.value">
+            <span class="time-input-label" *ngIf="actualBRTransitionTime.value">T2 |&nbsp;</span>
+            <input id="t2" placeholder="Enter T2 Time" class="btn btn-outline-secondary px-3 time-input"
+              timeFormatMask includeHour="true"
+              #actualBRTransitionTime="ngModel"
+              [timePattern]="timePattern"
+              [ngModel]="details.uiRaceDetails.actualBRTransitionTime"
+              (ngModelChange)="updateActualBRTransitionTime($event)"
+              [customTooltip]="isActualBRTransitionTimeError === 'format' ? 'Please provide value in the format 00:00:00' : isActualBRTransitionTimeError === 'required' ? 'This field is required' : isActualBRTransitionTimeError"  tooltip-class="tooltip-danger">
+          </span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="details.raceEventDetails.runDistance">
+      <div class="card-box run-box rounded shadow justify-content-between align-items-center border-left border-4 mb-4">
+        <div class="row">
+          <div class="col-12 col-lg-4 pr-lg-0">
+            <div class="row h-100">
+              <div class="col-12 col-lg-6 pr-lg-0">
+                <div class="h-100 d-flex flex-column align-items-center justify-content-center py-5 py-sm-3">
+                  <div class="tridot-score run score-lg">
+                    <span *ngIf="race.daysTillRace != 0">{{details.runPlanned.dotScore}}</span>
+                    <span *ngIf="race.daysTillRace == 0">{{details.runActual.dotScore}}</span>
+                  </div>
+                  <div class="d-none d-lg-block btn-container mt-3">
+                    <div [ngClass]="{'btn-primary': comments.run, 'btn-default': !comments.run }" class="btn border rounded" style="padding: 6px 12px;" (click)="showComments('run')">
+                      <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/pace-icon.svg'"></div>
+                    </div>
+                    <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                      <div *ngSwitchCase="true" class="btn btn-default border rounded" style="padding: 6px 12px;" [customTooltip]="upgradeTemplate" [hide-delay]="1000">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                      </div>
+                      <div *ngSwitchCase="false" [ngClass]="{'btn-primary': displayNutrition == 'run', 'btn-default': displayNutrition != 'run' }"
+                        class="btn border rounded" style="padding: 6px 12px;" (click)="showNutrition('run')">
+                        <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6 pl-lg-0">
+                <div class="info-block bg-light h-100">
+                  <div class="stacked-number-container py-4" (mouseenter)="toggleDistanceInput('run')" (mouseleave)="toggleDistanceInput()">
+                    <div class="stacked-number-inner">
+                      <h5 class="text-sm text-body-accent text-uppercase font-weight-bold">Distance</h5>
+                      <ng-container *ngTemplateOutlet="distanceControls; context: {$implicit: 'run'}"></ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row pt-4 pr-4 pb-4 pl-4 pl-lg-0">
+              <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100">
+                  <div class="stacked-number-container py-3">
+                    <div class="stacked-number-inner py-4" (mouseenter)="toggleElevationInput('run')" (mouseleave)="toggleElevationInput()">
+                      <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Elev Change</h5>
+                      <ng-container *ngTemplateOutlet="elevationControls; context: {$implicit: 'run'}"></ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected Split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.runPlanned.split |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualRun || '00:00:00' |timeFormat }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 mt-3 text-uppercase text-xs font-weight-bold">Split</h5>
+                        <input
+                          type="text"
+                          class="actual-split font-weight-bold text-center text-muted shadow rounded {{actualRunError?'border-1 border border-danger':'border-0'}} p-2"
+                          timeFormatMask includeHour="true"
+                          [timePattern]="timePattern"
+                          [(ngModel)]="details.uiRaceDetails.actualRun"
+                          (ngModelChange)="updateActualRun($event)"
+                          [customTooltip]="actualRunError" tooltip-type="error"
+                        >
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.runPlanned.split |timeFormat }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-3 mb-2 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected Pace</h5>
+                        <span class="number-sm font-weight-bold">
+                          {{details.runPlanned.pace | timeFormat}}
+                        <span class="unit text-lowercase d-inline">Per {{details.athleteProfile.measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                        </span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">
+                          {{details.runActual.pace || 0 | timeFormat}}
+                          <span class="unit-sm text-lowercase d-inline">Per {{details.athleteProfile.measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                        </span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Speed</h5>
+                        <span class="number-sm font-weight-bold">
+                          {{details.runActual.pace | timeFormat}}
+                          <span class="unit text-lowercase d-inline">Per {{details.athleteProfile.measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                        </span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">
+                          {{details.runPlanned.pace | timeFormat}}
+                          <span class="unit-sm text-lowercase d-inline">Per {{details.athleteProfile.measurementSystem == 'standard' ? 'Mi' : 'Km'}}</span>
+                        </span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                <div class="info-block bg-light h-100 py-3">
+                  <div class="stacked-number-container py-4">
+                    <div class="stacked-number-inner">
+                      <ng-container *ngIf="race.daysTillRace != 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">Projected EN split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.runPlanned.ensSplit |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.uiRaceDetails.actualRunEn || '00:00:00' |timeFormat }}</span>
+                      </ng-container>
+                      <ng-container *ngIf="race.daysTillRace == 0">
+                        <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">EN split</h5>
+                        <span class="number-sm font-weight-bold">{{ details.uiRaceDetails.actualRunEn |timeFormat }}</span>
+                        <hr class="mt-2 mb-1">
+                        <span class="number-sm-sub font-weight-bold">{{ details.runPlanned.ensSplit |timeFormat }}</span>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 d-flex d-lg-none align-items-center justify-content-center">
+                <div class="btn-container mt-3">
+                  <div [ngClass]="{'btn-primary': comments.run, 'btn-default': !comments.run }" class="btn border rounded" style="padding: 6px 12px;" (click)="showComments('run')">
+                    <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/pace-icon.svg'"></div>
+                  </div>
+                  <ng-container [ngSwitch]="details.athleteProfile.subscriptionLevelId === 10">
+                    <div *ngSwitchCase="true" class="btn btn-default border rounded" style="padding: 6px 12px;" [customTooltip]="upgradeTemplate" [hide-delay]="1000">
+                      <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                    </div>
+                    <div *ngSwitchCase="false" [ngClass]="{'btn-primary': displayNutrition == 'run', 'btn-default': displayNutrition != 'run' }"
+                      class="btn border rounded" style="padding: 6px 12px;" (click)="showNutrition('run')">
+                      <div class="icon-15 inline-svg" [inlineSVG]="'../../../assets/img/svg/icons/nutrition-icon.svg'"></div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box run-box rounded shadow border-left border-4 mb-4" *ngIf="displayNutrition == 'run'">
+        <div class="row mx-md-0">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-4 border-right py-sm-3 pr-sm-4 pl-sm-4 pl-lg-0">
+            <div class="comment-header m-3 m-sm-0">
+              <h5 class="mt-1 mb-3 text-center text-md-left text-body font-weight-bold">Planned</h5>
+            </div>
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" id="planned-comment" (change)="update('nutritionNotesPlannedRun', nutrition.nutritionNotesPlannedRun,'nutrition')"
+                [(ngModel)]="nutrition.nutritionNotesPlannedRun" class="styled-textarea" placeholder="Nutrition Plan"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-12 col-lg-6 pl-0">
+                <div class="row pb-2 border-bottom text-sm px-0 ml-3 ml-sm-0">
+                  <div class="col-6 pl-lg-0">Total</div>
+                  <div class="col-6 pl-lg-0">Rate/Hour</div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0" [class.border-danger]="caloriesPlannedRunError"
+                  [ngModel]="nutrition.caloriesPlannedRun || ''" (ngModelChange)="nutrition.caloriesPlannedRun = $event || 0; updateCalories('caloriesPlannedRun', $event, 0, 2000, 'caloriesPlannedRunError')" type="text" placeholder="0"
+                  [customTooltip]="caloriesPlannedRunError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled"
+                  [ngModel]="getRatePerHour('calories', 'run', 'planned') || ''" type="text" placeholder="00" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="text-sm text-body mr-3" *ngIf="local.primaryCalorieSourcePlannedRun">
+                      {{local.primaryCalorieSourcePlannedRun}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieSourcePlannedRun" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieSourcePlannedRun)?
+                      getSource(nutrition.primaryCalorieSourcePlannedRun) : 'Primary Calories Source' }} </span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieSourcePlannedRun', calorie.value,'nutrition');local.primaryCalorieSourcePlannedRun = calorie.name"
+                      *ngFor="let calorie of calorie_source" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="fluidsPlannedRunError"
+                  [ngModel]="nutrition.fluidsPlannedRun || ''" (ngModelChange)="nutrition.fluidsPlannedRun = $event || 0; updateFluids('fluidsPlannedRun', $event, 'fluidsPlannedRunError', 2)" type="text" placeholder="0 oz"
+                  [customTooltip]="fluidsPlannedRunError" tooltip-type="error"
+                  maxlength="3" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled px-0" 
+                  [ngModel]="getRatePerHour('fluids', 'run', 'planned') || ''" type="text" placeholder="0 oz" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieFormPlannedRun" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieFormPlannedRun}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieFormPlannedRun" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieFormPlannedRun)?
+                      getForm(nutrition.primaryCalorieFormPlannedRun) : 'Primary Calorie Form' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieFormPlannedRun', calorie.value,'nutrition');local.primaryCalorieFormPlannedRun = calorie.name"
+                      *ngFor="let calorie of calorie_form" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="sodiumPlannedRunError"
+                  [ngModel]="nutrition.sodiumPlannedRun || ''" (ngModelChange)="nutrition.sodiumPlannedRun = $event || 0; updateSodium('sodiumPlannedRun', $event, 0, 3500, 'sodiumPlannedRunError')" type="text" placeholder="0 mg"
+                  [customTooltip]="sodiumPlannedRunError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$"
+                  [disabled]="race.daysTillRace == 0">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled" 
+                  [ngModel]="getRatePerHour('sodium', 'run', 'planned') || ''" type="text" placeholder="0 oz" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box run-box rounded shadow border-left border-4 mb-4" *ngIf="displayNutrition == 'run' && race.daysTillRace == 0">
+        <div class="row mx-md-0">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-4 border-right py-sm-3 pr-sm-4 pl-sm-4 pl-lg-0">
+            <div class="comment-header m-3 m-sm-0">
+              <h5 class="mt-1 mb-3 text-center text-md-left text-body font-weight-bold">Actual</h5>
+            </div>
+            <div class="comment-block m-3 m-sm-0">
+              <textarea name="planned-comment" id="planned-comment" (change)="update('nutritionNotesActualRun', nutrition.nutritionNotesActualRun,'nutrition')"
+                [(ngModel)]="nutrition.nutritionNotesActualRun" class="styled-textarea" placeholder="Nutrition Plan"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-12 col-lg-6 pl-0">
+                <div class="row pb-2 border-bottom text-sm px-0 ml-3 ml-sm-0">
+                  <div class="col-6 pl-lg-0">Total</div>
+                  <div class="col-6 pl-lg-0">Rate/Hour</div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="caloriesActualRunError"
+                  [ngModel]="nutrition.caloriesActualRun || ''" (ngModelChange)="nutrition.caloriesActualRun = $event || 0; updateCalories('caloriesActualRun', $event, 0, 2000, 'caloriesActualRunError')" type="text" placeholder="0"
+                  [customTooltip]="caloriesActualRunError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled px-0"
+                  [ngModel]="getRatePerHour('calories', 'run', 'actual') || ''" type="text" placeholder="00" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Calories</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block btn-primary px-3 py-2" (click)="moveActualRun()">Copy from Planned</button>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" [class.border-danger]="fluidsActualRunError"
+                  [ngModel]="nutrition.fluidsActualRun || ''" (ngModelChange)="nutrition.fluidsActualRun = $event || 0; updateFluids('fluidsActualRun', $event, 'fluidsActualRunError', 2)"
+                  type="text" placeholder="0 oz"
+                  [customTooltip]="fluidsActualRunError" tooltip-type="error"
+                  maxlength="3" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>  
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled" 
+                  [ngModel]="getRatePerHour('fluids', 'run', 'actual') || ''" type="text" placeholder="0 oz" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Fluids</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieSourceActualRun" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieSourceActualRun}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieSourceActualRun" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieSourceActualRun)?
+                      getSource(nutrition.primaryCalorieSourceActualRun) : 'Primary Calorie Source' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieSourceActualRun', calorie.value,'nutrition');local.primaryCalorieSourceActualRun = calorie.name"
+                      *ngFor="let calorie of calorie_source" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row my-sm-4 px-sm-2 align-items-center mb-3 mb-sm-0">
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="styled-input w-100 text-center px-0 ml-3 ml-sm-0" type="text" [class.border-danger]="sodiumActualRunError"
+                  [ngModel]="nutrition.sodiumActualRun || ''" (ngModelChange)="nutrition.sodiumActualRun = $event || 0; updateSodium('sodiumActualRun', $event, 0, 3500, 'sodiumActualRunError')"
+                  [customTooltip]="sodiumActualRunError" tooltip-type="error"
+                  maxlength="4" patternInput pattern="^\d+$">
+              </div>
+              <div class="col-3 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-3 col-lg-1 px-lg-0">
+                <input id="calories" class="w-100 text-center disabled px-0"
+                  [ngModel]="getRatePerHour('sodium', 'run', 'actual') || ''" type="text" placeholder="0 mg" disabled>
+              </div>
+              <div class="col-2 col-lg-2">
+                <label for="calories" class="font-weight-bold">Sodium</label>
+              </div>
+              <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="mx-3 mx-sm-0">
+                  <button type="button" class="btn btn-block dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span *ngIf="local.primaryCalorieFormActualRun" class="text-sm text-body mr-3">
+                      {{local.primaryCalorieFormActualRun}}
+                    </span>
+                    <span *ngIf="!local.primaryCalorieFormActualRun" class="text-sm text-body mr-3">
+                      {{(nutrition.primaryCalorieFormActualRun)?
+                      getForm(nutrition.primaryCalorieFormActualRun) : 'Primary Calorie Form' }}</span>
+                    <span class="">
+                      <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                    </span>
+                  </button>
+                  <div class="dropdown-menu w-100">
+                    <button class="dropdown-item" (click)="update('primaryCalorieFormActualRun', calorie.value,'nutrition');local.primaryCalorieFormActualRun = calorie.name"
+                      *ngFor="let calorie of calorie_form" type="button">{{calorie.name | ucwords}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box run-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="displayNutrition == 'run' && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-11 d-flex flex-wrap align-items-center">
+            <div class="border-right mr-3 pr-1">
+              <div class="form-check form-check-inline">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bloatingRun"
+                    (change)="update('bloatingRun', nutrition.bloatingRun, 'nutrition')"
+                    [ngModel]="nutrition.bloatingRun" (ngModelChange)="nutrition.bloatingRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bloatingRun">Bloating</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="nauseaRun"
+                    (change)="update('nauseaRun', nutrition.nauseaRun, 'nutrition')"
+                    [ngModel]="nutrition.nauseaRun" (ngModelChange)="nutrition.nauseaRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="nauseaRun">Nausea</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="diarrheaRun"
+                    (change)="update('diarrheaRun', nutrition.diarrheaRun, 'nutrition')"
+                    [ngModel]="nutrition.diarrheaRun" (ngModelChange)="nutrition.diarrheaRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="diarrheaRun">Diarrhea</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="flatulenceRun"
+                    (change)="update('flatulenceRun', nutrition.flatulenceRun, 'nutrition')"
+                    [ngModel]="nutrition.flatulenceRun" (ngModelChange)="nutrition.flatulenceRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="flatulenceRun">Flatulance</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="crampingRun"
+                    (change)="update('crampingRun', nutrition.crampingRun, 'nutrition')"
+                    [ngModel]="nutrition.crampingRun" (ngModelChange)="nutrition.crampingRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="crampingRun">Cramping</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="bonkRun"
+                    (change)="update('bonkRun', nutrition.bonkRun, 'nutrition')"
+                    [ngModel]="nutrition.bonkRun" (ngModelChange)="nutrition.bonkRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-3 text-xs" for="bonkRun">Bonk</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="otherRun"
+                    (change)="update('otherRun', nutrition.otherRun, 'nutrition')"
+                    [ngModel]="nutrition.otherRun" (ngModelChange)="nutrition.otherRun = $event ? 1 : 0">
+                  <label class="custom-control-label custom-control-label-sm mr-0 text-xs" for="otherRun">Other</label>
+                </div>
+              </div>
+            </div>
+            <div class="text-nowrap">
+              <label for="" class="text-sm mb-0 mr-3">Was your run nutrition successful?</label>
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-3">{{ nutrition.nutritionSuccessRun ? 'Yes' : 'No' }}</span>
+                <span>
+                  <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu">
+              <button class="dropdown-item" (click)="update('nutritionSuccessRun', 1, 'nutrition'); nutrition.nutritionSuccessRun = 1" type="button">Yes</button>
+              <button class="dropdown-item" (click)="update('nutritionSuccessRun', 0, 'nutrition'); nutrition.nutritionSuccessRun = 0" type="button">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box run-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="displayNutrition == 'run' && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-none d-lg-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-12 col-lg-11 row align-items-center justify-content-between pl-5 pl-lg-0">
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="runExternalFactors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">Significant External Factors {{ details.uiRaceDetails.runExternalFactors ? '(YES)' : '(NO)' }}</span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="runExternalFactors">
+                <button class="dropdown-item" (click)="update('runExternalFactors', 1); details.uiRaceDetails.runExternalFactors = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('runExternalFactors', 0); details.uiRaceDetails.runExternalFactors = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="runNutritionalFactors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">Significant Nutritional Factors {{ details.uiRaceDetails.runNutritionalFactors ? '(YES)' : '(NO)' }}</span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="runNutritionalFactors">
+                <button class="dropdown-item" (click)="update('runNutritionalFactors', 1); details.uiRaceDetails.runNutritionalFactors = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('runNutritionalFactors', 0); details.uiRaceDetails.runNutritionalFactors = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <div class="col-12 col-lg-2 btn-group">
+              <button type="button" class="btn dropdown-toggle shadow px-3 py-2 btn-sm" id="runResultValidForAnalysis" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-xs text-body mr-2">
+                  Is result valid for analysis?
+                  <ng-container [ngSwitch]="details.uiRaceDetails.runResultValidForAnalysis">
+                    <ng-container *ngSwitchCase="1">(YES)</ng-container>
+                    <ng-container *ngSwitchCase="0">(NO)</ng-container>
+                  </ng-container>
+                </span>
+                <span><div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div></span>
+              </button>
+              <div class="dropdown-menu" role="menu" aria-labelledby="runResultValidForAnalysis">
+                <button class="dropdown-item" (click)="update('runResultValidForAnalysis', 1); details.uiRaceDetails.runResultValidForAnalysis = 1" type="button">Yes</button>
+                <button class="dropdown-item" (click)="update('runResultValidForAnalysis', 0); details.uiRaceDetails.runResultValidForAnalysis = 0" type="button">No</button>
+              </div>
+            </div>
+            <div class="d-none d-lg-block divider"></div>
+            <button class="col-12 col-lg-2 btn btn-primary text-body text-xs px-3" (click)="showComments('run'); commentsPlannedRunVisible = true;">Comments</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-box run-box rounded shadow border-left border-4 mb-4 py-3" *ngIf="comments.run && race.daysTillRace == 0">
+        <div class="d-flex">
+          <div class="col-1 d-flex flex-wrap align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-11 d-flex align-items-center justify-content-between pr-5 pl-5 pl-sm-0">
+            <div class="position-relative">
+              <label for="run-overall-rank" class="inside-label">Overall Rank</label>
+              <input id="run-overall-rank" type="text" [class.border-danger]="runOverallRankError"
+                [ngModel]="details.uiRaceDetails.runOverallRank || ''" (ngModelChange)="details.uiRaceDetails.runOverallRank = $event || 0; updateRunOverallRank($event)"
+                [customTooltip]="runOverallRankError" tooltip-type="error"
+                maxlength="4" patternInput pattern="^\d+$">
+            </div>
+            <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.runOverallRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalParticipants}} TOP {{ details.uiRaceDetails.runOverallRank/details.uiRaceDetails.totalParticipants |percent:'0.0' }}</small>
+            <div class="position-relative">
+              <label for="run-gender-rank" class="inside-label">Gender Rank</label>
+              <input id="run-gender-rank" type="text" [class.border-danger]="runGenderRankError"
+                [ngModel]="details.uiRaceDetails.runGenderRank || ''" (ngModelChange)="details.uiRaceDetails.runGenderRank = $event || 0; updateRunGenderRank($event)"
+                [customTooltip]="runGenderRankError" tooltip-type="error"
+                maxlength="4" patternInput pattern="^\d+$">
+            </div>
+            <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.runGenderRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalParticipantsInGender}} TOP {{ details.uiRaceDetails.runGenderRank/details.uiRaceDetails.totalParticipantsInGender |percent:'0.0' }}</small>
+            <div class="position-relative">
+              <label for="run-division-rank" class="inside-label">Division Rank</label>
+              <input id="run-division-rank" type="text" [class.border-danger]="runDivisionRankError"
+                [ngModel]="details.uiRaceDetails.runDivisionRank || ''" (ngModelChange)="details.uiRaceDetails.runDivisionRank = $event || 0; updateRunDivisionRank($event)"
+                [customTooltip]="runDivisionRankError" tooltip-type="error"
+                maxlength="4" patternInput pattern="^\d+$">
+            </div>
+            <small class="d-none d-lg-inline" [style.visibility]="details.uiRaceDetails.runDivisionRank?'visible':'hidden'">OF {{details.uiRaceDetails.totalInDivision}} TOP {{ details.uiRaceDetails.runDivisionRank/details.uiRaceDetails.totalInDivision |percent:'0.0' }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="card-box run-box rounded shadow border-left border-4 mb-4" *ngIf="comments.run">
+        <div class="d-flex align-items-center">
+          <div class="col-1 d-flex align-items-center justify-content-center pr-0">
+            <div  [inlineSVG]="'../../../assets/img/svg/run-logo-sm.svg'" [autosize]="true" style="width: 40px;" class="mx-auto d-inline-block"></div>
+          </div>
+          <div class="col-9 border-right py-3 pr-4">
+            <div class="table-responsive" (pan)="onPan($event)" (panend)="onPanEnd($event)">
+              <table class="table border-top-0 mb-0 text-sm">
+                <thead class="border-top-0">
+                  <tr>
+                    <th scope="col" class="text-small border-top-0">Leg</th>
+                    <th scope="col" class="text-small border-top-0">Miles</th>
+                    <th scope="col" class="text-small border-top-0">Pace</th>
+                    <th scope="col" class="text-small border-top-0">HR</th>
+                    <th scope="col" class="text-small border-top-0">HR Cap</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let step of details.runPlanned.steps">
+                    <th scope="row">{{step.leg}}</th>
+                    <td>{{step.miles}}</td>
+                    <td>{{step.pace}}</td>
+                    <td>{{step.hr}}</td>
+                    <td>{{step.hrCap}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-2 py-3 px-4">
+            <div class="info-block bg-light h-100 py-2 mb-3">
+              <div class="stacked-number-container py-4">
+                <div class="stacked-number-inner">
+                  <h5 class="text-body-accent mb-2 text-uppercase text-xs font-weight-bold">LTHR</h5>
+                  <span class="number-md-sm font-weight-bold">{{details.runPlanned.lthr}}</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block text-sm"
+              [class.btn-primary]="commentsPlannedRunVisible"
+              [class.btn-default]="!commentsPlannedRunVisible"
+              (click)="commentsPlannedRunVisible = !commentsPlannedRunVisible">Notes</button>
+          </div>
+        </div>
+        <div *ngIf="commentsPlannedRunVisible" [@ngIfExpandHeight] class="card-footer py-4 border-0 overflow-hidden">
+          <div class="comment-block">
+            <textarea name="planned-comment" id="planned-comment" (change)="update('commentsPlannedRun', nutrition.commentsPlannedRun,'nutrition')"
+              [(ngModel)]="nutrition.commentsPlannedRun" class="styled-textarea" placeholder="Notes..."></textarea>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- SUMMARY-->
+
+  <div class="card-box rounded shadow border-left border-4 mb-4 py-3">
+    <div class="d-flex w-100 justify-content-around">
+      <div class="position-relative">
+        <span class="text-muted"> Projected EN Time </span>
+        <span class="font-weight-bold"> {{details.uiRaceDetails.projectedTotalTimeEn |timeFormat}} </span>
+      </div>
+      <div class="position-relative">
+        <span class="text-muted"> Projected Time </span>
+        <span class="font-weight-bold"> {{details.uiRaceDetails.projectedTotalTime |timeFormat}} </span>
+      </div>
+      <div class="position-relative" *ngIf="race.daysTillRace == 0">
+        <span class="text-muted"> Actual EN Time </span>
+        <span class="font-weight-bold"> {{details.uiRaceDetails.actualTotalTimeEn |timeFormat}}
+          <!-- <div  [inlineSVG]="'../../../../assets/img/svg/icons/red-up-arrow.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div> <small class="text-danger"> {{details.raceDetails.totalEnDiff}} </small> -->
+        </span>
+      </div>
+      <div class="position-relative" *ngIf="race.daysTillRace == 0">
+        <span class="text-muted"> Actual Time </span>
+        <span class="font-weight-bold"> {{details.uiRaceDetails.actualTotalTime |timeFormat}}
+          <!-- <div  [inlineSVG]="'../../../../assets/img/svg/icons/red-up-arrow.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div> <small class="text-danger"> {{details.raceDetails.totalDiff}} </small>  -->
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="race.daysTillRace == 0 && showBottomSurvey">
+    <app-race-x-environment [race]="race" [details]="details" (updateRaceX)="updateRaceX.emit($event)"></app-race-x-environment>
+    
+  </ng-container>
+
+  <ng-template #upgradeTemplate>
+    <div class="p-2">
+      <p class="p-1">Please Upgrade to Use this Feature</p>
+      <a class="btn btn-primary btn-sm btn-block" routerLink="/user/subscription-options">Upgrade</a>
+    </div>
+  </ng-template>
+</div>
+<div *ngIf="!race && !loading">
+  <div class="card-box rounded shadow border-left border-4 py-5">
+    <div class="row">
+      <div class="col-12">
+        <div class="text-center">
+          <h6 class="font-weight-normal">No races currently scheduled.</h6>
+          <button
+            class="btn btn-default btn-md text-uppercase text-xs mt-3 py-2 px-3"
+            [routerLink] = "['/season-planner/training-phase/add-a-race']"
+          >
+            Add a Race <i class="fal fa-plus ml-1"></i>
+          </button>
+          <button
+            class="btn btn-default btn-md text-uppercase text-xs mt-3 py-2 px-3"
+            [routerLink] = "['/season-planner']"
+          >
+            Season Planner
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #distanceControls let-element>
+  <div class="btn-group mt-1" role="group">
+    <button *ngIf="distanceEditMode(element)" class="btn btn-rounded btn-sm btn-outline-secondary border-1" (click)="distanceInput.focus()"><i class="fas fa-pencil p-0 pl-1"></i></button>
+    <span *ngIf="!distanceEditMode(element)" class="number-md-sm font-weight-bold p-1">{{getDistance(element)}}</span>
+    <input #distanceInput [hidden]="!distanceEditMode(element)"
+      type="number"
+      step="0.01"
+      min="0"
+      [ngModel]="getDistance(element)"
+      (ngModelChange)="updateDistance(element, distanceInput.value)"
+      class="distance-input btn btn-outline-secondary border-1 p-0 px-1 font-weight-bold"
+      [class.border-danger]="distanceErrors[element]" 
+      [customTooltip]="distanceErrors[element]" tooltip-type="error"
+    >
+    <span *ngIf="!distanceUnitEditMode(element)" class="number-md-sm font-weight-bold p-1">{{getUnit(element)}}</span>
+    <button *ngIf="distanceUnitEditMode(element)" class="btn btn-rounded btn-sm btn-outline-secondary border-1 p-0 pr-2 pl-2 text-uppercase font-weight-bold"
+      (click)="toggleUnits(element); updateDistance(element, distanceInput.value, false)"
+    >{{getUnit(element)}}</button>
+  </div>
+</ng-template>
+<ng-template #elevationControls let-element>
+  <div class="btn-group mt-1" role="group">
+    <button *ngIf="elevationEditMode(element)" class="btn btn-rounded btn-sm btn-outline-secondary border-1" (click)="elevationInput.focus()"><i class="fas fa-pencil p-0 pl-1"></i></button>
+    <span *ngIf="!elevationEditMode(element)" class="number-md-sm font-weight-bold p-1">{{getElevation(element)}}</span>
+    <input #elevationInput [hidden]="!elevationEditMode(element)"
+      type="number"
+      step="0.01"
+      min="0"
+      [ngModel]="getElevation(element)"
+      (ngModelChange)="updateElevation(element, elevationInput.value)"
+      class="distance-input btn btn-outline-secondary border-1 p-0 px-1 font-weight-bold"
+      [class.border-danger]="elevationErrors[element]" 
+      [customTooltip]="elevationErrors[element]" tooltip-type="error"
+    >
+    <span class="number-md-sm font-weight-bold p-1"> {{getElevationUnit()}}</span>
+  </div>
+</ng-template>

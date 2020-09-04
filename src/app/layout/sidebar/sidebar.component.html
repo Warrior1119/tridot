@@ -1,0 +1,195 @@
+<nav id="sidebar" class="sidebar" (mouseenter)="isHovering=true" (mouseleave)="isHovering=false">
+  <div class="position-relative">
+    <div class="sidebar-toggle-hover-zone">
+      <button *ngIf="isHovering" [@ngIfFadeIn] [@ngIfFadeOut] class="sidebar-toggle bg-white shadow-sm text-center text-secondary position-absolute d-flex align-items-center justify-content-center {{!getSideBarState() ? 'sidebar-toggle-chevron' : 'sidebar-toggle-burger'}}" (click)="toggleSidebar()">
+        <i *ngIf="getSideBarState()" class="fa fa-bars text-sm"></i>
+        <i *ngIf="!getSideBarState()" class="fa fa-chevron-left text-sm"></i>
+      </button>
+    </div>
+  </div>
+  <div class="sidebar-content">
+    <perfect-scrollbar>
+
+      <div class="sidebar-header">
+
+        <div class="mx-auto">
+          <a class="row" href="/">
+            <div *ngIf="!getSideBarState()" class="sidebar-logo-lg" style="width: 115px;" inlineSVG="../assets/img/svg/logo-white.svg"> </div>
+            <div *ngIf="getSideBarState()" class="sidebar-logo-sm" style="width: 115px;position: relative;right: -150px;" inlineSVG="../assets/img/svg/logo-sm-red.svg"> </div>
+          </a>
+        </div>
+      </div>
+
+      <div *ngIf="profile && !getSideBarState()" [@ngIfExpandHeight] class="sidebar-profile">
+          <div class="d-flex justify-content-center">
+
+              <div class="tridot-score swim" placement="top">
+                <span>{{ swimdot }}</span>
+              </div>
+
+              <div class="tridot-score bike" placement="top">
+                <span>{{ bikedot }}</span>
+              </div>
+
+              <div class="tridot-score run" placement="top">
+                <span>{{ rundot }}</span>
+              </div>
+        </div>
+      </div>
+
+      <div class="sidebar-menu d-flex justify-content-center">
+        <ul class="sidebar-expanded" *ngIf="!getSideBarState()">
+          <li class="sidebar-dropdown">
+            <a class="text-uppercase cursor-pointer d-inline-flex align-items-center justify-content-between" [class.active]="activeMenuItem === 'train'" (click)="toggleActiveMenu('train')">
+              <span class="text-sm font-weight-bold text-white">Train</span>
+              <div class="float-right" inlineSVG="../../../../assets/img/svg/icons/planner-icon.svg" class="nav-icon-lg icon-correction fix-up-2"></div>
+            </a>
+            <div *ngIf="activeMenuItem === 'train'" [@ngIfExpandHeight] class="sidebar-submenu">
+              <ul>
+                <li [class.active]="isLinkActive('/season-planner/training-phase/weekly-summary/daily-workout')"><a routerLink="/season-planner/training-phase/weekly-summary/daily-workout">Today</a></li>
+                <li [class.active]="isLinkActive('/season-planner/training-phase/weekly-summary')"><a routerLink="/season-planner/training-phase/weekly-summary">Calendar</a></li>
+                <li routerLinkActive="active"><a routerLink="/training-intensities">Intensities</a></li>
+                <li routerLinkActive="active"><a routerLink="/assessments">Assessments</a></li>
+
+              </ul>
+            </div>
+          </li>
+          <li class="sidebar-dropdown">
+            <a class="text-uppercase cursor-pointer d-inline-flex align-items-center justify-content-between" [class.active]="activeMenuItem === 'race'" (click)="toggleActiveMenu('race')">
+              <span class="text-sm font-weight-bold text-white">Race</span>
+              <div class="float-right" inlineSVG="../../../../assets/img/svg/icons/race-icon.svg" class="nav-icon-lg icon-correction fix-up-2"></div>
+            </a>
+            <div *ngIf="activeMenuItem === 'race'" [@ngIfExpandHeight] class="sidebar-submenu">
+              <ul>
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/season-planner">Season Planner</a></li>
+                <li routerLinkActive="active"><a routerLink="/racex">RaceX</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="sidebar-dropdown">
+            <a class="text-uppercase cursor-pointer d-inline-flex align-items-center justify-content-between" [class.active]="activeMenuItem === 'engage'" (click)="toggleActiveMenu('engage')">
+              <span class="text-sm font-weight-bold text-white">Engage</span>
+              <div class="float-right" inlineSVG="../../../../assets/img/svg/icons/coach-icon.svg" class="nav-icon-lg icon-correction fix-up-2"></div>
+            </a>
+            <div *ngIf="activeMenuItem === 'engage'" [@ngIfExpandHeight] class="sidebar-submenu">
+              <ul>
+                <li routerLinkActive="active"><a routerLink="/support">Support</a></li>
+                <li *ngIf="!hasCoach" routerLinkActive="active"><a routerLink="/coaches">Coaches</a></li>
+                <li *ngIf="hasCoach" routerLinkActive="active"><a routerLink="/coaches/coach-profile">My Coach</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="sidebar-dropdown">
+            <a class="text-uppercase cursor-pointer d-inline-flex align-items-center justify-content-between" [class.active]="activeMenuItem === 'diagnostics'" (click)="toggleActiveMenu('diagnostics')">
+              <span class="text-sm font-weight-bold text-white">Diagnostics</span>
+              <div class="float-right" inlineSVG="../../../../assets/img/svg/icons/chart-bar-32.svg" class="nav-icon-lg icon-correction fix-up-2"></div>
+            </a>
+            <div *ngIf="activeMenuItem === 'diagnostics'" [@ngIfExpandHeight] class="sidebar-submenu">
+              <ul>
+                <li routerLinkActive="active"><a routerLink="/genetics">PhysiogenomiX</a></li>
+                <li routerLinkActive="active"><a routerLink="/swimform">Swim Form</a></li>
+                <li routerLinkActive="active"><a routerLink="/user/user-profile/tsp">Training Stress Profile</a></li>
+                <li routerLinkActive="active"><a routerLink="/user/user-profile/b2r">B2R Factor</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <ul *ngIf="getSideBarState()" class="sidebar-collapsed float-right">
+          <li #dropdown1="bs-dropdown" dropdown triggers="mouseover" (mouseenter)="dropdown2.isOpen = false; dropdown3.isOpen = false; dropdown4.isOpen = false"
+              class="mt-3">
+            <a class="btn btn-lg rounded btn-sidebar-collapsed cursor-pointer d-inline-block" [class.active]="activeMenuItem === 'train'" dropdownToggle>
+              <div inlineSVG="../../../../assets/img/svg/icons/planner-icon.svg" class="nav-icon-sm"></div>
+            </a>
+            <ul class="dropdown-menu arrow_box" *dropdownMenu>
+              <li role="menuitem" [class.active]="isLinkActive('/season-planner/training-phase/weekly-summary/daily-workout')"><a class="dropdown-item"
+                  routerLink="/season-planner/training-phase/weekly-summary/daily-workout">Today</a></li>
+              <li role="menuitem" [class.active]="isLinkActive('/season-planner/training-phase/weekly-summary')"><a class="dropdown-item" routerLink="/season-planner/training-phase/weekly-summary">Calendar</a></li>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/training-intensities">Intensities</a></li>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/assessments">Assessments</a></li>
+            </ul>
+          </li>
+          <li #dropdown2="bs-dropdown" dropdown triggers="mouseover" (mouseenter)="dropdown1.isOpen = false; dropdown3.isOpen = false; dropdown4.isOpen = false">
+            <a class="btn btn-lg rounded btn-sidebar-collapsed cursor-pointer d-inline-block" [class.active]="activeMenuItem === 'race'" dropdownToggle>
+              <div inlineSVG="../../../../assets/img/svg/icons/race-icon.svg" class="nav-icon-sm"></div>
+            </a>
+            <ul class="dropdown-menu arrow_box" *dropdownMenu>
+              <li role="menuitem" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a class="dropdown-item" routerLink="/season-planner">Season Planner</a></li>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/racex">RaceX</a></li>
+            </ul>
+          </li>
+          <li #dropdown3="bs-dropdown" dropdown triggers="mouseover" (mouseenter)="dropdown1.isOpen = false; dropdown2.isOpen = false; dropdown4.isOpen = false">
+            <a class="btn btn-lg rounded btn-sidebar-collapsed cursor-pointer d-inline-block" [class.active]="activeMenuItem === 'engage'" dropdownToggle>
+              <div inlineSVG="../../../../assets/img/svg/icons/coach-icon.svg" class="nav-icon-sm"></div>
+            </a>
+            <ul class="dropdown-menu arrow_box" *dropdownMenu>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/support">Support</a></li>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/coaches">My Coach</a></li>
+            </ul>
+          </li>
+          <li #dropdown4="bs-dropdown" dropdown triggers="mouseover" (mouseenter)="dropdown1.isOpen = false; dropdown2.isOpen = false; dropdown3.isOpen = false">
+            <a class="btn btn-lg rounded btn-sidebar-collapsed cursor-pointer d-inline-block" [class.active]="activeMenuItem === 'diagnostics'" dropdownToggle>
+              <div inlineSVG="../../../../assets/img/svg/icons/chart-bar-32.svg" class="nav-icon-sm"></div>
+            </a>
+            <ul class="dropdown-menu arrow_box" *dropdownMenu>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/swimform">Swim Form</a></li>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/user/user-profile/tsp">Training Stress Profile</a></li>
+              <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" routerLink="/user/user-profile/b2r">B2R Factor</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </perfect-scrollbar>
+  </div>
+  <div class="sidebar-footer">
+    <div *ngIf="!getSideBarState()" class="text-center p-3 footer-btn-group">
+      <button class="btn btn-lg text-xs p-2 mr-1" routerLink="/support">Support</button>
+      <a href="https://shop.tridot.com/collections/all?sort=price-descending" class="btn btn-lg text-xs p-2 ml-1" target="_blank">Store</a>
+    </div>
+    <ng-container *ngIf="profile && profilePicture">
+      <div class="footer-profile-group d-flex flex-row justify-content-between px-3">
+        <ng-container *ngIf="!getSideBarState()">
+          <div class="sidebar-profile-details d-flex align-items-center">
+            <i *ngIf="loading" class="fal fa-spinner fa-spin text-danger"></i>
+            <div *ngIf="!loading" class="mr-1 profile-picture rounded-circle shadow-sm">
+              <img *ngIf="profilePicture" width="55" [src]="profilePicture" alt="">
+            </div>
+            <div class="mx-2">
+              <div class="font-weight-bold text-sm text-white">
+                <span>{{profile.firstName | ucwords}}</span> <span>{{profile.lastName | ucwords}}</span>
+              </div>
+              <div class="text-uppercase" style="line-height:0.5">
+                <span class="text-xxs">{{profile.primaryDistanceName | ucwords}}</span> <span class="text-xxs">/</span>
+                <span class="text-xxs">{{profile.performanceLevelName | ucwords}}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div class="d-flex align-items-center" dropdown [dropup]="true" [class.dropdown-left]="!getSideBarState()">
+          <button *ngIf="!getSideBarState()" class="dropdown-toggle btn text-xl d-flex justify-content-center p-2 ml-1 mr-1" dropdownToggle>
+            <i class="fa fa-cog"></i>
+          </button>
+          <div *ngIf="getSideBarState()">
+            <div>
+                <i *ngIf="loading" class="fal fa-spinner fa-spin text-danger"></i>
+                <div *ngIf="!loading" class="mr-1 profile-picture profile-picture-mini rounded-circle shadow-sm">
+                  <img *ngIf="profilePicture" width="35" [src]="profilePicture" alt="">
+                </div>
+            </div>
+            <button class="text-center text-secondary bg-transparent text-xl dropdown-toggle py-2 mr-2"><i class="fa fa-ellipsis-h pr-1" dropdownToggle></i></button>
+          </div>
+          <ul class="dropdown-menu dropup" 
+                [class.profile-menu]="!getSideBarState()" 
+                [class.profile-menu-mini]="getSideBarState()" *dropdownMenu  style = "bottom: 48px">
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/user/user-profile/athlete-profile-settings">Profile</a></li>
+            <li *ngIf="!isCoachAccess" role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/user/user-profile/account-settings">Account</a></li>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/user/user-profile/preferences">Preferences</a></li>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/user/user-profile/permissions/health-related-data">Permissions</a></li>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/user/user-profile/my-bikes">Gear</a></li>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" routerLink="/user/devices">Connections</a></li>
+            <li role="menuitem" routerLinkActive="active"><a class="dropdown-item" role="button" (click)="logout()">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</nav>

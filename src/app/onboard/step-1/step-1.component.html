@@ -1,0 +1,51 @@
+<div class="container h-100 green-borders">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-lg-8 col-xl-6 text-center">
+      <form [formGroup]="step1Form" #form="ngForm">
+        <div class="box shadow rounded">
+          <div class="row">
+            <div class="col">
+              <h1 class="display-1 text-darker text-uppercase page-heading">Let's Get Started
+              </h1>
+              <p class="text-drk mb-4">Tell us a little about yourself.</p>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col">
+              <label for="name" class="inside-label inside-label-lg">
+                <span class="custom-tooltip" *ngIf="step1Form.hasError('required', 'name') && (form.submitted || step1Form.get('name').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext">Please enter your full name</span>
+                </span>
+                <span class="custom-tooltip" *ngIf="step1Form.hasError('pattern', 'name') && (form.submitted || step1Form.get('name').touched)">
+                  <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+                  <span class="custom-tooltiptext">Please include both your first and last name</span>
+                </span>
+
+                <i class="far fa-check-circle text-success cursor-pointer" *ngIf="!step1Form.hasError('pattern', 'name') && !step1Form.hasError('required', 'name') && step1Form.get('name').touched"></i>
+              </label>
+
+              <input type="name"
+                class="form-control {{form.submitted ? step1Form.get('name').invalid ? 'border border-1 border-danger':'border border-1 border-success':''}}"
+                [(ngModel)]="name"
+                formControlName="name"
+                autocomplete="name"
+                placeholder="Please enter your first and last name">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 pr-md-2 mb-3 mb-sm-3 mb-md-0">
+              <button type="submit" class="btn btn-lg btn-block btn-info text-md"
+                (click)="nextStep('M', form.valid)">I'm a man </button>
+            </div>
+            <div class="col-sm-12 col-md-6 pl-md-2">
+              <button type="submit" class="btn btn-lg btn-block btn-info text-md"
+                (click)="nextStep('F', form.valid)">I'm a woman</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

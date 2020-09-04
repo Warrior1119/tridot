@@ -1,0 +1,30 @@
+<input type="file" #fileInput style="display: none !important;" accept="image/*" (change)="onFileChanged($event, fileInput)">
+
+<div class="card">
+  <div class="card-header bg-white">
+    My photos
+  </div>
+  <div class="card-body px-4 pb-2">
+    <div class="row">
+      <div class="col-4 mb-3" *ngFor="let photo of photos; let i = index">
+        <div class="coach-photo">
+          <div class="image" [class.image--new]="photo.new" (click)="editPhoto(i); fileInput.click()">
+            <img [src]="photo.url" alt="" class="w-100" />
+<!--            <button *ngIf="photo.id" class="coach-photo__delete" (click)="deletePhoto(photo.id)"><i class="fas fa-times"></i></button>-->
+          </div>
+          <button *ngIf="!photo.id" class="btn btn-sm btn-default w-100 mt-2 text-uppercase" (click)="editPhoto(i); fileInput.click()">
+            <i *ngIf="loading && currentEditingPhoto === i" class="fa fa-spin fa-spinner"></i>
+            Add
+          </button>
+          <button *ngIf="photo.id && deletingItem != i" class="btn btn-sm text-xs btn-danger w-100 mt-2 text-uppercase" (click)="setDeleting(i)">
+            Remove
+          </button>
+          <button *ngIf="photo.id && deletingItem == i" class="btn btn-sm text-xs btn-danger w-100 mt-2 text-uppercase" (click)="deletePhoto(photo.id)">
+            <i *ngIf="loading" class="fa fa-spin fa-spinner"></i>
+            <span *ngIf="!loading">Confirm</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

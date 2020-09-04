@@ -1,0 +1,5 @@
+<div class="alerts row p-2" *ngIf="alerts">
+  <div class="col text-center">
+    <span *ngFor="let alert of alerts" class="alert alert-{{alert.type}}" role="alert"> {{alert.msg}}</span>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27.648 27.648">
+  <defs>
+    <style>
+      .cal-icon-cls-1 {
+        fill: none;
+        stroke: #808e98;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <g id="Group_531" data-name="Group 531" transform="translate(-1011 -80.176)">
+    <line id="Line_19" data-name="Line 19" class="cal-icon-cls-1" x1="25.648" transform="translate(1012 89.725)"/>
+    <rect id="Rectangle_25" data-name="Rectangle 25" class="cal-icon-cls-1" width="25.648" height="23.084" transform="translate(1012 83.741)"/>
+    <line id="Line_20" data-name="Line 20" class="cal-icon-cls-1" y2="5.13" transform="translate(1024.824 81.176)"/>
+    <line id="Line_21" data-name="Line 21" class="cal-icon-cls-1" y2="5.13" transform="translate(1017.985 81.176)"/>
+    <line id="Line_22" data-name="Line 22" class="cal-icon-cls-1" y2="5.13" transform="translate(1031.664 81.176)"/>
+    <path id="Path_66" data-name="Path 66" class="cal-icon-cls-1" d="M14,32v8.549H24.259V36.275h5.13V32Z" transform="translate(1003.13 62)"/>
+    <line id="Line_23" data-name="Line 23" class="cal-icon-cls-1" y2="4.275" transform="translate(1027.389 94)"/>
+    <line id="Line_24" data-name="Line 24" class="cal-icon-cls-1" y2="7.695" transform="translate(1022.259 94.855)"/>
+    <line id="Line_25" data-name="Line 25" class="cal-icon-cls-1" x1="10.259" transform="translate(1017.13 98.275)"/>
+  </g>
+</svg>

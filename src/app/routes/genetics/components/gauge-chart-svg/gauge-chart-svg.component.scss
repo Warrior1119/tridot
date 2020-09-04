@@ -1,0 +1,14 @@
+.svg-container {
+  position: relative; 
+}
+
+.svg-label {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  strong {
+    margin-left: 5px;
+  }
+  max-width: 200px;
+}

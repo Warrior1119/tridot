@@ -1,0 +1,102 @@
+<div class="card mb-4">
+  <div class="card-header bg-white d-flex justify-content-between">
+    <div>My profile</div>
+    <div>
+      <button *ngIf="!editMode" class="btn btn-sm btn-default ml-auto text-uppercase" (click)="enableEditMode()">Edit</button>
+      <button *ngIf="editMode" type="button" class="btn btn-sm btn-default mr-2" (click)="cancel()" [disabled]="loading">Cancel</button>
+      <button *ngIf="editMode" type="submit" class="btn btn-sm btn-success" (click)="valid && save()" [disabled]="loading"><i *ngIf="loading" class="fa fa-spin fa-spinner"></i> Save</button>
+    </div>
+  </div>
+  <div class="card-body px-4 py-3">
+    <div class="info" *ngIf="!editMode">
+      <p>{{ coachProfile.firstName }} {{ coachProfile.lastName }}</p>
+      <p>{{ coachProfile.email }}</p>
+      <p>{{ coachProfile.mobilePhone }}</p>
+      <p>{{ coachProfile.address1 }}</p>
+      <p>{{ coachProfile.address2 }}</p>
+      <p>{{ coachProfile.city }}, {{ coachProfile.state }} {{ coachProfile.zipCode }}</p>
+      <p>{{ coachProfile.countryCode }}</p>
+      <div class="mt-3" >
+        <ul class="coach-social-list list-inline mb-0">
+          <li class="list-inline-item" [ngClass]="{'social-icon-disabled' : !coachProfile.twitter}">
+            <a href="{{'https://twitter.com/'+coachProfile.twitter}}" target="_blank">
+              <div class="social-icons" [inlineSVG]="'../../../assets/img/svg/icons/twitter-profile.svg'"
+              [ngClass]="{'social-icon-disabled' : !coachProfile.twitter}"> </div>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="{{'https://www.facebook.com/'+coachProfile.facebook}}" target="_blank">
+              <div class="social-icons"  [inlineSVG]="'../../../assets/img/svg/icons/facebook-profile.svg'"
+              [ngClass]="{'social-icon-disabled' : !coachProfile.facebook}"> </div>
+            </a>
+          </li>
+          <li class="list-inline-item" [ngClass]="{'social-icon-disabled' : !coachProfile.linkedIn}">
+            <a href="{{'https://www.linkedin.com/in/'+coachProfile.linkedIn}}" target="_blank">
+              <div class="social-icons" [inlineSVG]="'../../../assets/img/svg/icons/linkedin-profile.svg'"
+              [ngClass]="{'social-icon-disabled' : !coachProfile.linkedIn}"> </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div *ngIf="editMode">
+      <div class="row mb-2 mx-0">
+        <div class="col-6 pl-0 pr-1">
+          <input type="text" #firstNameInput class="form-control form-control-sm" placeholder="First Name" [(ngModel)]="coachProfile.firstName" required />
+        </div>
+        <div class="col-6 pr-0 pl-1">
+          <input type="text" #lastNameInput class="form-control form-control-sm" placeholder="Last Name" [(ngModel)]="coachProfile.lastName" required />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="email" class="form-control" placeholder="E-mail" [(ngModel)]="coachProfile.email" required />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="tel" class="form-control" placeholder="Phone" [(ngModel)]="coachProfile.mobilePhone" required />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="text" class="form-control" placeholder="Address 1" [(ngModel)]="coachProfile.address1" required />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="text" class="form-control" placeholder="Address 2" [(ngModel)]="coachProfile.address2" required />
+        </div>
+      </div>
+
+      <div class="form-group mb-2">
+        <ngxgeo-autocomplete id="location-input" [userSettings]="locationSettings"
+                             (componentCallback)="onLocationChange($event)">
+        </ngxgeo-autocomplete>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="text" class="form-control" placeholder="Twitter Profile" [(ngModel)]="coachProfile.twitter" />
+          <div class="social-icons text-box-icon" [inlineSVG]="'../../../assets/img/svg/icons/twitter-profile.svg'"></div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="text" class="form-control" placeholder="Facebook Profile" [(ngModel)]="coachProfile.facebook" />
+          <div class="social-icons text-box-icon" [inlineSVG]="'../../../assets/img/svg/icons/facebook-profile.svg'"></div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-12">
+          <input type="text" class="form-control" placeholder="LinkedIn Profile" [(ngModel)]="coachProfile.linkedIn" />
+          <div class="social-icons text-box-icon" [inlineSVG]="'../../../assets/img/svg/icons/linkedin-profile.svg'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.btn-container {
+  display: inline-block;
+}
+
+.coach-profile-pic {
+  height: 208px;
+  width: 100%;
+  object-fit: contain;
+  background: lightgray;
+}
+
+.coach-card {
+  min-width: 329px;
+  max-width: 329px;
+  margin-bottom: 30px;
+
+  .card-body {
+    .card-text {
+      max-height: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}

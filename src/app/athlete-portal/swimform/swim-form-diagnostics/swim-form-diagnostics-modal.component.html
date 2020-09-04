@@ -1,0 +1,198 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">Diagnostic Questions</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" *ngIf="swimForm && !savedDiagnostics">
+  <div class="">
+    <div class="">
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Have you swam competitively or on a swim team?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="swamInSwimTeam" [(ngModel)]="swimForm.swamInSwimTeam"
+              id="swamInSwimTeamRadio1" value="true">
+            <label class="custom-control-label" for="swamInSwimTeamRadio1">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="swamInSwimTeam" [(ngModel)]="swimForm.swamInSwimTeam"
+              id="swamInSwimTeamRadio2" value="false">
+            <label class="custom-control-label" for="swamInSwimTeamRadio2">No</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Can you swim 400m without stopping, even for a short rest?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="swim400MetersWithoutStopping" [(ngModel)]="swimForm.swim400MetersWithoutStopping"
+              id="swim400MetersWithoutStoppingRadio1" value="true">
+            <label class="custom-control-label" for="swim400MetersWithoutStoppingRadio1">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="swim400MetersWithoutStopping" [(ngModel)]="swimForm.swim400MetersWithoutStopping"
+              id="swim400MetersWithoutStoppingRadio2" value="false">
+            <label class="custom-control-label" for="swim400MetersWithoutStoppingRadio2">No</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Do you feel out of breath when you swim?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="outOfBreath" [(ngModel)]="swimForm.outOfBreath"
+              id="outOfBreathRadio1" value="true">
+            <label class="custom-control-label" for="outOfBreathRadio1">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="outOfBreath" [(ngModel)]="swimForm.outOfBreath"
+              id="outOfBreathRadio2" value="false">
+            <label class="custom-control-label" for="outOfBreathRadio2">No</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Do you swim well in open water relative to the pool?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="openWaterSwim" [(ngModel)]="swimForm.openWaterSwim"
+              id="openWaterSwimRadio1" value="true">
+            <label class="custom-control-label" for="openWaterSwimRadio1">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="openWaterSwim" [(ngModel)]="swimForm.openWaterSwim"
+              id="openWaterSwimRadio2" value="false">
+            <label class="custom-control-label" for="openWaterSwimRadio2">No</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Do you swim slower with a pull buoy than without?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="swimSlowWithPullBuoy" [(ngModel)]="swimForm.swimSlowWithPullBuoy"
+              id="swimSlowWithPullBuoyRadio1" value="true">
+            <label class="custom-control-label" for="swimSlowWithPullBuoyRadio1">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="swimSlowWithPullBuoy" [(ngModel)]="swimForm.swimSlowWithPullBuoy"
+              id="swimSlowWithPullBuoyRadio2" value="false">
+            <label class="custom-control-label" for="swimSlowWithPullBuoyRadio2">No</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Do you normally breathe to one or both sides?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="breathBothSides" [(ngModel)]="swimForm.breathBothSides"
+              id="breathBothSidesRadio1" value="false">
+            <label class="custom-control-label" for="breathBothSidesRadio1">One</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="breathBothSides" [(ngModel)]="swimForm.breathBothSides"
+              id="breathBothSidesRadio2" value="true">
+            <label class="custom-control-label" for="breathBothSidesRadio2">Both</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Which best describes your mindset in the pool?</span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <select class=" p-2 m-2 custom-select custom-select-lg text-md" [(ngModel)]="swimForm.swimMindSet">
+            <option value="anxious">Anxious</option>
+            <option value="frustrated">Frustrated</option>
+            <option value="neutral">Neutral</option>
+            <option value="confident">Confident</option>
+          </select>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">
+            On a 1-10 scale with 1 being "Not driven at all" and 10 being "Very driven," how
+            would you describe your personality?
+        </span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <select class=" p-2 m-2 custom-select custom-select-lg text-md" [(ngModel)]="swimForm.drivenRating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">
+            Overall, how proficient do you consider yourself to be in the other three strokes on
+            a scale of 1-10 (10 being most proficient)?
+        </span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <select class=" p-2 m-2 custom-select custom-select-lg text-md" [(ngModel)]="swimForm.threeStrokesProficient">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between border-bottom">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">
+            Do your arms hit the lane ropes on the lane line test?
+            <button (click)="openLaneLineTestHelp()" style="cursor:pointer; opacity:.8; background: transparent; border: none; outline: none;">
+              <div  [inlineSVG]="'../assets/img/svg/icons/helper-light.svg'" [autosize]="true"  style="width: 20px;" class="mx-auto d-inline-block"></div>
+            </button>
+        </span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="armsHitLanes" [(ngModel)]="swimForm.armsHitLanes"
+              id="armsHitLanesRadio1" value="true">
+            <label class="custom-control-label" for="armsHitLanesRadio1">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input class="custom-control-input" type="radio" name="armsHitLanes" [(ngModel)]="swimForm.armsHitLanes"
+              id="armsHitLanesRadio2" value="false">
+            <label class="custom-control-label" for="armsHitLanesRadio2">No</label>
+          </div>
+        </span>
+      </div>
+      <div class="row py-3 d-flex align-items-center justify-content-between">
+        <span class="col-12 col-sm-9 mb-2 mb-sm-0 text-sm">Stroke Rate (seconds per complete cycle—both arms—between 1.0 and 3.0) </span>
+        <span class="col-12 col-sm-3 text-center text-sm-right">
+          <input type="text" style="width: 100%;" class="{{strokeRateValid ? 'normal-border' : 'error-border'}}"
+          [(ngModel)]="swimForm.strokeRateActual" placeholder="1.0"
+          mask = "0.0" [dropSpecialCharacters]="false" step="0.1"
+          maxlength="3" (input)="validateStrokeRate($event);">
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-body text-center" *ngIf="savedDiagnostics">
+    {{savedDiagnostics}}
+</div>
+<div class="modal-footer" *ngIf="!savedDiagnostics">
+    <div class="row">
+      <div class="col-6">
+          <button type="button" class="btn btn-md btn-block btn-success text-md" (click)="saveSwimForm()">Save</button>
+      </div>
+      <div class="col-6">
+          <button type="button" class="btn btn-md btn-block btn-info text-md" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+</div>
+<div class="modal-footer justify-content-center" *ngIf="savedDiagnostics">
+  <button type="button" class="btn btn-md px-4 btn-success text-md" (click)="closeModal()">OK</button>
+</div>

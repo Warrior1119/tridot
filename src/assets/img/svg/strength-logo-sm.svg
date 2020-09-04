@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57.097 57.096">
+  <defs>
+    <style>
+      .lift-icon-cls-1 {
+        fill: #808e98;
+        stroke: #808e98;
+        stroke-width: 4px;
+      }
+
+      .lift-icon-cls-2 {
+        fill: #fff;
+      }
+
+      .lift-icon-cls-3 {
+        stroke: none;
+      }
+
+      .lift-icon-cls-4 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="Group_533" data-name="Group 533" transform="translate(-675 -508.904)">
+    <g id="Ellipse_25" data-name="Ellipse 25" class="lift-icon-cls-1" transform="translate(679 512.904)">
+      <circle class="lift-icon-cls-3" cx="24.548" cy="24.548" r="24.548"/>
+      <circle class="lift-icon-cls-4" cx="24.548" cy="24.548" r="26.548"/>
+    </g>
+    <g id="dumbbells" transform="translate(686.088 514.543)">
+      <path id="Path_289" data-name="Path 289" class="lift-icon-cls-2" d="M5.364,19H3.728a.546.546,0,0,0-.546.546V23.91H1.546A.546.546,0,0,0,1,24.456v3.273a.546.546,0,0,0,.546.546H3.182v4.364a.546.546,0,0,0,.546.546H5.364a.546.546,0,0,0,.546-.546V19.546A.546.546,0,0,0,5.364,19Z" transform="translate(0 -3.636)"/>
+      <path id="Path_290" data-name="Path 290" class="lift-icon-cls-2" d="M33.277,11H30a.546.546,0,0,0-.546.546v8.729H16.364V11.546A.546.546,0,0,0,15.819,11H12.546a.546.546,0,0,0-.546.546V33.368a.546.546,0,0,0,.546.546h3.273a.546.546,0,0,0,.546-.546V24.639H29.458v8.729a.546.546,0,0,0,.546.546h3.273a.546.546,0,0,0,.546-.546V11.546A.546.546,0,0,0,33.277,11Z" transform="translate(-4.999)"/>
+      <path id="Path_291" data-name="Path 291" class="lift-icon-cls-2" d="M58.364,23.91H56.728V19.546A.546.546,0,0,0,56.182,19H54.546a.546.546,0,0,0-.546.546V32.639a.546.546,0,0,0,.546.546h1.637a.546.546,0,0,0,.546-.546V28.274h1.637a.546.546,0,0,0,.546-.546V24.456A.546.546,0,0,0,58.364,23.91Z" transform="translate(-24.086 -3.636)"/>
+    </g>
+  </g>
+</svg>

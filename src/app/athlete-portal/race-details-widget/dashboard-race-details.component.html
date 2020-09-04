@@ -1,0 +1,34 @@
+<a [routerLink]="['/season-planner/training-phase/add-a-race']" class="btn btn-primary btn-lg btn-block text-md text-uppercase mb-4">
+  Add a Race
+  <div class="mb-1 ml-2 d-inline-block"  [inlineSVG]="'../assets/img/svg/icons/plus-icon.svg'" [autosize]="true" style="width: 15px;"></div>
+</a>
+<div class="card-box shadow rounded-lg" *ngIf="athleteProfile && athleteProfile.comingRace">
+  <div class="box-content">
+    <div class="row mb-4">
+      <div class="col border-right border-2">
+        <div class="days-to-race stacked-number-container">
+          <div class="stacked-number-inner">
+            <h5 class="text-md text-muted mb-4">Total Training Hours</h5>
+            <span class="number-lg mb-3">{{athleteProfile.comingRace.totalTrainingDur || 0 }}</span>
+            <span class="number-lg-sub">Hrs</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="days-to-race stacked-number-container">
+          <div class="stacked-number-inner">
+            <h5 class="text-md text-muted mb-4">Current Race Projection</h5>
+            <span class="number-lg mb-3">{{athleteProfile.comingRace.totalProjectedTime | timeFormat }}</span>
+            <span class="number-lg-sub">Hrs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-tertiary btn-block btn-lg text-md">Current Race Phase:
+          {{athleteProfile.comingRace.raceType}}</button>
+      </div>
+    </div>
+  </div>
+</div>

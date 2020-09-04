@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h6 class="modal-title pull-left">Upload File</h6>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="selectedFileForm">
+
+    <div class="row">
+      <div class="col">
+        <label class="inside-label" for="name">
+          <span class="custom-tooltip" *ngIf="selectedFileForm.hasError('required', 'selectedFile') && selectedFileForm.get('selectedFile').touched">
+            <i class="far fa-exclamation-circle text-danger cursor-pointer"></i>
+            <span class="custom-tooltiptext"> Please enter a valid file </span>
+          </span>
+
+          <i class="far fa-check-circle text-success" *ngIf="!selectedFileForm.hasError('required', 'selectedFile') && selectedFileForm.get('selectedFile').touched"></i>
+        </label>
+        <input #file type="file" (change)="fileChangeEvent($event)" placeholder="Upload File" accept=".tcx, .fit"
+          formControlName="selectedFile" class="form-control d-none">
+        <input type="text" (click)="file.click()" [(ngModel)]="fileName" [ngModelOptions]="{standalone: true}" class="form-control cursor-pointer"
+          placeholder="Click Here To Upload Your file">
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-block btn-default mt-0" (click)="closeModal()">Cancel</button>
+  <button type="button" class="btn btn-block btn-success mt-0" [disabled]="!selectedFile" (click)="decision(selectedFile)">Upload</button>
+</div>

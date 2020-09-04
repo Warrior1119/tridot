@@ -1,0 +1,21 @@
+:host {
+  height: 100px;
+  margin: auto;
+  transform: translate(17%);
+}
+
+#Logo {
+  position: relative;
+  margin: 0;
+  left: 0;
+}
+
+#Overlay {
+  mix-blend-mode: lighten;
+  fill: #f4f4f4;
+  opacity: 0.8;
+}
+
+.loading-small {
+  margin: -205px 0 -250px 15px !important;
+}

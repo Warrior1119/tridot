@@ -1,0 +1,27 @@
+.distance-type {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 44px;
+}
+.race-avatar {
+  background-color: #F4F4F4;
+  border-radius: 50%;
+  width: 33px;
+  height: 33px;
+  text-align: center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.race-name {
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.distance-container {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items:center;
+}

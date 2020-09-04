@@ -1,0 +1,145 @@
+<form #form="ngForm" class="w-100">
+  <div class="card-title card-header text-left d-flex justify-content-between align-items-center py-3">
+    <div class="text-left text-md mb-0">Billing Details</div>
+    <div>
+      <ng-container *ngIf="canEdit">
+        <button type="button" class="btn-default btn-xs text-sm text-capitalize py-1 px-2 rounded" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn-success btn-xs text-sm text-capitalize py-1 px-2 rounded ml-2" (click)="updatePayment(!form.invalid)">
+          Save <i class="fal fa-spinner fa-spin" *ngIf="billingLoading"></i>
+        </button>
+      </ng-container>
+      <button *ngIf="!canEdit" type="button" class="btn-default btn-xs rounded text-sm px-2 text-capitalize py-1" (click)="edit()">Edit</button>
+    </div>
+  </div>
+  <!-- <app-alerts *ngIf="!canEdit && billingSuccessAlerts" [alerts] = "billingSuccessAlerts"></app-alerts> -->
+  <div class="row" *ngIf="!canEdit && billingSuccessAlerts">
+    <div *ngFor="let alert of billingSuccessAlerts" class="col">
+      <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout" [dismissible]="true">
+        {{ alert.msg }}
+      </alert>
+    </div>
+  </div>
+  <fieldset [disabled]="!canEdit">
+    <div *ngIf="canEdit" class="text-left px-4 py-2 border-bottom-0">
+      <div class="row">
+        <div class="col">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="row" *ngIf = "billingAlerts && billingAlerts.length > 0">
+              <div *ngFor="let alert of billingAlerts" class="col">
+                <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout" [dismissible]="true">
+                  {{ alert.msg }}
+                </alert>
+              </div>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="customCheck1" [checked]="sameAsAccount"
+                [(ngModel)]="sameAsAccount" name="sameAsAccount" (ngModelChange)="adjustAddresses($event);showUpdateForBilling = true">
+              <label class="custom-control-label" for="customCheck1" [ngClass]="{'item-title' : isMobile}">Same as Account Address</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-body card-body-md pt-2 pb-0">
+      <!-- Name on Card -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 border-bottom px-0">
+        <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Name on Card</div>
+        <ng-container *ngIf="!canEdit">
+          <div class="text-right text-sm text-muted"> {{subscription.billingFirstName}} &nbsp; {{ subscription.billingLastName }}</div>
+        </ng-container>
+        <ng-container *ngIf="canEdit">
+          <div class="d-flex">
+            <input type="text" maxlength="30" (ngModelChange)="showUpdateForBilling = true" [(ngModel)]="subscription.billingFirstName" name="billingFirstName"
+                  class="form-control form-input" placeholder="First Name" required
+                  [ngClass]="{ 'border border-1 border-danger': billingFirstName.invalid, 'item-title':isMobile }"
+                  #billingFirstName="ngModel" [customTooltip]="billingFirstName.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+            <input type="text" maxlength="30" (ngModelChange)="showUpdateForBilling = true" [(ngModel)]="subscription.billingLastName" name="billingLastName"
+                    class="form-control form-input ml-2" placeholder="Last Name" required
+                    [ngClass]="{ 'border border-1 border-danger': billingLastName.invalid, 'item-title':isMobile }"
+                    #billingLastName="ngModel" [customTooltip]="billingLastName.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Billing Address -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 border-bottom px-0">
+        <div class="text-left mb-0" [ngClass]="{'item-title' : isMobile}">Billing Address</div>
+        <ng-container *ngIf="!canEdit">
+          <div class="d-flex align-items-center">
+            <div class="text-right text-sm text-muted"> {{subscription.billingAddress.address1}}</div>
+            <div>&nbsp;</div>
+            <div class="text-right text-sm text-muted"> {{subscription.billingAddress.city}}</div>
+            <div>&nbsp;</div>
+            <div class="text-right text-sm text-muted"> {{subscription.billingAddress.state}}, </div>
+            <div class="text-right text-sm text-muted"> {{subscription.billingAddress.zip}} </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="canEdit">
+          <div class="col-8 px-0" [ngClass]="{'d-flex justify-content-between' : !isMobile}">
+            <input type="text" class="form-control form-input w-50" (ngModelChange)="showUpdateForBilling = true" maxlength="100" [(ngModel)]="subscription.billingAddress.address1" name="address1"
+                    placeholder="Street Address" required
+                    [ngClass]="{ 'border border-1 border-danger': address1.invalid, 'item-title w-100 mt-1':isMobile }"
+                    #address1="ngModel" [customTooltip]="address1.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+            <input type="text" class="form-control form-input w-25" (ngModelChange)="showUpdateForBilling = true" maxlength="30" [(ngModel)]="subscription.billingAddress.city" name="city"
+                    placeholder="City" required
+                    [ngClass]="{ 'border border-1 border-danger': city.invalid, 'item-title w-100 mt-1':isMobile, 'ml-2':!isMobile }"
+                    #city="ngModel" [customTooltip]="city.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+            <select class="custom-select- custom-select custom-select-lg text-md w-25"
+                    [ngClass]="{ 'border border-1 border-danger': state.invalid, 'item-title w-100 mt-1':isMobile, 'ml-2':!isMobile }"
+                    [(ngModel)]="selectedState" name="state"
+                    (change)="showUpdateForContact = true"
+                    *ngIf="billingStates?.length"
+                    required
+                    #state="ngModel" [customTooltip]="state.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+              <option [ngClass]="{'item-title':isMobile}" value="">State / Province</option>
+              <option [ngClass]="{'item-title':isMobile}" *ngFor="let state of billingStates" [value]="state.code">{{state.name}}</option>
+            </select>
+            <input type="text" class="form-control form-input w-50" maxlength="50"
+                [ngClass]="{ 'border border-1 border-danger': state.invalid, 'item-title w-100 mt-1':isMobile, 'ml-2':!isMobile }"
+                (change)="showUpdateForContact = true"
+                [(ngModel)]="subscription.billingAddress.state" name="state"
+                *ngIf="!billingStates?.length"
+                placeholder="State / Province"
+                required
+                #state="ngModel" [customTooltip]="state.invalid && 'This field is required'" tooltip-class="tooltip-danger"
+                pattern=".*[^\s]+.*">
+            <input type="text" class="form-control form-input w-25"
+                (ngModelChange)="showUpdateForBilling = true"
+                [(ngModel)]="subscription.billingAddress.zip" name="zip"
+                [ngClass]="{ 'border border-1 border-danger': zip.invalid, 'item-title w-100 mt-1':isMobile, 'ml-2':!isMobile }"
+                placeholder="Postal Code"
+                required
+                #zip="ngModel" [customTooltip]="zip.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Country -->
+      <div class="col-12 d-flex justify-content-between align-items-center py-3 border-bottom px-0">
+        <div class="text-left mb-0" [ngClass]="{'item-title mr-2' : isMobile}">Country</div>
+        <ng-container *ngIf="!canEdit">
+          <div class="text-right text-sm text-muted"> {{subscription.billingAddress.countryCode}} </div>
+        </ng-container>
+        <ng-container *ngIf="canEdit">
+          <select class="custom-select-form-control custom-select custom-select-lg"
+                  [ngClass]="{ 'border border-1 border-danger': countryCode.invalid, 'custom-width' : !isMobile, 'item-title' : isMobile }"
+                  [(ngModel)]="subscription.billingAddress.countryCode" name="countryCode"
+                  (change)="onCountryCodeChanged()" required
+                  #countryCode="ngModel" [customTooltip]="countryCode.invalid && 'This field is required'" tooltip-class="tooltip-danger">
+            <option [ngClass]="{'item-title':isMobile}" value="">Country</option>
+            <option [ngClass]="{'item-title':isMobile}" *ngFor="let country of countries" [value]="country.code">{{country.name}}</option>
+          </select>
+        </ng-container>
+      </div>
+
+      <!-- Payment Method -->
+      <app-payment-method *ngIf="subscription" 
+                          [canEdit]="canEdit" class="w-100" [subscription]="subscription" 
+                          [isMobile]="isMobile"
+                          (updateCard)="updatePayment($event)"
+                          [(submitSubject)]="submitSubject"
+                          >
+      </app-payment-method>
+    </div>
+  </fieldset>
+</form>

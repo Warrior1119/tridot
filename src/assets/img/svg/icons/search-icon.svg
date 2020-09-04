@@ -1,0 +1,15 @@
+<svg id="zoom-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.414 21.414">
+  <defs>
+    <style>
+      .search-icon-cls-1 {
+        fill: none;
+        stroke: #bfbfbf;
+        stroke-linecap: square;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <line id="Line_3" data-name="Line 3" class="search-icon-cls-1" x1="5.067" y1="5.067" transform="translate(14.933 14.933)"/>
+  <circle id="Ellipse_1" data-name="Ellipse 1" class="search-icon-cls-1" cx="8.143" cy="8.143" r="8.143" transform="translate(1 1)"/>
+</svg>

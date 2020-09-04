@@ -1,0 +1,291 @@
+<ng-template #unlock><app-unlock-overlay></app-unlock-overlay></ng-template>
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Weekly Volumes</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>You can choose your training volume preferences for each discipline independently.  This selection is a "preference"</p>
+        <ul>
+          <li>Low Volume - This is the minimalist option.  You will be adequately trained to complete your events, but you will not realize your full performance potential.  You may choose this option for several reasons such as:  you have extremely little time to train, you are dealing with an injury for a prolonged time, you are an exceptional swimmer and training for a sprint race...</li>
+          <li>Standard Volume - This is the volume preference that most athletes should select unless they have a compelling reason not to.  All of your training will be efficient and purposeful.  Your training volume will be limited to training that produces the most return.  i.e.  As the marginal benefit of an additional unit of training sharply declines and risk of injury sharply rises, this is where your training volume will be curtailed.</li>
+          <li>High Volume - This is the volume preference for truly elite athletes (pro level and young) where small incremental performance gains are significant and risk of injury is lower.  Additionally, you may want to choose this option if your time isn't scarce and you enjoy spending more time in a particular discipline.  i.e.  You're retired and love being out on your bike.  However, remember that this is a non-performance related preference and will have costs.  Time and energy spent on one place will limit the amount spent somewhere else. </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="weeklyPatternInfoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Weekly Pattern</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>Your training schedule will be based on your selections listed below.  You can also move your training days around on your schedule after your plan is built.  Moving your sessions around may not be optimal, but you have to do what is feasible for you and fits within your active and often dynamic lifestyle.</p>
+        <ul>
+          <li>Off Days - Select what day of the week you want as an off day, if any.  If you are training for long course events, it is recommended to do something almost every day (no days off) rather than to overload fewer days.  A swim-only day provides sufficient recovery from bike and run training.</li>
+          <li>Long Bike Session - Options are Saturday and Sunday (You can move on your schedule as desired.)</li>
+          <li>Long Run Session - Options are Wednesday, Saturday, and Sunday (You can move on your schedule as desired.)  Wednesday is optimal for long course training as it provides more recovery and better quality training for your long bike and run.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="strengthTrainingInfoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Strength Training</h5>
+        <button aria-label="Close" class="close" type="button" data-dismiss="modal">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <p>If you haven't been doing strength training, it's generally best not to add it during training periods when your training volume or intensity is significantly increasing in preparation for an upcoming race. (eg 6-7 weeks out from a long course tri when you're nearing peak training volumes)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-box v-100 d-flex">
+  <div class="card-title card-header d-flex justify-content-between align-items-center py-3">
+    <div class="title">Training Preferences</div>
+    <div class="float-right">
+      <button *ngIf="editing" class="btn-default btn-xs px-2 py-1 mr-2 rounded cursor-pointer text-sm text-capitalize"
+        (click)="cancel()">
+        Cancel
+      </button>
+      <button class="btn-xs px-2 py-1 rounded cursor-pointer text-sm text-capitalize"
+        [class.btn-default]="!editing"
+        [class.btn-success]="editing"
+        (click)="save(profile)">
+        {{ editing ? 'Save' : 'Edit' }}
+        <i class="fal fa-spinner fa-spin" *ngIf="loading"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="profile" class="card-body card-body-md d-flex flex-column justify-content-between training-preference pt-0 pb-0">
+    <div class="col-12 text-center mt-2">
+      <span class="text-danger">{{error}}</span>
+    </div>
+    <ng-container *isFeatureSubscribed="['swimVolPref', 'bikeVolPref', 'runVolPref', 'longBikePref', 'longRunPref']; overlay unlock">
+    <!-- Swim Volume Preference -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex justify-content-between">
+        <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Swim Volume Preference</div>
+        <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+              data-target="#infoModal" class="cursor-pointer ml-2 d-inline-block" [ngClass]="{'mt-2' : isMobile}"></div>
+      </div>
+      
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}"> {{profile.swimVolumePreference}} </div>
+
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 ml-3 text-capitalize align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.swimVolPref==0">
+          <span class="text-sm text-body mr-3">{{profile.swimVolumePreference}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.swimVolumePreference = 'low';">Low</a>
+          <a class="dropdown-item" (click)="profile.swimVolumePreference = 'standard';">Standard</a>
+          <a class="dropdown-item" (click)="profile.swimVolumePreference = 'high';">High</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bike Volume Preference -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Bike Volume Preference</div>
+        <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+              data-target="#infoModal" class="cursor-pointer d-inline-block ml-2 d-inline-block" [ngClass]="{'mt-2' : isMobile}"></div>
+      </div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}"> {{profile.bikeVolumnPreferece}} </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 ml-3 text-capitalize align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.swimVolPref==0">
+          <span class="text-sm text-body mr-3">{{profile.bikeVolumnPreferece}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.bikeVolumnPreferece = 'low';">Low</a>
+          <a class="dropdown-item" (click)="profile.bikeVolumnPreferece = 'standard';">Standard</a>
+          <a class="dropdown-item" (click)="profile.bikeVolumnPreferece = 'high';">High</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Run Volume Preference -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Run Volume Preference</div>
+        <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+              data-target="#infoModal" class="cursor-pointer d-inline-block ml-2 d-inline-block" [ngClass]="{'mt-2' : isMobile}"></div>
+      </div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}"> {{profile.runVolumePreference}} </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 ml-3 text-capitalize align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.swimVolPref==0">
+          <span class="text-sm text-body mr-3">{{profile.runVolumePreference}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.runVolumePreference = 'low';">Low</a>
+          <a class="dropdown-item" (click)="profile.runVolumePreference = 'standard';">Standard</a>
+          <a class="dropdown-item" (click)="profile.runVolumePreference = 'high';">High</a>
+        </div>
+      </div>
+    </div>
+    </ng-container>
+
+    <ng-container *isFeatureSubscribed="['swimVolPref', 'bikeVolPref', 'runVolPref', 'longBikePref', 'longRunPref']; overlay unlock">
+    <!-- Bike Long Session Day -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Bike Long Session Day</div>
+        <div [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+              data-target="#weeklyPatternInfoModal" class="cursor-pointer d-inline-block ml-2" [ngClass]="{'mt-2' : isMobile}"></div>
+      </div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}">
+        {{profile.bikeLongSessionDay === 'sat' ? 'Saturday' : '' }}
+        {{profile.bikeLongSessionDay === 'sun' ? 'Sunday' : '' }}
+      </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 ml-3 text-capitalize align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.longBikePref==0">
+          <span class="text-sm text-body mr-3">
+            {{profile.bikeLongSessionDay === 'sat' ? 'Saturday' : '' }}
+            {{profile.bikeLongSessionDay === 'sun' ? 'Sunday' : '' }}
+          </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.bikeLongSessionDay = 'sat';">Saturday</a>
+          <a class="dropdown-item" (click)="profile.bikeLongSessionDay = 'sun';">Sunday</a>
+        </div>
+      </div>
+    </div>
+    <!-- Run Long Session Day -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Run Long Session Day</div>
+        <div [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+              data-target="#weeklyPatternInfoModal" class="cursor-pointer d-inline-block ml-2" [ngClass]="{'mt-2' : isMobile}"></div>
+      </div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}">
+        {{profile.runLongSessionDay === 'wed' ? 'Wednesday' : '' }}
+        {{profile.runLongSessionDay === 'sat' ? 'Saturday' : '' }}
+        {{profile.runLongSessionDay === 'sun' ? 'Sunday' : '' }}
+      </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 ml-3 text-capitalize align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.longRunPref==0">
+          <span class="text-sm text-body mr-3">
+              {{profile.runLongSessionDay === 'wed' ? 'Wednesday' : '' }}
+              {{profile.runLongSessionDay === 'sat' ? 'Saturday' : '' }}
+              {{profile.runLongSessionDay === 'sun' ? 'Sunday' : '' }}
+          </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.runLongSessionDay = 'wed';">Wednesday</a>
+          <a class="dropdown-item" (click)="profile.runLongSessionDay = 'sat';">Saturday</a>
+          <a class="dropdown-item" (click)="profile.runLongSessionDay = 'sun';">Sunday</a>
+        </div>
+      </div>
+    </div>
+    </ng-container>
+
+    <ng-container *isFeatureSubscribed="['dayOffPref', 'strengthSessions']; overlay unlock">
+    <!-- Non-required Sessions to include  -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Non-required Sessions to Include (Optional)</div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}">
+        {{ profile.phaseTrainingPreferences === 'sbr' ? 'Swim, Bike & Run' : '' }}
+        {{ profile.phaseTrainingPreferences === 'br' ? 'Bike & Run' : '' }}
+        {{ profile.phaseTrainingPreferences === 'r' ? 'Run Only' : '' }}
+      </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 ml-3 text-capitalize align-items-center justify-content-between d-flex" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.phaseTrainingPreferences==''">
+          <span class="text-sm text-body mr-3">
+            {{ profile.phaseTrainingPreferences === 'sbr' ? 'Swim, Bike & Run' : '' }}
+            {{ profile.phaseTrainingPreferences === 'br' ? 'Bike & Run' : '' }}
+            {{ profile.phaseTrainingPreferences === 'r' ? 'Run Only' : '' }}
+          </span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="setPhaseTrainingPreferences('sbr');">Swim, Bike & Run</a>
+          <a class="dropdown-item" (click)="setPhaseTrainingPreferences('br');">Bike & Run</a>
+          <a class="dropdown-item" (click)="setPhaseTrainingPreferences('r');">Run Only</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Which day of the week do you take off? -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0 border-bottom">
+      <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Which day of the week do you take off?</div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}">{{getWeekDay(profile.dayOff)}}</div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.dayOffPref==0">
+          <span class="text-sm text-body mr-3">{{getWeekDay(profile.dayOff)}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" *ngFor = "let weekDay of WEEK_DAYS" (click)="profile.dayOff = weekDay.key;">{{weekDay.value}}</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include Strength Training -->
+    <div class="col-12 d-flex justify-content-between align-items-center py-3 px-0">
+      <div class="d-flex">
+        <div class="text-left mb-0" [ngClass]="{'itme-title' : isMobile}">Include Strength Training</div>
+        <div  [inlineSVG]="'../assets/img/svg/icons/alert-icon-light.svg'" [autosize]="true" style="width: 18px;" data-toggle="modal"
+              data-target="#strengthTrainingInfoModal" class="cursor-pointer d-inline-block ml-2" [ngClass]="{'mt-2' : isMobile}"></div>
+      </div>
+      <div class="text-right text-mb text-muted text-capitalize w-50" *ngIf="!editing" [ngClass]="{'itme-text' : isMobile}">
+        {{profile.trainingDaysPerWeek == 2 ? 'Yes' : 'No'}}
+      </div>
+      <div class="d-flex w-50 justify-content-end" *ngIf="editing">
+        <button type="button" class="btn training-item dropdown-toggle shadow px-3 py-2 d-flex align-items-center justify-content-between"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="!editing || profile.subFeatures.strengthSessions==0">
+          <span class="text-sm text-body mr-3"> {{profile.trainingDaysPerWeek == 2 ? 'Yes' : 'No'}}</span>
+          <span class="">
+            <div  [inlineSVG]="'../assets/img/svg/icons/arrow-down.svg'" [autosize]="true"  style="width: 10px;" class="mx-auto d-inline-block"></div>
+          </span>
+        </button>
+        <div class="dropdown-menu training-item" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="profile.trainingDaysPerWeek = 2;">Yes</a>
+          <a class="dropdown-item" (click)="profile.trainingDaysPerWeek = 0;">No</a>
+        </div>
+      </div>
+    </div>
+    </ng-container>
+  </div>
+</div>
